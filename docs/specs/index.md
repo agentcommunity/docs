@@ -11,15 +11,15 @@ Currently, the primary specification is:
 
 <div class="grid cards" markdown>
 
--   [:material-home-outline:{ .lg .middle } __Introduction__ ](introduction.md)
+-   [:material-home-outline:{ .lg .middle } __Introduction__ ](aid/introduction.md)
 
     ELI5 explainer of DNS for Agents
 
--   [:material-head-question-outline:{ .lg .middle } __Design Rationale__](rationale.md)
+-   [:material-head-question-outline:{ .lg .middle } __Design Rationale__](aid/rationale.md)
 
     Understand the design decisions for AID.
 
--   [:material-file-document-outline:{ .lg .middle } __Specification__ ](spec-v1.md)
+-   [:material-file-document-outline:{ .lg .middle } __Specification__ ](aid/spec-v1.md)
 
     Read the full Specification
 
