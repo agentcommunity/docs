@@ -1,16 +1,3 @@
-# docs
-The official documentation for the Agent Community specifications and projects.
-
----
-hide:
-  - navigation
-  - toc
----
-
-<div style="text-align: center; margin-bottom: 2rem;">
-  <img src="./assets/logo.svg" alt="Agent Community Logo" style="max-width: 200px; height: auto;">
-</div>
-
 # Welcome to the .agent Community
 
 *Build the agentic future, together.*
