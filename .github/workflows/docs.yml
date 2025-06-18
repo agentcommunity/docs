@@ -6,6 +6,8 @@ on:
       - docs/**
       - mkdocs.yml
       - requirements.txt
+      - vercel.json
+      - .vercel/project.json
       - .github/workflows/docs.yml
   workflow_dispatch:
 
@@ -13,8 +15,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set Up Python
         uses: actions/setup-python@v5
@@ -27,13 +28,11 @@ jobs:
       - name: Build Docs
         run: mkdocs build
 
-      - name: Set Up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
       - name: Deploy to Vercel
-        run: vercel deploy --prod --yes site --token ${{ secrets.VERCEL_TOKEN }}
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: site
