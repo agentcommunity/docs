@@ -31,9 +31,9 @@ jobs:
         run: npm i -g vercel
 
       - name: Deploy to Vercel
-        run: vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} --prebuilt
-        working-directory: site
+        run: vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} site
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 
