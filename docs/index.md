@@ -37,6 +37,10 @@ The Agent Community is an open, non‑commercial home where builders, researcher
 
 <div class="grid cards" markdown>
 
+-   [:material-home-outline:{ .lg .middle } __Agent Interface Discovery (aid)__](specs/index.md)
+
+    DNS for Agents speficiation (Introduction)
+
 -   [:material-book-open:{ .lg .middle } __Work Items__](specs/index.md)
 
     Browse all current and upcoming specifications from the Agent Community.
