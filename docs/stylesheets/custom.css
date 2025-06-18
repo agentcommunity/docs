@@ -1,0 +1,354 @@
+/**
+ * Copyright 2025 Agent Community
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+ */
+
+/* Root Variables for Consistent shadcn/ui Styling */
+:root {
+  --base-border-radius: 0.5rem;
+  --card-border-radius: 0.75rem;
+  --button-border-radius: 0.5rem;
+  --input-border-radius: 0.5rem;
+  --shadcn-muted: hsl(210 40% 98%);
+  --shadcn-muted-foreground: hsl(215.4 16.3% 46.9%);
+  --shadcn-accent: hsl(210 40% 96%);
+  --shadcn-accent-foreground: hsl(222.2 84% 4.9%);
+}
+
+/* Dark mode shadcn colors */
+[data-md-color-scheme="slate"] {
+  --shadcn-muted: hsl(217.2 32.6% 17.5%);
+  --shadcn-muted-foreground: hsl(215 20.2% 65.1%);
+  --shadcn-accent: hsl(217.2 32.6% 17.5%);
+  --shadcn-accent-foreground: hsl(210 40% 98%);
+}
+
+/* Index page styling */
+.md-grid {
+    max-width: 80%;
+  }
+  
+  .footer {
+    padding-bottom: 30vh;
+  }
+  
+  .centered-logo-text-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5em;
+    margin-bottom: 0.5em;
+    vertical-align: middle;
+  }
+  
+  .centered-logo-text-group img {
+    height: auto;
+  }
+  
+  .centered-logo-text-group h1 {
+    margin: 0;
+    text-align: left;
+  }
+  
+  .install-command-container {
+    max-width: 600px;
+    margin: 2.5em auto;
+    padding: 1.5em 2em;
+    background-color: var(--md-code-bg-color, #f5f5f5);
+    border-radius: var(--base-border-radius);
+    text-align: center;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 5%);
+    border-left: 5px solid var(--md-primary-fg-color, #526cfe);
+    margin-top: 30px;
+  }
+  
+  .install-command-container p {
+    font-size: 1.1em;
+    color: var(--md-default-fg-color);
+    margin-bottom: -10px;
+    margin-top: -10px;
+  }
+  
+  .install-command-container p code {
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 0.3em 0.6em;
+    background-color: var(--md-code-fg-color--light);
+    border-radius: 4px;
+    display: inline-block;
+    line-height: 1.4;
+  }
+
+/* --- ShadCN-style Admonitions (Notes, Warnings, etc.) --- */
+.md-typeset .admonition {
+  border-left: 2px solid var(--md-primary-fg-color--light);
+  border-radius: var(--base-border-radius);
+  box-shadow: none;
+}
+
+/* --- ShadCN-style Buttons --- */
+.md-button,
+.md-typeset .md-button {
+  border-radius: var(--button-border-radius);
+  box-shadow: none;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.md-button--primary {
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  border: 1px solid var(--md-primary-fg-color);
+}
+
+.md-button--primary:hover {
+  background-color: var(--md-primary-fg-color--dark);
+}
+
+/* --- ShadCN-style Code Blocks --- */
+.md-typeset code {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.3rem;
+  font-size: 0.8em;
+}
+
+.md-typeset pre > code {
+  font-size: 1em;
+  border-radius: var(--base-border-radius);
+}
+
+/* Code block filenames */
+.highlight span.filename {
+  border-bottom: none;
+  border-radius: var(--base-border-radius);
+  display: inline;
+  font-family: var(--md-code-font-family);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.highlight span.filename + pre > code {
+  border-radius: var(--base-border-radius);
+  border-top-left-radius: 0;
+}
+
+/* --- ShadCN-style Tables --- */
+.md-typeset table:not([class]) {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: var(--base-border-radius);
+    overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+    background-color: var(--md-code-bg-color);
+    font-weight: 500;
+}
+
+/* --- Header Customization to Match Main Site --- */
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color: #000000;
+    --md-header-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, 0.12);
+  }
+  
+  .md-header__button.md-icon {
+    color: var(--md-default-fg-color);
+  }
+  
+  /* Ensure light mode toggle is visible against dark header */
+  [data-md-color-scheme="default"] .md-header__button.md-icon {
+    color: white;
+  }
+  
+  [data-md-color-scheme="slate"] .md-header__button .md-logo img {
+    filter: brightness(0) invert(1);
+  }
+
+/* --- ShadCN-inspired Fully Clickable Grid Cards --- */
+.md-typeset .grid.cards > ul > li,
+.md-card {
+  box-shadow: none;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: var(--card-border-radius);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+/* Make the entire card clickable */
+.md-typeset .grid.cards > ul > li {
+  position: relative;
+}
+
+.md-typeset .grid.cards > ul > li > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Create an overlay link that covers the entire card */
+.md-typeset .grid.cards > ul > li a[href]:first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  text-decoration: none;
+  border-radius: var(--card-border-radius);
+}
+
+/* Ensure card content is properly displayed */
+.md-typeset .grid.cards > ul > li > :not(a:first-child) {
+  position: relative;
+  z-index: 1;
+  pointer-events: none; /* Prevent interference with overlay link */
+}
+
+/* Make sure text content is visible */
+.md-typeset .grid.cards > ul > li p,
+.md-typeset .grid.cards > ul > li hr {
+  display: block;
+  margin: revert;
+}
+
+/* Style the horizontal rule properly */
+.md-typeset .grid.cards > ul > li hr {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Hover effects for cards */
+.md-typeset .grid.cards > ul > li:hover,
+.md-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 6px 18px hsla(0, 0%, 0%, 0.1);
+  cursor: pointer;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  box-shadow: 0 6px 18px hsla(0, 0%, 0%, 0.3);
+}
+
+/* Style card content */
+.md-typeset .grid.cards > ul > li .card-content {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Forms and Search */
+.md-search__form {
+  border-radius: var(--input-border-radius);
+}
+
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  border-top-right-radius: var(--input-border-radius);
+  border-top-left-radius: var(--input-border-radius);
+}
+
+[dir="ltr"] .md-search__output {
+  border-bottom-right-radius: var(--input-border-radius);
+  border-bottom-left-radius: var(--input-border-radius);
+}
+
+/* Mark and Critic */
+.md-typeset .critic,
+.md-typeset mark {
+  border-radius: 0.2rem;
+  padding: 0 0.2rem;
+}
+
+.md-typeset mark {
+  box-shadow: 0 0 0 0.1rem var(--md-typeset-mark-color);
+}
+
+.md-typeset ins.critic {
+  box-shadow: 0 0 0 0.1rem var(--md-typeset-ins-color);
+  text-decoration: none;
+}
+
+.md-typeset del.critic {
+  box-shadow: 0 0 0 0.1rem var(--md-typeset-del-color);
+  text-decoration: none;
+}
+
+/* Blog excerpts */
+.md-post--excerpt {
+  background-color: var(--md-accent-fg-color--transparent);
+  box-shadow: 0 0 0 1rem var(--md-accent-fg-color--transparent);
+  border-radius: var(--base-border-radius);
+}
+
+/* Additional shadcn/ui inspired elements */
+.md-typeset blockquote {
+  border-radius: var(--base-border-radius);
+}
+
+.md-typeset details {
+  border-radius: var(--base-border-radius);
+}
+
+/* Ensure all interactive elements have consistent styling */
+.md-typeset .tabbed-set {
+  border-radius: var(--base-border-radius);
+}
+
+.md-typeset .tabbed-labels > label {
+  border-radius: var(--base-border-radius) var(--base-border-radius) 0 0;
+}
+
+/* Navigation elements - shadcn button style */
+.md-nav__item .md-nav__link {
+  border-radius: var(--base-border-radius);
+  transition: all 0.15s ease-in-out;
+  padding: 0.5rem 0.75rem;
+  margin: 0.125rem 0;
+}
+
+.md-nav__item .md-nav__link:hover {
+  background-color: var(--shadcn-accent);
+  color: var(--shadcn-accent-foreground);
+}
+
+/* Content area links - button-like on hover */
+.md-typeset a:not(.md-button):hover {
+  background-color: var(--shadcn-accent);
+  color: var(--shadcn-accent-foreground);
+  border-radius: var(--base-border-radius);
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Table of contents links */
+.md-nav--secondary .md-nav__link {
+  border-radius: var(--base-border-radius);
+  transition: all 0.15s ease-in-out;
+  padding: 0.25rem 0.5rem;
+  margin: 0.125rem 0;
+}
+
+.md-nav--secondary .md-nav__link:hover {
+  background-color: var(--shadcn-accent);
+  color: var(--shadcn-accent-foreground);
+}
