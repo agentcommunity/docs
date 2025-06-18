@@ -1,69 +1,99 @@
-#  **Introduction**
+---
+icon: material/home-outline
+---
 
-Connecting AI agents to tools and services is currently a messy, manual process. Developers and users are forced to hunt through documentation, copy-paste API endpoints, and manually configure authentication tokens for every new integration. This friction slows down development and creates a poor user experience.
+# Agent Interface Discovery (AID)
 
-**Agent Interface Discovery (AID)** solves this.
+> ##DNS for Agents
+> *Type a domain – connect to its agent(s), instantly.*
 
-It's a simple, open standard that uses a standard DNS record to let any client automatically discover how to connect to an agent service, given only its domain name (e.g., `supabase.com`). AID tells a client everything it needs: the correct API endpoint, the communication protocol to use (like MCP or A2A), and the required authentication method.
+Imagine opening your favourite AI‑powered IDE, typing just `supabase.com`, and having the client wire itself to the official Supabase MCP server with zero extra steps. No digging through docs, no JSON snippets, no token wrangling. That "it just works" moment is what **AID** delivers.
 
-The goal is to create a "just works" experience for the agentic web, replacing fragile, manual setup with automated, reliable discovery.
+!!! agent "Agent-first Discovery"
+    Agent wants to use a tool. It just enters `supabase.com` and automatically resolves the MCP endpoints—no documentation required.
+
+```mermaid
+flowchart LR
+    User["User/Agent"] --> Domain["supabase.com"];
+    Domain --> DNS["DNS (_agent.supabase.com)"];
+    DNS --> Endpoints["Supabase MCPs"];
+```
+
+## What it does (in one sentence)
+
+AID is a tiny DNS record that tells any client **where** an agent lives, **which** protocol it speaks (MCP, A2A, ACP, …), and **how** to start talking to it.
+
+## Links
+
+<div class="grid cards" markdown>
+
+-   [:material-file-document-outline:{ .lg .middle } __Specification__ ](spec-v1.md)
+
+    Read the full Specification
+
+-   [:material-forum:{ .lg .middle } __Design Rationale__](rationale.md)
+
+    Understand the design decisions for AID.
+
+</div>
+
+## Why you should care
+
+* **Good‑bye manual setup** – Paste a domain, not a 200‑line config.
+* **Fewer docs, fewer errors** – The record is the source of truth, always up to date.
+* **Works with today's winners** – Designed around MCP while staying protocol‑agnostic.
+* **Agents find tools, too** – Your agents can now locate and chain the services they need on the fly – true autonomy.
+* **Zero lock‑in** – Uses plain DNS + HTTPS, so any provider can adopt it overnight.
+* **Local/Diff domain tooling** - Enables complex protocol discovery via standardized mechanisms.
+
+## How it works (30‑second version)
+
+1. Client queries `TXT _agent.<domain>`.
+2. If the record holds a full URI, connect right away.
+3. If it points to an `aid.json` manifest, fetch it and pick the best implementation (remote API, local Docker, etc.).
+4. Kick off the session using the declared protocol – typically MCP.
+
+That is the whole boot‑strap layer. The heavy lifting (auth flows, task calls) stays in MCP or whichever protocol you choose.
 
 ---
 
-### State Diagram Analysis: How AID Aligns and Extends
+### The full discovery flow
 
-AID does not compete with protocols like MCP (Agent-Client Protocol), A2A (Agent-to-Agent), or ACP (IBM's Agent Control Plane). Instead, **AID is a prerequisite discovery layer** that enables them.
-
-*   **What MCP/A2A/ACP define:** The *language* agents speak once a connection is established (e.g., "create task," "execute step," "here are the artifacts"). They answer the question: "**What do we say?**"
-*   **What AID defines:** The process for finding the agent in the first place. It answers the questions: "**Where are you?**" and "**How do we start talking?**"
-
-**Therefore, AID extends these protocols by providing the missing "Chapter 0" of their specifications: Service Discovery.** The state diagram below illustrates this handoff. The process begins with AID and concludes by initiating a session using the protocol that AID discovered.
-
-### State Diagram
+For those who like state charts, here's the exact handshake AID enables.
 
 ```mermaid
 stateDiagram-v2
-    direction LR
-
-    %% --- Phase 1: AID Discovery ---
-    subgraph AID_Discovery_Phase ["AID Discovery Phase"]
-        direction TB
-        [*] --> DNS_Lookup
-        DNS_Lookup: Client queries TXT record for\n_agent.domain
-        DNS_Lookup --> Parse_TXT
-        Parse_TXT: Parse v=aid1; uri=...; proto=...
-        Parse_TXT --> Is_Config_Present{Has config key?}
-        Is_Config_Present --> |No Simple Profile| Ready_To_Connect
-        Is_Config_Present --> |Yes Extended Profile| Fetch_Manifest
-        Fetch_Manifest: GET /.well-known/aid.json
-        Fetch_Manifest --> Process_Manifest
-        Process_Manifest: Client chooses an implementation\ne.g., remote API, local Docker
-        Process_Manifest --> Gather_Credentials
-        Gather_Credentials: Prompt user for secrets/paths\nbased on authentication & configuration
-        Gather_Credentials --> Ready_To_Connect
-        Ready_To_Connect: Client has endpoint, protocol,\nand credentials.
-    end
-
-    %% --- Handoff Point ---
-    Ready_To_Connect --> Handoff: AID Discovery Complete
-
-    %% --- Phase 2: Agent Communication ---
-    subgraph Agent_Communication_Phase ["Agent Communication Phase"]
-        direction TB
-        Handoff --> Protocol_Choice{Which Protocol was Discovered?}
-        Protocol_Choice --> |proto = mcp| MCP_Session
-        Protocol_Choice --> |proto = a2a| A2A_Session
-        Protocol_Choice --> |proto = acp| ACP_Session
-        Protocol_Choice --> |other| Other_Protocol_Session
-        MCP_Session: Communicate via MCP
-        A2A_Session: Communicate via A2A
-        ACP_Session: Communicate via ACP IBM
-        Other_Protocol_Session: Communicate via other\ndiscovered protocol
-        MCP_Session --> [*]
-        A2A_Session --> [*]
-        ACP_Session --> [*]
-        Other_Protocol_Session --> [*]
-    end
-
-    note right of Handoff : AID's job is done.\nThe client now uses the discovered\nprotocol MCP, A2A, etc.\nto communicate with the agent.
+    [*] --> DNSLookup
+    DNSLookup: Query TXT _agent.<domain>
+    DNSLookup --> ParseTXT
+    ParseTXT: Parse v=aid1 uri=... proto=...
+    ParseTXT --> ConfigCheck
+    ConfigCheck: Has config key?
+    ConfigCheck --> ReadySimple: No – Simple Profile
+    ConfigCheck --> FetchManifest: Yes – Extended Profile
+    FetchManifest: GET /.well-known/aid.json
+    FetchManifest --> ProcessManifest
+    ProcessManifest: Choose implementation
+    ProcessManifest --> GatherCreds
+    GatherCreds: Obtain auth credentials
+    GatherCreds --> ReadySimple
+    ReadySimple --> ProtocolChoice
+    ProtocolChoice: Select protocol
+    ProtocolChoice --> MCPSession: MCP
+    ProtocolChoice --> A2ASession: A2A
+    ProtocolChoice --> ACPSession: ACP
+    ProtocolChoice --> OtherSession: Other
+    MCPSession --> [*]
+    A2ASession --> [*]
+    ACPSession --> [*]
+    OtherSession --> [*]
 ```
+
+---
+
+### Want the deep dive?
+
+* **Rationale** – *Why discovery belongs in DNS and how AID complements `.well-known`.*
+* **Specification** – *Exact TXT keys, manifest schema, security model.*
+
+(See the neighbouring docs in this folder.)

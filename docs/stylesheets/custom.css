@@ -31,6 +31,7 @@
   --shadcn-muted-foreground: hsl(215.4 16.3% 46.9%);
   --shadcn-accent: hsl(210 40% 96%);
   --shadcn-accent-foreground: hsl(222.2 84% 4.9%);
+  --md-admonition-icon--agent: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M320 0c17.7 0 32 14.3 32 32l0 64 120 0c39.8 0 72 32.2 72 72l0 272c0 39.8-32.2 72-72 72l-304 0c-39.8 0-72-32.2-72-72l0-272c0-39.8 32.2-72 72-72l120 0 0-64c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zM264 256a40 40 0 1 0 -80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224l16 0 0 192-16 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-16 0 0-192 16 0z"/></svg>');
 }
 
 /* Dark mode shadcn colors */
@@ -101,6 +102,22 @@
   border-left: 2px solid var(--md-primary-fg-color--light);
   border-radius: var(--base-border-radius);
   box-shadow: none;
+}
+
+/* --- Custom Agent Admonition --- */
+.md-typeset .admonition.agent,
+.md-typeset details.agent {
+  border-color: #6b7280;
+}
+.md-typeset .agent > .admonition-title,
+.md-typeset .agent > summary {
+  background-color: rgba(75, 85, 99, 0.15);
+}
+.md-typeset .agent > .admonition-title::before,
+.md-typeset .agent > summary::before {
+  background-color: #6b7280;
+  -webkit-mask-image: var(--md-admonition-icon--agent);
+          mask-image: var(--md-admonition-icon--agent);
 }
 
 /* --- ShadCN-style Buttons --- */
@@ -182,50 +199,37 @@
     filter: brightness(0) invert(1);
   }
 
-/* --- ShadCN-inspired Fully Clickable Grid Cards --- */
+/* --- ShadCN-inspired Grid Cards --- */
 .md-typeset .grid.cards > ul > li,
 .md-card {
-  box-shadow: none;
-  border: 1px solid var(--md-default-fg-color--lightest);
+  box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.12);
+  border: 1px solid hsl(0, 0%, 70%);
   border-radius: var(--card-border-radius);
-  transition: all 0.2s ease-in-out;
+  background-color: var(--md-default-bg-color);
   position: relative;
+  transition: all 0.2s ease-in-out;
 }
 
-/* Make the entire card clickable */
+/* Basic card structure */
 .md-typeset .grid.cards > ul > li {
   position: relative;
+  padding: 1rem;
 }
 
-.md-typeset .grid.cards > ul > li > * {
-  position: relative;
-  z-index: 1;
+/* Hover effects - enhanced shadow and black border */
+.md-typeset .grid.cards > ul > li:hover,
+.md-card:hover {
+  border-color: var(--md-primary-fg-color);
+  box-shadow: 0 6px 20px hsla(0, 0%, 0%, 0.2);
 }
 
-/* Create an overlay link that covers the entire card */
-.md-typeset .grid.cards > ul > li a[href]:first-child {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  text-decoration: none;
-  border-radius: var(--card-border-radius);
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li {
+  box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.25);
+  border-color: hsl(0, 0%, 50%);
 }
 
-/* Ensure card content is properly displayed */
-.md-typeset .grid.cards > ul > li > :not(a:first-child) {
-  position: relative;
-  z-index: 1;
-  pointer-events: none; /* Prevent interference with overlay link */
-}
-
-/* Make sure text content is visible */
-.md-typeset .grid.cards > ul > li p,
-.md-typeset .grid.cards > ul > li hr {
-  display: block;
-  margin: revert;
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  box-shadow: 0 6px 20px hsla(0, 0%, 0%, 0.4);
 }
 
 /* Style the horizontal rule properly */
@@ -233,27 +237,20 @@
   margin: 1rem 0;
   border: none;
   border-top: 1px solid var(--md-default-fg-color--lightest);
+  position: relative;
+  z-index: 1;
 }
 
-/* Hover effects for cards */
-.md-typeset .grid.cards > ul > li:hover,
-.md-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--md-accent-fg-color);
-  box-shadow: 0 6px 18px hsla(0, 0%, 0%, 0.1);
-  cursor: pointer;
+/* Ensure proper spacing for card content */
+.md-typeset .grid.cards > ul > li {
+  padding: 1rem;
 }
 
-[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
-  box-shadow: 0 6px 18px hsla(0, 0%, 0%, 0.3);
-}
-
-/* Style card content */
-.md-typeset .grid.cards > ul > li .card-content {
-  padding: 1.5rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+/* Style the visible card content */
+.md-typeset .grid.cards > ul > li p {
+  margin: 0.5rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* Forms and Search */
@@ -301,7 +298,22 @@
 
 /* Additional shadcn/ui inspired elements */
 .md-typeset blockquote {
+  border-left: 4px solid #000000;
+  background-color: var(--shadcn-muted);
+  padding: 1rem 1.5rem;
   border-radius: var(--base-border-radius);
+  margin: 1.5em 0;
+  color: #000000;
+  font-style: normal; /* As requested, no italics */
+}
+
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+  border-left-color: var(--shadcn-accent-foreground);
+  color: var(--shadcn-accent-foreground);
+}
+
+.md-typeset blockquote p {
+    margin-bottom: 0;
 }
 
 .md-typeset details {
@@ -352,3 +364,4 @@
   background-color: var(--shadcn-accent);
   color: var(--shadcn-accent-foreground);
 }
+

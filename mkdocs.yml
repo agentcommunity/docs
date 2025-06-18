@@ -65,12 +65,13 @@ extra_javascript:
 # Main Site Navigation
 nav:
   - 'Home': 'index.md'
-  - 'Specifications':
+  - 'Work Items':
       - 'Overview': 'specs/index.md'
       - 'Agent Interface Discovery':
-          - 'Introduction': 'specs/aid/introduction.md'
-          - 'AID Specification': 'specs/aid/spec-v1.md'
-          - 'Design Rationale': 'specs/aid/rationale.md'
+          - 'Introduction (aid)': 'specs/aid/introduction.md'
+          - 'Design Rationale (aid)': 'specs/aid/rationale.md'
+          - 'Specification (aid)': 'specs/aid/spec-v1.md'
+
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
@@ -89,6 +90,8 @@ markdown_extensions:
   - toc:
       permalink: true
       toc_depth: 3
+  - admonition
+  - pymdownx.details
 
 
 
