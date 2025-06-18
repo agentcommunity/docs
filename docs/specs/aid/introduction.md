@@ -93,7 +93,7 @@ stateDiagram-v2
 
 ### Want the deep dive?
 
-* **Rationale** – *Why discovery belongs in DNS and how AID complements `.well-known`.*
-* **Specification** – *Exact TXT keys, manifest schema, security model.*
+* [**Rationale**](rationale.md) – *Why discovery belongs in DNS and how AID complements `.well-known`.*
+* [**Specification**](spec-v1.md) – *Exact TXT keys, manifest schema, security model.*
 
 (See the neighbouring docs in this folder.)

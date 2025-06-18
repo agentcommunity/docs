@@ -1,5 +1,4 @@
 {
     "builds": [{ "src": "site/**", "use": "@vercel/static" }],
     "github": { "enabled": false }
-  }
-  
+}
