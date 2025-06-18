@@ -24,7 +24,4 @@ Currently, the primary specification is:
     Read the full Specification
 
 
-
 </div>
-
----
