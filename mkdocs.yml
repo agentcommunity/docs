@@ -97,6 +97,7 @@ markdown_extensions:
 
 plugins:
   - search
+  - meta
   - social:
       cards_layout: custom
       cards_layout_options:
