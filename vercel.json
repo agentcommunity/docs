@@ -1,12 +1,5 @@
 {
-    "builds": [
-      {
-        "src": "site/**",
-        "use": "@vercel/static"
-      }
-    ],
-    "github": {
-      "enabled": false
-    },
-    "outputDirectory": "site"
+  "github": {
+    "enabled": false
   }
+}
