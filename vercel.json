@@ -1,5 +1,4 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
     "builds": [{ "src": "site/**", "use": "@vercel/static" }],
     "github": { "enabled": false }
   }
