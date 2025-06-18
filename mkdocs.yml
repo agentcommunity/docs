@@ -99,6 +99,8 @@ plugins:
   - search
   - meta
   - social:
-      cards_layout: custom
       cards_layout_options:
+        logo: assets/logo-white.svg
+        background_color: "#ffffff"
+        color: "#000000"
         font_family: Inter
