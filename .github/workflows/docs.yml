@@ -22,17 +22,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-
       - name: Build Docs
-        run: mkdocs build
+        run: |
+          pip install -r requirements.txt
+          mkdocs build
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: site
+        run: vercel deploy --prod --yes --token ${{ secrets.VERCEL_TOKEN }} site
