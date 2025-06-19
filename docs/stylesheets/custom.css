@@ -46,6 +46,12 @@
 .md-grid {
     max-width: 80%;
   }
+
+@media screen and (max-width: 768px) {
+  .md-grid {
+    max-width: 100%;
+  }
+}
   
   .footer {
     padding-bottom: 30vh;
