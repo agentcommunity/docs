@@ -2,6 +2,7 @@
 hide:
   - navigation
   - toc
+description: "The home for open source agent collaboration."
 ---
 
 <div style="text-align: center; margin-bottom: 2rem;">

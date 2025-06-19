@@ -1,4 +1,6 @@
 ---
+title: "Agent Interface Discovery 'aid'"
+description: "Specification"
 icon: material/file-document-outline
 ---
 

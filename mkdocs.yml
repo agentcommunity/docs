@@ -10,6 +10,8 @@ theme:
   name: material
   favicon: https://www.agentcommunity.org/favicon.ico
   logo: assets/logo.svg
+  features:
+  - content.action.view
 
   font:
     text: Inter
@@ -100,7 +102,7 @@ plugins:
   - meta
   - social:
       cards_layout_options:
-        logo: assets/logo-white.svg
-        background_color: "#ffffff"
-        color: "#000000"
+        logo: assets/logo.svg
+        background_color: "#000000"
+        color: "#ffffff"
         font_family: Inter

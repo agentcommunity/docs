@@ -1,4 +1,6 @@
 ---
+title: "Agent Interface Discovery 'aid'"
+description: "Introduction"
 icon: material/home-outline
 ---
 

@@ -1,4 +1,6 @@
 ---
+title: "Agent Interface Discovery 'aid'"
+description: "Design Rationale"
 icon: material/head-question-outline
 ---
 
