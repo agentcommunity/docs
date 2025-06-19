@@ -6,3 +6,5 @@ __pycache__/
 .vercel
 NEXTSTEPS.md
 TODO.md
+@/.cache
+.cache
