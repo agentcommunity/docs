@@ -74,6 +74,8 @@ nav:
           - 'Introduction (aid)': 'specs/aid/introduction.md'
           - 'Design Rationale (aid)': 'specs/aid/rationale.md'
           - 'Specification (aid)': 'specs/aid/spec-v1.md'
+          - 'JSON Schema (aid)': 'specs/aid/aid.schema.json'
+          - 'aid Generator / Resolver': 'https://aid.agentcommunity.org'
 
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 

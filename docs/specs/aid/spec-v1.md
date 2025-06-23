@@ -183,7 +183,6 @@ Each object in the `implementations` array describes one way to run or connect t
 | **`requiredPaths`** | Array of Objects | No | An array of local filesystem paths the user must provide. See **Required Path Object Schema** below. |
 | **`status`** | `"active"`\|`"deprecated"` | No | If `"deprecated"`, clients SHOULD hide or warn. |
 | **`revocationURL`** | String | No | Overrides global `revocationURL` for this implementation only. |
-| **`platformOverrides`** | Object | No | Keys MAY include arch-specific labels, e.g. `"linux_amd64"`, `"linux_arm64"`, `"macos_arm64"`. |
 | **`certificate`** | Object | If `authentication.scheme` = `mtls` | `{ "source":"file"\|"enrollment", "enrollmentEndpoint":"https://…" }` |
 
 #### **Package Object Schema (`package`)**
@@ -200,7 +199,7 @@ Each object in the `implementations` array describes one way to run or connect t
 | --- | --- | --- | --- |
 | **`command`** | String | Yes | The executable to run. Ex: `"docker"`. |
 | **`args`** | Array of Strings | Yes | An array of arguments passed to the command. Supports variable substitution. |
-| **`platformOverrides`** | Object | No | An object to specify different `command` or `args` based on client OS (`"windows"`, `"linux"`, `"macos"`). |
+| **`platformOverrides`** | Object | No | An object to specify a different `command` or `args` based on client OS. Valid keys are `"windows"`, `"linux"`, and `"macos"`. |
 
 #### **Configuration Object Schema (for `configuration` array)**
 
@@ -268,6 +267,7 @@ The `authentication` object unambiguously describes how a client should acquire 
 | **`deviceAuthorizationEndpoint`** | String | For `oauth2_device` | The URL for the device authorization flow. |
 | **`tokenEndpoint`** | String | Yes | The URL to exchange a code or credentials for an access token. |
 | **`scopes`** | Array of Strings | No | An optional list of required OAuth scopes. |
+| **`clientId`** | String | No | The public identifier for the client application, if required by the provider. |
 
 #### **Placement Object Schema (`placement`)**
 
