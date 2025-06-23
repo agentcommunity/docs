@@ -660,9 +660,35 @@
                       },
                       "platformOverrides": {
                         "type": "object",
-                        "additionalProperties": {
-                          "$ref": "#/definitions/AidManifest/properties/implementations/items/anyOf/1/properties/execution"
-                        }
+                        "properties": {
+                          "windows": {
+                            "type": "object",
+                            "properties": {
+                              "command": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "args": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "command",
+                              "args"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "linux": {
+                            "$ref": "#/definitions/AidManifest/properties/implementations/items/anyOf/1/properties/execution/properties/platformOverrides/properties/windows"
+                          },
+                          "macos": {
+                            "$ref": "#/definitions/AidManifest/properties/implementations/items/anyOf/1/properties/execution/properties/platformOverrides/properties/windows"
+                          }
+                        },
+                        "additionalProperties": false
                       }
                     },
                     "required": [
