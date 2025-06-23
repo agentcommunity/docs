@@ -203,8 +203,7 @@
                         },
                         "required": [
                           "scheme",
-                          "description",
-                          "placement"
+                          "description"
                         ],
                         "additionalProperties": false
                       },
@@ -250,8 +249,7 @@
                         },
                         "required": [
                           "scheme",
-                          "description",
-                          "placement"
+                          "description"
                         ],
                         "additionalProperties": false
                       },
@@ -278,8 +276,7 @@
                         },
                         "required": [
                           "scheme",
-                          "description",
-                          "placement"
+                          "description"
                         ],
                         "additionalProperties": false
                       },
