@@ -18,6 +18,8 @@ theme:
   icon:
     repo: fontawesome/brands/github
     view: fontawesome/brands/markdown
+    tag:
+      new: material/new-box  # Icon for NEW tag
 
   palette:
     # DARK MODE CONFIGURATION (Stays the same)
@@ -68,6 +70,8 @@ extra_javascript:
 # Main Site Navigation
 nav:
   - 'Home': 'index.md'
+  - 'AID':
+      - 'Introduction': 'specs/aid/introduction.md'
   - 'Work Items':
       - 'Overview': 'specs/index.md'
       - 'Agent Interface Discovery':
@@ -103,9 +107,21 @@ markdown_extensions:
 plugins:
   - search
   - meta
+  - tags
   - social:
+      cards: true
+      cards_layout: custom
       cards_layout_options:
         logo: assets/logo.svg
         background_color: "#000000"
         color: "#ffffff"
         font_family: Inter
+
+# Tags Configuration
+extra:
+  tags:
+    NEW: new  # Define NEW tag identifier
+
+# Custom CSS for tag styling
+extra_css:
+  - stylesheets/custom.css
