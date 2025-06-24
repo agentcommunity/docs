@@ -10,19 +10,19 @@ Currently, the primary specification is:
 
 <div class="grid cards" markdown>
 
--   [:material-home-outline:{ .lg .middle } __Introduction__ ](aid/introduction.md)
+-   [:material-home-outline:{ .lg .middle } __Introduction__ ](../aid/index.md)
 
     ELI5 explainer of DNS for Agents
 
--   [:material-head-question-outline:{ .lg .middle } __Design Rationale__](aid/rationale.md)
+-   [:material-head-question-outline:{ .lg .middle } __Design Rationale__](../aid/rationale.md)
 
     Understand the design decisions for AID.
 
--   [:material-file-document-outline:{ .lg .middle } __Specification v1__](aid/spec-v1.md)
+-   [:material-file-document-outline:{ .lg .middle } __Specification v1__](../aid/v1/specification.md)
 
     Full specification for Agent Interface Discovery (AID)
 
--   [:material-code-json:{ .lg .middle } __Schema__ ](aid/aid.schema.json)
+-   [:material-code-json:{ .lg .middle } __Schema__ ](../aid/v1/aid.schema.json)
 
     Full JSON Schema for aid
 

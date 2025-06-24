@@ -2,6 +2,10 @@
 title: "Agent Interface Discovery 'aid'"
 description: "Specification"
 icon: material/file-document-outline
+
+tags:
+  - v1
+  - '2025-06-19'
 ---
 
 

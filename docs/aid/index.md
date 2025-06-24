@@ -1,12 +1,11 @@
 ---
-title: "Agent Interface Discovery 'aid'"
+title: "Introduction 'aid'"
 description: "Introduction"
 icon: material/home-outline
-tags:
-  - NEW
+
 ---
 
-# Agent Interface Discovery (AID)
+# Agent Interface Discovery (AID) 
 
 > ##DNS for Agents
 > *Type a domain – connect to its agent(s), instantly.*
@@ -31,13 +30,21 @@ AID is a tiny DNS record that tells any client **where** an agent lives, **which
 
 <div class="grid cards" markdown>
 
--   [:material-file-document-outline:{ .lg .middle } __Specification__ ](spec-v1.md)
+-   [:material-file-document-outline:{ .lg .middle } __Specification__](v1/specification.md)
 
     Read the full Specification
 
 -   [:material-forum:{ .lg .middle } __Design Rationale__](rationale.md)
 
     Understand the design decisions for AID.
+
+-   [:material-git:{ .lg .middle } __Versioning__](versioning.md)
+
+    Learn how we version the AID specification.
+
+-   [:material-cogs:{ .lg .middle } __Tools__](generator.md)
+
+    Generate, resolve, and validate AID manifests.
 
 </div>
 
@@ -98,6 +105,6 @@ stateDiagram-v2
 ### Want the deep dive?
 
 * [**Rationale**](rationale.md) – *Why discovery belongs in DNS and how AID complements `.well-known`.*
-* [**Specification**](spec-v1.md) – *Exact TXT keys, manifest schema, security model.*
+* [**Specification**](v1/specification.md) – *Exact TXT keys, manifest schema, security model.*
 
 (See the neighbouring docs in this folder.)
