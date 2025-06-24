@@ -43,7 +43,6 @@ theme:
     - content.code.copy
     - content.code.annotate
     - navigation.sections
-    - content.diagram
 
 # Plugins
 plugins:
@@ -91,3 +90,6 @@ nav:
 # Extra assets (same as main)
 extra_css:
   - stylesheets/custom.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js
