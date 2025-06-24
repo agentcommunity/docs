@@ -1,6 +1,7 @@
 # mkdocs.yml
 site_name: ".agent Community"
 site_url: https://docs.agentcommunity.org
+use_directory_urls: true
 
 # Repository
 repo_url: https://github.com/agentcommunity/docs
@@ -102,9 +103,9 @@ plugins:
   - social:
       cards: true
   - redirects:
-      use_directory_urls: true
       redirect_maps:
         specs/aid/introduction.md: /aid/latest/
+        specs/aid/rationale.md: /aid/latest/rationale/
 
 # Tags Configuration
 extra:
