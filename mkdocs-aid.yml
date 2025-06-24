@@ -1,5 +1,6 @@
 site_name: "AID Specification"
 site_url: https://docs.agentcommunity.org/aid/
+use_directory_urls: true
 docs_dir: aid
 
 # Repository
