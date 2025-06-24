@@ -101,18 +101,10 @@ plugins:
   - tags
   - social:
       cards: true
-      cards_layout: custom
-      cards_layout_options:
-        logo: assets/logo.svg
-        background_color: "#000000"
-        color: "#ffffff"
-        font_family: Inter
   - redirects:
+      use_directory_urls: true
       redirect_maps:
         specs/aid/introduction.md: /aid/latest/
-        specs/aid/rationale.md: /aid/latest/rationale/
-        specs/aid/spec-v1.md: /aid/latest/spec-v1/
-        specs/aid/aid.schema.json: /aid/latest/aid.schema.json
 
 # Tags Configuration
 extra:

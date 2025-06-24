@@ -4,6 +4,8 @@
 
 Agents are exploding across the web, but the ecosystem is scattered. There is no common home for open standards, shared trust signals, or ethical guard‑rails. .agent community is here to fix that.
 
+📘 **Live Documentation:** https://docs.agentcommunity.org
+
 ## Our Mission
 
 The Agent Community is an open, non‑commercial home where builders, researchers, and operators:
@@ -74,6 +76,5 @@ Today agent developers face:
 *Let's build an agentic web that is open, safe, and interoperable.*
 
 [![Deploy Docs](https://github.com/agentcommunity/docs/actions/workflows/docs.yml/badge.svg)](https://github.com/agentcommunity/docs/actions/workflows/docs.yml)
-[![Powered by Vercel](https://vercel.com/button)](https://vercel.com)
 
 📘 **Live site:** https://docs.agentcommunity.org
