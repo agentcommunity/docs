@@ -1,0 +1,7 @@
+{
+  "name": "agent-community-docs",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bash build-docs.sh"
+  }
+} 

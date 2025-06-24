@@ -1,11 +1,22 @@
 {
+  "version": 2,
   "builds": [
     {
-      "src": "**/*",
-      "use": "@vercel/static"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "site"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ],
   "github": {
-    "enabled": false
+    "enabled": true,
+    "autoAlias": true
   }
 }
