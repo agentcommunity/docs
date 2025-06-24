@@ -20,11 +20,15 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Build and Deploy
+      - name: Build Docs
+        run: |
+          pip install -r requirements.txt
+          mkdocs build
+
+      - name: Deploy to Vercel
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          bash build-docs.sh
           vercel deploy ./site --prod --token=${{ secrets.VERCEL_TOKEN }} --yes

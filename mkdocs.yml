@@ -72,13 +72,18 @@ extra_javascript:
 nav:
   - 'Home': 'index.md'
   - 'Work Items': 'work-items/index.md'
-  - 'AID Specification': 'https://docs.agentcommunity.org/aid/latest/'
+  - 'AID Specification':
+    - 'Introduction': 'aid/index.md'
+    - 'Design Rationale': 'aid/rationale.md'
+    - 'v1 Specification': 'aid/v1/spec-v1.md'
+    - 'v1 JSON Schema': 'aid/v1/aid.schema.json'
+    - 'aid Generator / Resolver': 'https://aid.agentcommunity.org'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
 markdown_extensions:
-  - attr_list # Lets us add classes to icons, like { .lg .middle }
-  - md_in_html # The most important one: allows grids to work at all
+  - attr_list
+  - md_in_html
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -94,18 +99,18 @@ markdown_extensions:
   - admonition
   - pymdownx.details
 
-
-
 plugins:
   - search
   - meta
   - tags
-  - social:
+  - social: # <--- CORRECT LOCATION
       cards: true
   - redirects:
       redirect_maps:
-        specs/aid/introduction.md: /aid/latest/
-        specs/aid/rationale.md: /aid/latest/rationale/
+        'specs/aid/introduction.md': 'aid/index.md'
+        'specs/aid/rationale.md': 'aid/rationale.md'
+        'specs/aid/spec-v1.md': 'aid/v1/spec-v1.md'
+        'specs/aid/aid.schema.json': 'aid/v1/aid.schema.json'
 
 # Tags Configuration
 extra:
