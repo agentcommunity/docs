@@ -31,6 +31,34 @@ The Agent Community is an open, non‑commercial home where builders, researcher
 3. **[Contribute](https://github.com/orgs/agentcommunity)** – comment. review, and propose new ideas.
 4. **Build** – ship agents, get feedback and and wear the .agent badge.
 
+```mermaid
+stateDiagram-v2
+    [*] --> DNSLookup
+    DNSLookup: Query TXT _agent.<domain>
+    DNSLookup --> ParseTXT
+    ParseTXT: Parse v=aid1 uri=... proto=...
+    ParseTXT --> ConfigCheck
+    ConfigCheck: Has config key?
+    ConfigCheck --> ReadySimple: No – Simple Profile
+    ConfigCheck --> FetchManifest: Yes – Extended Profile
+    FetchManifest: GET /.well-known/aid.json
+    FetchManifest --> ProcessManifest
+    ProcessManifest: Choose implementation
+    ProcessManifest --> GatherCreds
+    GatherCreds: Obtain auth credentials
+    GatherCreds --> ReadySimple
+    ReadySimple --> ProtocolChoice
+    ProtocolChoice: Select protocol
+    ProtocolChoice --> MCPSession: MCP
+    ProtocolChoice --> A2ASession: A2A
+    ProtocolChoice --> ACPSession: ACP
+    ProtocolChoice --> OtherSession: Other
+    MCPSession --> [*]
+    A2ASession --> [*]
+    ACPSession --> [*]
+    OtherSession --> [*]
+```
+
 ---
 
 ## Quick Links
@@ -38,11 +66,11 @@ The Agent Community is an open, non‑commercial home where builders, researcher
 
 <div class="grid cards" markdown>
 
--   [:material-home-outline:{ .lg .middle } __Agent Interface Discovery (aid)__](specs/index.md)
+-   [:material-home-outline:{ .lg .middle } __Agent Interface Discovery (aid)__](aid/index.md)
 
     DNS for Agents speficiation (Introduction)
 
--   [:material-book-open:{ .lg .middle } __Work Items__](specs/index.md)
+-   [:material-book-open:{ .lg .middle } __Work Items__](work-items/index.md)
 
     Browse all current and upcoming specifications from the Agent Community.
 

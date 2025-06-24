@@ -70,17 +70,8 @@ extra_javascript:
 # Main Site Navigation
 nav:
   - 'Home': 'index.md'
-  - 'AID':
-      - 'Introduction': 'specs/aid/introduction.md'
-  - 'Work Items':
-      - 'Overview': 'specs/index.md'
-      - 'Agent Interface Discovery':
-          - 'Introduction (aid)': 'specs/aid/introduction.md'
-          - 'Design Rationale (aid)': 'specs/aid/rationale.md'
-          - 'Specification (aid)': 'specs/aid/spec-v1.md'
-          - 'JSON Schema (aid)': 'specs/aid/aid.schema.json'
-          - 'aid Generator / Resolver': 'https://aid.agentcommunity.org'
-
+  - 'Work Items': 'work-items/index.md'
+  - 'AID Specification': 'https://docs.agentcommunity.org/aid/latest/'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
@@ -116,6 +107,12 @@ plugins:
         background_color: "#000000"
         color: "#ffffff"
         font_family: Inter
+  - redirects:
+      redirect_maps:
+        specs/aid/introduction.md: /aid/latest/
+        specs/aid/rationale.md: /aid/latest/rationale/
+        specs/aid/spec-v1.md: /aid/latest/spec-v1/
+        specs/aid/aid.schema.json: /aid/latest/aid.schema.json
 
 # Tags Configuration
 extra:
