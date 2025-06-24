@@ -11,8 +11,7 @@ edit_uri: edit/main/aid/
 theme:
   name: material
   favicon: https://www.agentcommunity.org/favicon.ico
-  # The logo will be defined in `extra.assets` to ensure correct pathing
-  # logo: assets/logo.svg
+  logo: https://docs.agentcommunity.org/assets/logo-white.svg
   font:
     text: Inter
   icon:
@@ -92,7 +91,7 @@ nav:
 
 # Extra assets (same as main)
 extra_css:
-  - stylesheets/custom.css
+  - https://docs.agentcommunity.org/stylesheets/custom.css
 
 extra_javascript:
   - https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js
