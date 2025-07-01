@@ -1,5 +1,5 @@
 {
-  "installCommand": "pip install -r requirements.txt",
+  "installCommand": "python3 -m pip install -r requirements.txt",
   "buildCommand": "git clone --depth 1 https://github.com/agentcommunity/AgentInterfaceDiscovery tmp-spec-repo && mv tmp-spec-repo/docs/aid docs/aid && mkdocs build",
   "outputDirectory": "site"
 }
