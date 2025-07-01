@@ -102,10 +102,11 @@ markdown_extensions:
   - pymdownx.details
 
 plugins:
-  - monorepo:
-      repo: https://github.com/agentcommunity/AgentInterfaceDiscovery
-      path: docs
-      branch: main
+  - get-deps:
+      git:
+        - repo: https://github.com/agentcommunity/AgentInterfaceDiscovery
+          path: docs/aid
+          dest: aid
   - search
   - meta
   - tags
@@ -124,6 +125,7 @@ extra:
     NEW: new
     v1: version
     '2025-06-19': date
+    '2025-06-25': date
 
 # Custom CSS for tag styling
 extra_css:
