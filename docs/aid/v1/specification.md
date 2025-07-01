@@ -110,7 +110,7 @@ _agent.big-container.com. IN TXT (
 
 ### 2.1.3. Reserved token registries
 
-The following registries **MUST** be used for new tokens. `proto`, `auth`, and future key namespaces are allocated via the provisional *AID registries* (see [Appendix H](#appendix-h-iana-considerations)). Until formal IANA review, allocation is "First-Come, Expert-Review".
+The following registries **MUST** be used for new tokens. `proto`, `auth`, and future field namespaces are allocated via the provisional *AID registries* (see [Appendix H](#appendix-h-iana-considerations)). Until formal IANA review, allocation is "First-Come, Expert-Review".
 
 ### 2.1.4. Example DNS Records
 
@@ -136,7 +136,7 @@ When the `config` key is present, it points to an **AID Manifest**, a JSON docum
 **JSON-Schema Link**
 
 A canonical JSON Schema for `schemaVersion: "1"` is maintained at: 
-[`https://aid.agentcommunity.org/schemas/v1/aid.schema.json`](https://aid.agentcommunity.org/schemas/v1/aid.schema.json)
+[`https://aid.agentcommunity.org/schema/v1/aid.schema.json`](https://aid.agentcommunity.org/schema/v1/aid.schema.json)
 
 Providers **MAY** reference it in tooling; clients **MAY** use it for validation.
 
@@ -190,7 +190,7 @@ Each object in the `implementations` array describes one way to run or connect t
 | **`package`** | Object | If `type` is `"local"` | Describes the software package to be executed. See **Package Object Schema** below. |
 | **`execution`** | Object | If `type` is `"local"` | Defines the command and arguments to run the local package. See **Execution Object Schema** below. |
 | **`authentication`** | Object | Yes | Describes the required authentication method. See **Section 2.2.4**. |
-| **`configuration`** | Array of Objects | No | An array of user-configurable settings. See **Configuration Object Schema** below. |
+| **`requiredConfig`** | Array of Objects | No | Settings that **MUST** be supplied by the user before the agent can run. See **Configuration Object Schema** below. |
 | **`requiredPaths`** | Array of Objects | No | An array of local filesystem paths the user must provide. See **Required Path Object Schema** below. |
 | **`status`** | `"active"`\|`"deprecated"` | No | If `"deprecated"`, clients SHOULD hide or warn. |
 | **`revocationURL`** | String | No | Overrides global `revocationURL` for this implementation only. |
@@ -214,7 +214,7 @@ Each object in the `implementations` array describes one way to run or connect t
 | **`args`** | Array of Strings | Yes | An array of arguments passed to the command. Supports variable substitution. |
 | **`platformOverrides`** | Object | No | An object to specify a different `command` or `args` based on client OS. Valid keys are `"windows"`, `"linux"`, and `"macos"`. |
 
-#### **Configuration Object Schema (for `configuration` array)**
+#### **Configuration Object Schema (for `requiredConfig` array)**
 
 | Field | Type | Required? | Description |
 | --- | --- | --- | --- |
@@ -239,7 +239,7 @@ The `execution.args` array supports variable substitution to construct commands 
 - `${package.identifier}`: Replaced by the package identifier.
 - `${auth.<key>}`: Replaced by the secret provided by the user for the corresponding `authentication.credentials` `key`.
 - `${path.<key>}`: Replaced by the local path provided by the user for the corresponding `requiredPaths` `key`.
-- `${config.<key>}`: Replaced by the value set by the user for the corresponding `configuration` `key`.
+- `${requiredConfig.<key>}`: Replaced by the value set by the user for the corresponding `requiredConfig` `key`.
 
 To prevent injection vulnerabilities, clients **MUST** treat substituted values as atomic arguments and **MUST NOT** allow them to be parsed by a shell.
 
@@ -316,7 +316,7 @@ An AID Client **MUST** perform the following steps for a given `<domain>`:
    a. Validate that `schemaVersion` is a version the client understands (e.g., `"1"`).
    b. Identify viable `implementations` based on the client's capabilities (e.g., a web client cannot run a `local` Docker implementation).
    c. If multiple implementations are viable, the client **MAY** present these options to the user using the `title` field for each.
-   d. For the chosen implementation, the client **MUST** follow the instructions in the `authentication`, `configuration`, and `execution` objects to obtain credentials and start/connect to the agent service. When the implementation's `protocol` is `"mcp"`, clients **MUST NOT** send requests as JSON-RPC batch arrays.
+   d. For the chosen implementation, the client **MUST** follow the instructions in the `authentication`, `requiredConfig`, and `execution` objects to obtain credentials and start/connect to the agent service. When the implementation's `protocol` is `"mcp"`, clients **MUST NOT** send requests as JSON-RPC batch arrays.
    e. If chosen implementation's "status" = "deprecated", client MUST display a warning or require user confirmation.
 6. **Cache Manifest:** The client **MUST** cache the manifest according to the guidance in Appendix B.
 
@@ -454,7 +454,7 @@ Clients **MUST** implement a two-layer caching strategy for `aid.json` manifests
 1. Publish `_agent.<domain>` **TXT** with `v`, `uri`, `proto` (and `config` if Extended Profile).
 2. **HTTPS-host** `aid.json` under `/.well-known/` with `schemaVersion:"1"` and increment `contentVersion` on every change.
 3. Sign TXT with **DNSSEC**; serve manifest via **TLS**.
-4. If you offer a local Docker path, test variable substitution `${auth.*}` and `${config.*}` works end-to-end.
+4. If you offer a local Docker path, test variable substitution `${auth.*}` and `${requiredConfig.*}` works end-to-end.
 5. Set `_agent` TXT **TTL ≤ 300 s** in production.
 6. Optional: Publish a preview SVCB/HTTPS RR for v2.
 
@@ -545,7 +545,7 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
           "type": "directory"
         }
       ],
-      "configuration": [
+      "requiredConfig": [
         {
           "key": "GRAFANA_URL",
           "description": "URL of your Grafana instance.",
@@ -557,7 +557,7 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
         "command": "docker",
         "args": [
           "run", "--rm", "-i",
-          "-e", "GRAFANA_URL=${config.GRAFANA_URL}",
+          "-e", "GRAFANA_URL=${requiredConfig.GRAFANA_URL}",
           "-e", "GRAFANA_API_KEY=${auth.grafana_api_key}",
           "-v", "${path.grafana_config_dir}:/etc/grafana",
           "${package.identifier}",
