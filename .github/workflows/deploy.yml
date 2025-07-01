@@ -1,34 +1,40 @@
-name: Deploy to Vercel
+name: Deploy Docs to Vercel
 
 on:
   push:
     branches:
       - main
+  repository_dispatch:
+    types: [spec-updated]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Docs Repo Code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11' # Or your preferred python version
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Fetch AID Spec Repository
+        run: |
+          git clone --depth 1 https://github.com/agentcommunity/AgentInterfaceDiscovery ../AgentInterfaceDiscovery
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build MkDocs Site
+        run: mkdocs build
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-
-      - name: Build Docs
-        run: |
-          pip install -r requirements.txt
-          mkdocs build
 
       - name: Deploy to Vercel
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          vercel deploy ./site --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+        run: vercel deploy ./site --prod --token=${{ secrets.VERCEL_TOKEN }}

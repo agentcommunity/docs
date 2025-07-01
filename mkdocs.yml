@@ -102,11 +102,10 @@ markdown_extensions:
   - pymdownx.details
 
 plugins:
-  - get-deps:
-      git:
-        - repo: https://github.com/agentcommunity/AgentInterfaceDiscovery
-          path: docs/aid
-          dest: aid
+  - monorepo:
+      projects:
+        - path: ../AgentInterfaceDiscovery/docs/aid        # spec folder next to this repo
+          dest: aid                                        # publish under /aid/
   - search
   - meta
   - tags
