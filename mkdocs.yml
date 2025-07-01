@@ -73,7 +73,7 @@ nav:
   - Home: index.md
   - Work Items: work-items/index.md
   - Agent Interface Discovery (AID):
-    - Introduction: aid/index.md
+    - Agent Interface Discovery: aid/index.md
     - Design Rationale: 'aid/rationale.md'
     - v1:
       - Specification: aid/v1/specification.md
@@ -102,10 +102,14 @@ markdown_extensions:
   - pymdownx.details
 
 plugins:
+  - monorepo:
+      repo: https://github.com/agentcommunity/AgentInterfaceDiscovery
+      path: docs
+      branch: main
   - search
   - meta
   - tags
-  - social: # <--- CORRECT LOCATION
+  - social:
       cards: true
   - redirects:
       redirect_maps:
