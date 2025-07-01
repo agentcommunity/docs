@@ -24,7 +24,7 @@ flowchart LR
 
 ## What it does (in one sentence)
 
-AID is a tiny DNS record that tells any client **where** an agent lives, **which** protocol it speaks (MCP, A2A, ACP, …), and **how** to start talking to it.
+AID is a protocol that uses DNS to discover agents. For simple cases, a single TXT record is all you need. For complex cases, that record can point to a rich `aid.json` manifest.
 
 ## Links
 
@@ -57,12 +57,11 @@ AID is a tiny DNS record that tells any client **where** an agent lives, **which
 * **Zero lock‑in** – Uses plain DNS + HTTPS, so any provider can adopt it overnight.
 * **Local/Diff domain tooling** - Enables complex protocol discovery via standardized mechanisms.
 
-## How it works (30‑second version)
+## How it works (30-second version)
 
-1. Client queries `TXT _agent.<domain>`.
-2. If the record holds a full URI, connect right away.
-3. If it points to an `aid.json` manifest, fetch it and pick the best implementation (remote API, local Docker, etc.).
-4. Kick off the session using the declared protocol – typically MCP.
+1. **Simple Profile:** A client queries the `TXT _agent.<domain>` record. The record contains a `uri`, `proto`, and `auth` hint, allowing the client to connect immediately.
+2. **Extended Profile:** If the TXT record also contains a `config` key, the client knows to fetch the full `aid.json` manifest from that URL for more detailed instructions.
+3. **Process Manifest:** The client parses the rich manifest, chooses an implementation (e.g., remote API, local Docker), and follows its instructions to connect.
 
 That is the whole boot‑strap layer. The heavy lifting (auth flows, task calls) stays in MCP or whichever protocol you choose.
 

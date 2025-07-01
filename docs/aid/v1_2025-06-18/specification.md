@@ -5,7 +5,7 @@ icon: material/file-document-outline
 
 tags:
   - v1
-  - '2025-06-25'
+  - '2025-06-19'
 ---
 
 
@@ -82,7 +82,7 @@ AID operates in two modes: a **Simple Profile** using only a DNS TXT record, and
 
 A domain advertises its agent service by publishing a DNS TXT record at a well-known subdomain: `_agent.<domain>`.
 
-The record's content is a single string composed of semicolon-delimited `key=value` pairs. While the order of keys is not significant to clients, providers **SHOULD** place the `v` key first for human readability. Keys should be concise (ideally ≤9 characters) and use US-ASCII. Registry keys MAY exceed 9 chars once SVCB is adopted; for TXT aim for brevity. To keep DNS responses efficient, the record should be kept under 255 characters. If a record exceeds this length, it may be split into multiple 255-octet strings by DNS; AID Clients **MUST** concatenate these strings before parsing (as per RFC 6763).
+The record's content is a single string composed of semicolon-delimited `key=value` pairs. Keys should be concise (ideally ≤9 characters) and use US-ASCII. Registry keys MAY exceed 9 chars once SVCB is adopted; for TXT aim for brevity. To keep DNS responses efficient, the record should be kept under 255 characters. If a record exceeds this length, it may be split into multiple 255-byte strings by DNS; AID Clients **MUST** concatenate these strings before parsing (as per RFC 6763).
 
 **Supported Keys:**
 
@@ -90,12 +90,10 @@ The record's content is a single string composed of semicolon-delimited `key=val
 | --- | --- | --- | --- |
 | **v** | **Required** | Version of the AID specification. Must be `aid1`. | `v=aid1` |
 | **uri** | Required **iff** at least one *remote* implementation exists (MUST be absent if all implementations are local). | The primary remote endpoint URI. In a Simple Profile, this is the only endpoint. In an Extended Profile, this serves as a fallback for simple clients and should correspond to the primary `remote` implementation in the manifest. | `uri=https://api.example.com/agent` |
-| **proto** | Required **iff** at least one *remote* implementation exists (MUST be absent if all implementations are local). | Supported protocol(s) at the primary URI. A comma-separated list; the first is preferred. Token values **MUST** come from the *AID-proto* registry (see Appendix H) or an IANA-assigned successor once available. | `proto=mcp` or `proto=mcp,a2a` |
+| **proto** | Required **iff** at least one *remote* implementation exists (MUST be absent if all implementations are local). | Supported protocol(s) at the primary URI. A comma-separated list; the first is preferred. | `proto=mcp` or `proto=mcp,a2a` |
 | **auth** | Recommended | Authentication hint(s) for the primary URI. See Appendix A for registry. | `auth=pat` or `auth=oauth2_device,oauth2_code` |
 | **env** | Optional | Environment indicator for the endpoint. | `env=prod` |
 | **config** | Optional | Absolute `https://` URL of an AID Manifest (`aid.json`). Its presence signals the Extended Profile is available. The URL should use a well-known path (see RFC 8615). | `config=https://example.com/.well-known/aid.json` |
-
-No additional version keys are defined; any change that would require a new key will instead be published as `v=aid2`.
 
 If a service exposes *only* local implementations (e.g., purely-offline tooling), providers MAY omit `uri` and `proto`.
 
@@ -110,7 +108,7 @@ _agent.big-container.com. IN TXT (
 
 ### 2.1.3. Reserved token registries
 
-The following registries **MUST** be used for new tokens. `proto`, `auth`, and future field namespaces are allocated via the provisional *AID registries* (see [Appendix H](#appendix-h-iana-considerations)). Until formal IANA review, allocation is "First-Come, Expert-Review".
+The following registries **MUST** be used for new tokens. `proto`, `auth`, and future key namespaces are allocated via the provisional *AID registries* (see [Appendix H](#appendix-h-iana-considerations)). Until formal IANA review, allocation is "First-Come, Expert-Review".
 
 ### 2.1.4. Example DNS Records
 
@@ -131,12 +129,12 @@ The following registries **MUST** be used for new tokens. `proto`, `auth`, and f
 
 ### 2.2. The AID Manifest (JSON Configuration Manifest)
 
-When the `config` key is present, it points to an **AID Manifest**, a JSON document that provides a rich, structured description of the agent service. The manifest **MUST** be accessible via HTTPS. The fields within this manifest reflect the capabilities as of the date in the document tag.
+When the `config` key is present, it points to an **AID Manifest**, a JSON document that provides a rich, structured description of the agent service. The manifest **MUST** be accessible via HTTPS.
 
 **JSON-Schema Link**
 
 A canonical JSON Schema for `schemaVersion: "1"` is maintained at: 
-[`https://aid.agentcommunity.org/schema/v1/aid.schema.json`](https://aid.agentcommunity.org/schema/v1/aid.schema.json)
+[`https://aid.dev/schema/v1/aid.schema.json`](https://aid.dev/schema/v1/aid.schema.json)
 
 Providers **MAY** reference it in tooling; clients **MAY** use it for validation.
 
@@ -169,9 +167,7 @@ Providers **MAY** reference it in tooling; clients **MAY** use it for validation
     - **`revocationURL`**: Optional. String. An absolute HTTPS URL for a real-time status check. See Appendix C.
 
 - **`implementations`**: **Required**. Array of one or more **Implementation Objects**.
-- **`signature`**: *Reserved for future use. When implemented, it is expected to use a detached signature format (e.g., as described in I-D.ietf-jose-json-signature-algorithms[^jose-draft-moving]).*
-
-[^jose-draft-moving]: The referenced JOSE signature algorithms draft is a moving target and may change before adoption; implementers should check for the latest version.
+- **`signature`**: *Reserved for future use; detached JWS signing is expected in v2.*
 
 ### 2.2.2. Implementation Object Schema
 
@@ -179,24 +175,19 @@ Each object in the `implementations` array describes one way to run or connect t
 
 | Field | Type | Required? | Description |
 | --- | --- | --- | --- |
-| **`name`** | String | Yes | A short, machine-readable identifier for the implementation, unique within the manifest. Ex: `"cloud-prod-v1"`. |
-| **`title`** | String | Yes | A human-readable name for this implementation, displayed to the user. Ex: `"Cloud (Production)"`. |
+| **`name`** | String | Yes | A short, human-readable name for the implementation. Displayed to the user. Ex: `"Cloud (Production)"`. |
 | **`type`** | String | Yes | Defines the execution environment. Must be either `"remote"` or `"local"`. |
 | **`protocol`** | String | Yes | The agent communication protocol. Ex: `"mcp"`, `"a2a"`. |
-| **`mcpVersion`** | String | No | A non-binding hint of the MCP version supported. Ex: `"2025-06-18"`. |
-| **`capabilities`** | Object | No | A hint about supported MCP capabilities. Ex: `{ "structuredOutput": {}, "resourceLinks": {} }`. |
 | **`tags`** | Array of Strings | No | Optional tags for filtering. Ex: `["prod", "beta", "docker"]`. |
 | **`uri`** | String | If `type` is `"remote"` | The base HTTPS URL for the agent's remote API endpoint. |
 | **`package`** | Object | If `type` is `"local"` | Describes the software package to be executed. See **Package Object Schema** below. |
 | **`execution`** | Object | If `type` is `"local"` | Defines the command and arguments to run the local package. See **Execution Object Schema** below. |
 | **`authentication`** | Object | Yes | Describes the required authentication method. See **Section 2.2.4**. |
-| **`requiredConfig`** | Array of Objects | No | Settings that **MUST** be supplied by the user before the agent can run. See **Configuration Object Schema** below. |
+| **`configuration`** | Array of Objects | No | An array of user-configurable settings. See **Configuration Object Schema** below. |
 | **`requiredPaths`** | Array of Objects | No | An array of local filesystem paths the user must provide. See **Required Path Object Schema** below. |
 | **`status`** | `"active"`\|`"deprecated"` | No | If `"deprecated"`, clients SHOULD hide or warn. |
 | **`revocationURL`** | String | No | Overrides global `revocationURL` for this implementation only. |
 | **`certificate`** | Object | If `authentication.scheme` = `mtls` | `{ "source":"file"\|"enrollment", "enrollmentEndpoint":"https://…" }` |
-
-**Authoritative Capabilities:** The `capabilities` and `mcpVersion` fields are non-binding, advisory hints. The definitive source of truth for a service's capabilities is the live response from an MCP `initialize` handshake. Clients **MUST** rely on the runtime negotiation over any static values in the manifest.
 
 #### **Package Object Schema (`package`)**
 
@@ -214,7 +205,7 @@ Each object in the `implementations` array describes one way to run or connect t
 | **`args`** | Array of Strings | Yes | An array of arguments passed to the command. Supports variable substitution. |
 | **`platformOverrides`** | Object | No | An object to specify a different `command` or `args` based on client OS. Valid keys are `"windows"`, `"linux"`, and `"macos"`. |
 
-#### **Configuration Object Schema (for `requiredConfig` array)**
+#### **Configuration Object Schema (for `configuration` array)**
 
 | Field | Type | Required? | Description |
 | --- | --- | --- | --- |
@@ -239,13 +230,11 @@ The `execution.args` array supports variable substitution to construct commands 
 - `${package.identifier}`: Replaced by the package identifier.
 - `${auth.<key>}`: Replaced by the secret provided by the user for the corresponding `authentication.credentials` `key`.
 - `${path.<key>}`: Replaced by the local path provided by the user for the corresponding `requiredPaths` `key`.
-- `${requiredConfig.<key>}`: Replaced by the value set by the user for the corresponding `requiredConfig` `key`.
+- `${config.<key>}`: Replaced by the value set by the user for the corresponding `configuration` `key`.
 
 To prevent injection vulnerabilities, clients **MUST** treat substituted values as atomic arguments and **MUST NOT** allow them to be parsed by a shell.
 
 If a substitution resolves to an empty string, the client **MUST** omit that argument *and* any immediately-preceding token that begins with `-` or `--`.
-
-If a literal `$` is needed inside an `args` element, providers **MUST** escape it as `$$` so that clients do not treat it as a variable token.
 
 Example:
 ```
@@ -262,8 +251,8 @@ The `authentication` object unambiguously describes how a client should acquire 
 | --- | --- | --- | --- |
 | **`scheme`** | String | Yes | The primary authentication token from the registry in Appendix A. Use `"none"` for no authentication. |
 | **`description`** | String | If `scheme` is not `"none"` | Human-readable text for the UI. Ex: `"Your GitHub Personal Access Token with 'repo' scope."`. |
-| **`tokenUrl`** | String | No | An optional HTTPS URL for credential self-service (e.g., where a user can create a PAT). **SHOULD NOT** be present for any `oauth2_*` scheme; for all others, it is **OPTIONAL** but RECOMMENDED when possible. |
-| **`credentials`** | Array of Objects | No | For multi-part secrets. Required for `basic` authentication (username/password). If present, prompts are generated from this array. See **Credential Item Schema** below. |
+| **`tokenUrl`** | String | No | An optional HTTPS URL where the user can generate the required credential. Clients **SHOULD** display this as a link. |
+| **`credentials`** | Array of Objects | No | For multi-part secrets (like Client ID/Secret). If present, prompts are generated from this array. See **Credential Item Schema** below. |
 | **`oauth`** | Object | If `scheme` is an `oauth2_*` type | Contains the necessary endpoints and scopes for an OAuth 2.0 flow. See **OAuth Object Schema** below. |
 | **`placement`** | Object | No | Describes how to *apply* the final token. Required for `remote` implementations unless `scheme` is `"none"`. See **Placement Object Schema** below. |
 
@@ -278,9 +267,11 @@ The `authentication` object unambiguously describes how a client should acquire 
 
 | Field | Type | Required? | Description |
 | --- | --- | --- | --- |
+| **`authorizationEndpoint`** | String | For `oauth2_code` | The URL for the authorization code grant flow. |
+| **`deviceAuthorizationEndpoint`** | String | For `oauth2_device` | The URL for the device authorization flow. |
+| **`tokenEndpoint`** | String | Yes | The URL to exchange a code or credentials for an access token. |
 | **`scopes`** | Array of Strings | No | An optional list of required OAuth scopes. |
 | **`clientId`** | String | No | The public identifier for the client application, if required by the provider. |
-| **`dynamicClientRegistration`** | Boolean | No | If `true`, signals that the client should attempt RFC 7591 Dynamic Client Registration if it does not have a `clientId`. |
 
 #### **Placement Object Schema (`placement`)**
 
@@ -289,18 +280,6 @@ The `authentication` object unambiguously describes how a client should acquire 
 | **`in`** | String | Yes | Where to place the token. One of: `"header"`, `"query"`, `"cli_arg"`. |
 | **`key`** | String | Yes | For `"header"`/`"query"`, the name of the header/parameter. For `"cli_arg"`, the name of the argument (e.g., `"--token"`). |
 | **`format`** | String | No | A format string for the value. `{token}` is the placeholder. Ex: `"Bearer {token}"`. Defaults to `"{token}"`. |
-
-### 2.2.5. OAuth 2.0 and Dynamic Discovery
-
-When an `oauth2_*` scheme is specified, clients **MUST** adhere to modern IETF best practices for discovery and security. Static endpoints in the manifest are deprecated in favor of dynamic discovery.
-
-- **Metadata Discovery:** Clients **MUST NOT** rely on static endpoints from legacy manifests. Instead, they **MUST** first attempt to access the protected resource. On receiving a `401 Unauthorized` response containing a `WWW-Authenticate` header, they **MUST** use the information to perform OAuth 2.0 Authorization Server Metadata discovery as per **RFC 8414** and Protected Resource Metadata discovery per **RFC 9728**.
-- **PKCE Mandate:** For any Authorization Code Grant flow (`oauth2_code`), clients **MUST** use Proof Key for Code Exchange (PKCE, **RFC 7636**).
-- **Resource Indicators:** To prevent confused deputy attacks, clients **MUST** include the `resource` parameter (Resource Indicators, **RFC 8707**) in all authorization requests, indicating the protected resource (API) they intend to access.
-  - **Device Grant Exception:** If a `device_authorization_request` fails with an `invalid_target` error, and *only* in this case, clients **MAY** retry the request once without the `resource` parameter to accommodate legacy authorization servers, as permitted by RFC 8707 § 4.3.
-- **Dynamic Client Registration:** If `dynamicClientRegistration` is `true` in the manifest and the client does not have a `clientId`, it **SHOULD** attempt to register itself with the Authorization Server as per **RFC 7591** and securely cache the resulting credentials.
-
-This set of requirements is also forward-compatible with the emerging OAuth 2.1 standard (see `draft-ietf-oauth-v2-1-10`, May 2024).
 
 ### 2.3. Client Discovery Logic
 
@@ -315,23 +294,23 @@ An AID Client **MUST** perform the following steps for a given `<domain>`:
 5. **Process Manifest:** Upon retrieving a valid JSON manifest:
    a. Validate that `schemaVersion` is a version the client understands (e.g., `"1"`).
    b. Identify viable `implementations` based on the client's capabilities (e.g., a web client cannot run a `local` Docker implementation).
-   c. If multiple implementations are viable, the client **MAY** present these options to the user using the `title` field for each.
-   d. For the chosen implementation, the client **MUST** follow the instructions in the `authentication`, `requiredConfig`, and `execution` objects to obtain credentials and start/connect to the agent service. When the implementation's `protocol` is `"mcp"`, clients **MUST NOT** send requests as JSON-RPC batch arrays.
+   c. If multiple implementations are viable, the client **MAY** present these options to the user using the `name` field for each.
+   d. For the chosen implementation, the client **MUST** follow the instructions in the `authentication`, `configuration`, and `execution` objects to obtain credentials and start/connect to the agent service.
    e. If chosen implementation's "status" = "deprecated", client MUST display a warning or require user confirmation.
 6. **Cache Manifest:** The client **MUST** cache the manifest according to the guidance in Appendix B.
 
 ### 2.4. Version interlock
 
-The manifest's `"schemaVersion"` **MUST** share the same major number as the TXT `v=` token. Example: `v=aid1` corresponds to a `schemaVersion` of `"1"`.
+The manifest's `"schemaVersion"` **MUST** share the same major number as the TXT `v=` token.
+Example: `v=aid2` → `"schemaVersion":"2.0"`.
 
 If the TXT record advertises `v=aid1`, any manifest with `schemaVersion` beginning with '2.' **MUST** be rejected.
 
 ### 2.5. Error Handling
 
 - **Missing mandatory TXT keys** → treat as "no AID record".
-- **DNS Lookup Failure:** If a lookup using DoH/DoT (RFC 8484) results in a transport error (as described in RFC 8484 §4.1), clients **MAY** fall back to classic UDP/TCP DNS before failing entirely.
 - **Unparseable manifest** → fall back to Simple Profile if possible, otherwise fail with a clear error to the user.
-- **Unknown `schemaVersion`** → client MAY attempt best-effort parse but MUST warn the user and MUST NOT execute any `local` implementation. Validation tools **SHOULD** warn on the use of deprecated fields, such as the static OAuth endpoint definitions from earlier drafts of this specification.
+- **Unknown `schemaVersion`** → client MAY attempt best-effort parse but MUST warn the user and MUST NOT execute any `local` implementation.
 - **HTTPS fetch returns ≥400** → treat as transient network error; client MAY retry after exponential back-off.
 - **DNSSEC failure** → client MAY continue if user overrides.
 
@@ -367,14 +346,10 @@ The intended flow is:
 ## 4. Security Considerations *(Non-normative)*
 
 - **DNSSEC for Record Integrity:** Providers are **STRONGLY ENCOURAGED** to sign their DNS records with DNSSEC. Clients **SHOULD** validate the signature on the AID record to ensure it has not been tampered with.
-- **Authorization Server Security:**
-    - Authorization Servers **MUST** rate-limit Dynamic Client Registration (**RFC 7591**) requests to prevent denial-of-service attacks.
-    - Resource Servers **MUST** validate the `aud` (audience) claim in the access token to ensure it matches their own canonical identifier, as per **RFC 8707**.
-- **Local Client Security:** CLI and other non-browser clients are **STRONGLY ENCOURAGED** to use the Device Authorization Grant (`oauth2_device`) to provide a secure, user-friendly authentication experience without requiring local web servers or credential pasting.
 - **HTTPS and TLS:** All `uri` and `config` URLs **MUST** use `https://`. Clients **MUST** perform standard TLS certificate validation, including host name matching.
 - **No Secrets in Public Records:** The DNS record and AID Manifest are public. They **MUST NOT** contain any secrets (tokens, keys, passwords). They only describe *how* to authenticate.
 - **Separation of Concerns:** AID discovers the service; the agent protocol itself is responsible for securing the communication channel and verifying agent identity.
-- **Clients SHOULD resolve DNS via DoH or DoT when available (RFC 8484).**
+- **Clients SHOULD resolve DNS via DoH or DoT when available.**
 - **Clients SHOULD apply IDNA-2008 A-label conversion before DNS lookup for non-ASCII domains.**
 - **Providers MAY publish CAA records to restrict certificate issuance for agent endpoints.**
 
@@ -383,7 +358,7 @@ The intended flow is:
 The `execution` block in a manifest represents a command retrieved from the internet and **MUST** be treated as untrusted. Clients that support `local` implementations **MUST** adhere to the following:
 
 1. **Explicit User Consent:** Before executing a command for the first time, the client **MUST** display the full, resolved command (with all variables substituted) to the user and require their explicit, affirmative consent.
-2. **Command Integrity Verification:** The client **MUST** compute and store a cryptographic fingerprint (e.g., SHA-256 hash) of the `execution` object. If a newly fetched manifest has a different fingerprint for a previously approved implementation, the client **MUST** treat it as a new, untrusted command and re-trigger the full consent process. When `package.digest` or a platform-specific `execution.platformOverrides.*.digest` is provided, clients **SHOULD** use it to verify the integrity of the downloaded package before execution.
+2. **Command Integrity Verification:** The client **MUST** compute and store a cryptographic fingerprint (e.g., SHA-256 hash) of the `execution` object. If a newly fetched manifest has a different fingerprint for a previously approved implementation, the client **MUST** treat it as a new, untrusted command and re-trigger the full consent process.
 3. **Prevent Command Injection:** The client **MUST NOT** execute the command in a shell that interprets arguments. Substituted values **MUST** be passed as distinct, atomic arguments to the underlying OS `exec` call.
 4. **Sandboxing:** It is **STRONGLY RECOMMENDED** that local execution commands be run within a sandboxed environment with minimum necessary permissions.
 
@@ -454,7 +429,7 @@ Clients **MUST** implement a two-layer caching strategy for `aid.json` manifests
 1. Publish `_agent.<domain>` **TXT** with `v`, `uri`, `proto` (and `config` if Extended Profile).
 2. **HTTPS-host** `aid.json` under `/.well-known/` with `schemaVersion:"1"` and increment `contentVersion` on every change.
 3. Sign TXT with **DNSSEC**; serve manifest via **TLS**.
-4. If you offer a local Docker path, test variable substitution `${auth.*}` and `${requiredConfig.*}` works end-to-end.
+4. If you offer a local Docker path, test variable substitution `${auth.*}` and `${config.*}` works end-to-end.
 5. Set `_agent` TXT **TTL ≤ 300 s** in production.
 6. Optional: Publish a preview SVCB/HTTPS RR for v2.
 
@@ -478,16 +453,15 @@ This manifest describes a single, cloud-hosted API that uses a Personal Access T
   "schemaVersion": "1",
   "name": "Simple Cloud Agent",
   "metadata": {
-    "contentVersion": "2025-06-25.1",
+    "contentVersion": "2025-06-17.1",
     "documentation": "https://simple-agent.com/docs/api"
   },
   "implementations": [
     {
-      "name": "simple-cloud-prod",
-      "title": "Cloud API (Production)",
+      "name": "Cloud API (Production)",
       "type": "remote",
       "protocol": "mcp",
-      "uri": "https://api.simple-agent.com/mcp",
+              "uri": "https://api.simple-agent.com/mcp",
       "tags": ["cloud", "stable"],
       "authentication": {
         "scheme": "pat",
@@ -513,13 +487,12 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
   "schemaVersion": "1",
   "name": "Grafana Agent (Local)",
   "metadata": {
-    "contentVersion": "2025-06-25.1",
+    "contentVersion": "v2.1.0-2025-06-18",
     "documentation": "https://grafana.com/docs/agent"
   },
   "implementations": [
     {
-      "name": "grafana-local-docker",
-      "title": "Grafana (Local via Docker for stdio clients)",
+      "name": "Grafana (Local via Docker for stdio clients)",
       "type": "local",
       "protocol": "mcp",
       "tags": ["docker", "stdio", "stable"],
@@ -545,7 +518,7 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
           "type": "directory"
         }
       ],
-      "requiredConfig": [
+      "configuration": [
         {
           "key": "GRAFANA_URL",
           "description": "URL of your Grafana instance.",
@@ -557,7 +530,7 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
         "command": "docker",
         "args": [
           "run", "--rm", "-i",
-          "-e", "GRAFANA_URL=${requiredConfig.GRAFANA_URL}",
+          "-e", "GRAFANA_URL=${config.GRAFANA_URL}",
           "-e", "GRAFANA_API_KEY=${auth.grafana_api_key}",
           "-v", "${path.grafana_config_dir}:/etc/grafana",
           "${package.identifier}",
@@ -571,31 +544,6 @@ This example for a hypothetical "Grafana" service describes a local Docker conta
 
 ---
 
-## Appendix F: OAuth Error Taxonomy
-
-When engaging in an OAuth flow, clients **SHOULD** be prepared to handle the following specific error codes in addition to standard HTTP errors.
-
-| Error (Source) | Meaning | Required Client Action |
-| --- | --- | --- |
-| `invalid_target` (RFC 8707) | The authorization server does not support the `resource` parameter for this flow. | Abort, or if it was a Device Grant flow, retry once without the `resource` parameter. |
-| `invalid_token` (RFC 6750) | The provided access token is expired, revoked, or malformed. | Securely discard the token and re-initiate the entire authorization flow from the beginning. |
-| `insufficient_scope` (RFC 6750) | The access token is valid but does not grant permission for the requested operation. | Inform the user. The client should re-initiate the authorization flow, requesting the necessary scopes from the user. |
-
----
-
-## Appendix G: Conformance Test Suite (Excerpt)
-
-The following non-exhaustive test cases can be used to verify client and provider implementations.
-
-| ID | Scenario                                           | Pass Criteria                                                 |
-| -- | -------------------------------------------------- | ------------------------------------------------------------- |
-| A  | 401 → RFC 9728 → RFC 8414 discovery                | Endpoints resolved; PKCE & `resource` applied.                |
-| B  | Resource Indicator audience check                  | Token `aud` mismatching server URI rejected with 401.         |
-| C  | `invalid_target` handling                          | Client retries Device-Grant without `resource` then succeeds. |
-| D  | Linter warns on deprecated static OAuth fields     | Severity logic verified.                                      |
-
----
-
 ## Appendix H: IANA Considerations
 
 #### Registered Namespaces
@@ -605,7 +553,7 @@ The following non-exhaustive test cases can be used to verify client and provide
 | AID-auth  | strings such as `"pat"`, `"oauth2_device"` | First-Come, Expert-Review |
 | AID-implType | `"remote"`, `"local"` | Specification Required |
 
-Until formal IANA action, these registries are provisionally maintained at aid.agentcommunity.org/registry.
+Until IANA action these registries are maintained at aid.dev/registry.
 
 ## Appendix I: Quick-start Implementation
 
@@ -626,8 +574,7 @@ _agent.cli-only.io. IN TXT "v=aid1;config=https://cli-only.io/.well-known/aid.js
   "name": "Example Service",
   "implementations": [
     {
-      "name": "prod-api",
-      "title": "Production API",
+      "name": "Production API",
       "type": "remote",
       "protocol": "mcp",
       "uri": "https://api.example.com/mcp",
