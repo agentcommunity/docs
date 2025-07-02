@@ -9,6 +9,8 @@ rm -rf tmp-spec-repo
 git clone --depth 1 https://github.com/agentcommunity/AgentInterfaceDiscovery tmp-spec-repo
 
 echo "--- Moving spec docs into place ---"
+# Clean up the old spec files to prevent nesting on rebuild
+rm -rf docs/aid
 # Move the markdown files into the docs directory for MkDocs to find
 mv tmp-spec-repo/docs/aid docs/aid
 
