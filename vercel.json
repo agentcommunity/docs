@@ -1,5 +1,5 @@
 {
-  "installCommand": "python3 -m pip install -r requirements.txt",
-  "buildCommand": "./build.sh",
+  "installCommand": "echo $PWD && ls -al && python3 -m pip install -r requirements.txt",
+  "buildCommand": "echo $PWD && ls -al && ./build.sh",
   "outputDirectory": "site"
 }
