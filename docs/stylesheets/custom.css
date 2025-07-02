@@ -426,3 +426,32 @@
   font-weight: bold;
 }
 
+/* ---------- AgentCommunity custom tweaks 2025-07-02 ---------- */
+
+/* 1. Improve contrast for section headers (e.g., "v1") in dark mode */
+[data-md-color-scheme="slate"] .md-nav__item--nested > label,
+[data-md-color-scheme="slate"] .md-nav__item--nested > summary {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 2. Ensure top-level nav (tabs) are visible against the black header in light mode */
+[data-md-color-scheme="default"] .md-tabs__item a,
+[data-md-color-scheme="default"] .md-tabs__item a:link,
+[data-md-color-scheme="default"] .md-tabs__item a:visited {
+  color: #ffffff;
+}
+
+/* 3. Remove the special highlight for the AID nav tab so it appears like other items */
+.md-tabs__link[href*="/aid/latest/"] {
+  background: transparent !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+  margin-right: 0 !important;
+}
+
+/* Hide the "NEW" badge that was attached to the AID tab */
+.md-tabs__link[href*="/aid/latest/"]::before {
+  display: none !important;
+}
+

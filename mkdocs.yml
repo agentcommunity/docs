@@ -73,16 +73,15 @@ nav:
   - Home: index.md
   - Work Items: work-items/index.md
   - Agent Interface Discovery (AID):
-    - Agent Interface Discovery: aid/index.md
     - Design Rationale: 'aid/rationale.md'
     - v1:
       - Specification: aid/v1/specification.md
       - JSON Schema: /schema/v1/aid.schema.json
     - Tools (Generator / Resolver / Validator): aid/generator.md
     - Versioning: aid/versioning.md
-  - SDKs:
-    - Python SDK: 'https://github.com/agentcommunity/sdk-python'
-    - Go SDK: 'https://github.com/agentcommunity/sdk-go'
+    - SDKs:
+      - Python SDK: 'https://github.com/agentcommunity/sdk-python'
+      - Go SDK: 'https://github.com/agentcommunity/sdk-go'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
