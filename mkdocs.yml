@@ -80,6 +80,9 @@ nav:
       - JSON Schema: /schema/v1/aid.schema.json
     - Tools (Generator / Resolver / Validator): aid/generator.md
     - Versioning: aid/versioning.md
+  - SDKs:
+    - Python SDK: 'https://github.com/agentcommunity/sdk-python'
+    - Go SDK: 'https://github.com/agentcommunity/sdk-go'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
