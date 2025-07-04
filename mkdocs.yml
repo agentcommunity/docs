@@ -81,8 +81,8 @@ nav:
     - Tools (Generator / Resolver / Validator): aid/generator.md
     - Versioning: aid/versioning.md
     - SDKs:
-      - Python SDK (soon): 'https://github.com/agentcommunity/sdk-python'
-      - Go SDK (soon): 'https://github.com/agentcommunity/sdk-go'
+      - Python SDK: 'https://github.com/agentcommunity/AgentInterfaceDiscovery/tree/main/packages/aid-core-py'
+      - Go SDK: 'https://github.com/agentcommunity/AgentInterfaceDiscovery/tree/main/packages/aid-core-go'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
 
 # Markdown Extensions
@@ -112,9 +112,10 @@ plugins:
       cards: true
   - redirects:
       redirect_maps:
-        'specs/aid/introduction.md': 'aid/index.md'
+        'specs/aid/introduction.md': 'aid/introduction.md'
         'specs/aid/rationale.md': 'aid/rationale.md'
         'specs/aid/spec-v1.md': 'aid/v1/specification.md'
+        'aid/index.md': 'aid/introduction.md'
 
 # Tags Configuration
 extra:
