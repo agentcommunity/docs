@@ -1,5 +1,0 @@
-{
-  "installCommand": "echo 'Install step PWD:' $PWD && REQ=$(find /vercel/path0 -maxdepth 3 -name requirements.txt | head -n 1) && echo 'Using requirements file:' $REQ && python3 -m pip install -r $REQ",
-  "buildCommand": "echo 'Build step PWD:' $PWD && BUILD_SCRIPT=$(find /vercel/path0 -maxdepth 3 -name build.sh | head -n 1) && echo 'Running build script:' $BUILD_SCRIPT && chmod +x $BUILD_SCRIPT && $BUILD_SCRIPT",
-  "outputDirectory": "site"
-}
