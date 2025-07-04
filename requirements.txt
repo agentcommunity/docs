@@ -32,3 +32,4 @@ watchdog==6.0.0
 Pillow
 CairoSVG
 mkdocs-monorepo-plugin==1.1.0
+
