@@ -73,7 +73,7 @@ nav:
   - Home: index.md
   - Work Items: work-items/index.md
   - Agent Interface Discovery (AID):
-    - Introduction: 'aid/index.md'
+    - Introduction: 'aid/introduction.md'
     - Design Rationale: 'aid/rationale.md'
     - v1:
       - Specification: aid/v1/specification.md
