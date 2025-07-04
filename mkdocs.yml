@@ -115,7 +115,7 @@ plugins:
         'specs/aid/introduction.md': 'aid/introduction.md'
         'specs/aid/rationale.md': 'aid/rationale.md'
         'specs/aid/spec-v1.md': 'aid/v1/specification.md'
-        'aid/index.md': 'aid/introduction.md'
+        'aid': 'aid/introduction.md'
 
 # Tags Configuration
 extra:
