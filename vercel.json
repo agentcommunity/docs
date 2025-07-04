@@ -1,5 +1,5 @@
 {
-  "installCommand": "echo 'Install step PWD:' $PWD && if [ -f requirements.txt ]; then ls -al && python3 -m pip install -r requirements.txt ; else echo 'requirements.txt not found, moving to project root' && cd .. && ls -al && python3 -m pip install -r requirements.txt ; fi",
-  "buildCommand": "echo 'Build step PWD:' $PWD && if [ -f build.sh ]; then ls -al && ./build.sh ; else echo 'build.sh not found in current directory, moving to project root' && cd .. && ls -al && ./build.sh ; fi",
+  "installCommand": "echo 'Install step PWD:' $PWD && REQ=$(find /vercel/path0 -maxdepth 3 -name requirements.txt | head -n 1) && echo 'Using requirements file:' $REQ && python3 -m pip install -r $REQ",
+  "buildCommand": "echo 'Build step PWD:' $PWD && BUILD_SCRIPT=$(find /vercel/path0 -maxdepth 3 -name build.sh | head -n 1) && echo 'Running build script:' $BUILD_SCRIPT && chmod +x $BUILD_SCRIPT && $BUILD_SCRIPT",
   "outputDirectory": "site"
 }
