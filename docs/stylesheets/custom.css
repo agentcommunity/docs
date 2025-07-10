@@ -455,3 +455,6 @@
   display: none !important;
 }
 
+.aid-page .md-content__button.md-content__button--view {
+  display: none !important;
+}

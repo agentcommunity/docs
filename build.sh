@@ -6,13 +6,13 @@ set -e
 echo "--- Cloning external spec repository ---"
 # Clean up old clones and fetch the latest spec repo
 rm -rf tmp-spec-repo
-git clone --depth 1 https://github.com/agentcommunity/AgentInterfaceDiscovery tmp-spec-repo
+git clone --depth 1 https://github.com/agentcommunity/agent-interface-discovery tmp-spec-repo
 
 echo "--- Moving spec docs into place ---"
 # Clean up the old spec files to prevent nesting on rebuild
 rm -rf docs/aid
 # Move the markdown files into the docs directory for MkDocs to find
-mv tmp-spec-repo/docs/aid docs/aid
+mv tmp-spec-repo/packages/docs docs/aid
 
 echo "--- Building MkDocs site ---"
 # Build the main HTML documentation
