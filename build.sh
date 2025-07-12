@@ -12,7 +12,7 @@ echo "--- Moving spec docs into place ---"
 # Clean up the old spec files to prevent nesting on rebuild
 rm -rf docs/aid
 # Move the markdown files into the docs directory for MkDocs to find
-mv tmp-spec-repo/packages/docs docs/aid
+mv tmp-spec-repo/packages/docsgit ad docs/aid
 
 echo "--- Building MkDocs site ---"
 # Build the main HTML documentation
