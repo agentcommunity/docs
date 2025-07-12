@@ -20,7 +20,7 @@ python3 -m mkdocs build
 
 echo "--- Staging canonical JSON Schema ---"
 # Create the schema directory in the final output and copy the file
-mkdir -p site/schema/v1
-cp tmp-spec-repo/packages/aid-schema/aid.schema.json site/schema/v1/aid.schema.json
+# mkdir -p site/schema/v1
+# cp tmp-spec-repo/packages/aid-schema/aid.schema.json site/schema/v1/aid.schema.json
 
 echo "--- Build complete ---" 
