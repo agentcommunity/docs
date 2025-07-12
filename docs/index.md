@@ -88,3 +88,4 @@ Today agent developers face:
 * Sign up for the newsletter for monthly updates
 
 *Let's build an agentic web that is open, safe, and interoperable.*
+
