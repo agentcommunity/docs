@@ -69,15 +69,30 @@ extra_javascript:
 
 
 # Main Site Navigation
+# Main Site Navigation
 nav:
   - Home: index.md
   - Work Items: work-items/index.md
   - Agent Interface Discovery (AID):
-    - Introduction: 'aid/index.md'
-    - Design Rationale: 'aid/rationale.md'
-    - Specification: 'aid/specification.md'
-    - Versioning: 'aid/versioning.md'
-  - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions'
+      - Introduction: index.md
+      - Quick Start:
+          - Overview: quickstart/index.md
+          - MCP Guide: quickstart/quickstart_mcp.md
+          - A2A Guide: quickstart/quickstart_a2a.md
+          - OpenAPI Guide: quickstart/quickstart_openapi.md
+      - Design Rationale: rationale.md
+      - Specification: specification.md
+      - Versioning: versioning.md
+      - SDKs:
+          - Go SDK: https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/aid-go
+          - Python SDK: https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/aid-py
+      - Blog:
+        - Finding the Front Door: blog/finding_door_a2a.md
+        - The Missing Grep: blog/missing_grep_mcp.md
+        - The Missing MX Record: blog/missing_record.md
+        - What Should Happen When You Type a Domain Name?: blog/what_when_domain.md
+  - Discussions: https://github.com/orgs/agentcommunity/discussions
+      
 
 # Markdown Extensions
 markdown_extensions:

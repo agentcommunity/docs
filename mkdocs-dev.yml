@@ -6,5 +6,5 @@ INHERIT: mkdocs.yml
 nav:
   - 'Home': 'index.md'
   - 'Work Items': 'work-items/index.md'
-  - 'AID Specification': 'http://127.0.0.1:8001/aid/latest/'
+  - 'AID Specification': 'http://127.0.0.1:8001/aid/specification.md'
   - 'Discussions': 'https://github.com/orgs/agentcommunity/discussions' 
