@@ -1,0 +1,12 @@
+{
+  "title": "Agent Interface Discovery (AID)",
+  "icon": "globe",
+  "pages": [
+    "index",
+    "rationale",
+    "quickstart",
+    "specification",
+    "versioning"
+  ]
+}
+

@@ -1,0 +1,11 @@
+{
+  "title": "Quickstart",
+  "icon": "rocket",
+  "pages": [
+    "index",
+    "quickstart_mcp",
+    "quickstart_a2a",
+    "quickstart_openapi"
+  ]
+}
+

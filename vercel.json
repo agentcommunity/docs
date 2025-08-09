@@ -1,6 +1,45 @@
 {
-  "installCommand": "echo 'Install step PWD:' $PWD && REQ=$(find . -maxdepth 3 -name requirements.txt | head -n 1) && echo 'Using requirements file:' $REQ && python3 -m pip install -r $REQ",
-  "buildCommand": "./build.sh",
-  "outputDirectory": "site",
-  "ignoreCommand": "exit 1"
+  "installCommand": "npm ci --no-audit --no-fund",
+  "buildCommand": "npm run build",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/blog",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/blog/:path*",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options", 
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
 } 
