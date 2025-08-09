@@ -1,16 +1,10 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "npm run build", 
-  "outputDirectory": ".next",
+  "buildCommand": "npm run build",
   "functions": {
     "app/**": {
       "maxDuration": 30
     }
   },
-  "domains": [
-    "docs.agentcommunity.org",
-    "blog.agentcommunity.org"
-  ],
   "redirects": [
     {
       "source": "/",
