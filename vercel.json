@@ -24,6 +24,11 @@
       "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
       "destination": "https://agentcommunity.org/blog/:path*",
       "permanent": true
+    },
+    {
+      "source": "/",
+      "destination": "/docs",
+      "permanent": false
     }
   ],
   "headers": [
