@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { baseOptions } from '@/app/layout.config';
 import { source, aidSource } from '@/lib/source';
 import Link from 'next/link';
-import { headers } from 'next/headers';
 import * as Lucide from 'lucide-react';
 
 type TreeNode = {
@@ -48,10 +47,15 @@ function mapIcons(node: TreeNode): TreeNode {
   return mapped;
 }
 
-export default async function Layout({ children }: { children: ReactNode }) {
-  const h = await headers();
-  const pathname = h.get('x-pathname') || '';
-  const isAID = pathname.startsWith('/docs/aid');
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const { slug = [] } = await params;
+  const isAID = slug[0] === 'aid';
   const rawTree = isAID ? aidSource.pageTree : source.pageTree;
   const treeWithIcons = mapIcons(rawTree as unknown as TreeNode) as unknown as Parameters<typeof DocsLayout>[0]['tree'];
 

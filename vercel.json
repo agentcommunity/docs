@@ -1,6 +1,10 @@
 {
-  "installCommand": "npm ci --no-audit --no-fund",
   "buildCommand": "npm run build",
+  "functions": {
+    "app/**": {
+      "maxDuration": 30
+    }
+  },
   "redirects": [
     {
       "source": "/",
