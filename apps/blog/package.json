@@ -1,0 +1,9 @@
+{
+  "name": "@agentcommunity/blog",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}

@@ -1,52 +1,44 @@
-# Agent Community Docs
+# Agent Community
 
-A Next.js + Fumadocs site for community docs, the AID specification, and the blog.
+Monorepo for community docs and blog using Next.js + Fumadocs.
+
+## Apps
+
+- apps/docs (basePath `/docs`)
+- apps/blog (basePath `/blog`)
 
 ## Getting started
 
 ```bash
 npm install
 npm run dev
-# open http://localhost:3000
+# docs → http://localhost:3000/docs
+# blog → http://localhost:3001/blog
 ```
 
-## Content layout
-
+## Content
 - Community docs: `content/docs/`
 - AID docs: `content/docs/aid/`
 - Blog: `content/blog/`
 
-Copy AID content from the sibling repo:
+## Features
+- Separate Next.js apps with basePath for robust subpath hosting
+- Sidebar tabs (Community | AID) with AID badge v1.0.0
+- Scoped search under docs app (`/docs/api/search`)
+- Copy Markdown and “Open in” actions
+- Mermaid diagrams; SEO (canonical, robots, JSON‑LD)
 
-`/Users/user/dev/side-projects/AgentCommunity/agent-interface-discovery/packages/docs`
-
-## Key features
-
-- Dual local sources with proper tab isolation (Community | AID)
-- Unified search endpoint `/api/search` (Docs + AID + Blog)
-- Copy Markdown + “Open in” actions (GitHub, ChatGPT, Claude, T3)
-- Mermaid diagrams supported (fenced ```mermaid blocks auto-render)
-- SEO: canonical URLs, sitemap, robots, JSON‑LD (Organization, WebSite, Article)
+## Deploy (Vercel)
+- Create two projects pointing to this repo:
+  - agentcommunity-docs → Root Dir: `apps/docs`
+  - agentcommunity-blog → Root Dir: `apps/blog`
+- Set env: `NEXT_PUBLIC_APP_URL=https://agentcommunity.org`
+- Landing rewrites:
+  - `/docs/:path*` → docs deployment `/docs/:path*`
+  - `/blog/:path*` → blog deployment `/blog/:path*`
 
 ## Canonical and domains
-
-- Canonical strategy: path-first (`agentcommunity.org/docs`, `agentcommunity.org/blog`)
-- Subdomains as aliases (permanent redirects):
+- Canonical: `agentcommunity.org/docs` and `/blog`
+- Subdomains redirect:
   - `docs.agentcommunity.org` → `https://agentcommunity.org/docs/:path*`
   - `blog.agentcommunity.org` → `https://agentcommunity.org/blog/:path*`
-- Set `NEXT_PUBLIC_APP_URL` to your canonical root (e.g. `https://agentcommunity.org`).
-
-## API surface
-
-- `GET /api/search` — unified search
-- `GET /api/mdx/docs/*`, `/api/mdx/aid/*`, `/api/mdx/blog/*` — raw Markdown for Copy/Open
-
-## Notes
-
-- `meta.json` can include an `icon` (Lucide name or alias like `spec`, `quickstart`)
-- Breadcrumb JSON‑LD is emitted on docs/AID pages
-
-## Learn more
-
-- Fumadocs: `https://fumadocs.dev`
-- Next.js: `https://nextjs.org/docs`
