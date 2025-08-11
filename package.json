@@ -13,8 +13,7 @@
     "build:docs": "npm run -w @agentcommunity/docs build",
     "build:blog": "npm run -w @agentcommunity/blog build",
     "start:docs": "PORT=3000 npm run -w @agentcommunity/docs start",
-    "start:blog": "PORT=3001 npm run -w @agentcommunity/blog start",
-    "postinstall": "fumadocs-mdx"
+    "start:blog": "PORT=3001 npm run -w @agentcommunity/blog start"
   },
   "dependencies": {
     "@fumadocs/mdx-remote": "^1.4.0",
