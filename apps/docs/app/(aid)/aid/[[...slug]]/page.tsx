@@ -3,6 +3,8 @@ import { DocsPage, DocsBody, DocsDescription, DocsTitle } from 'fumadocs-ui/page
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import { LLMCopyButton, ViewOptions } from '@/components/ai/page-actions';
+import type React from 'react';
+import type { MDXComponents } from 'mdx/types';
 
 export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
@@ -10,7 +12,8 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
   const page = aidSource.getPage(slug);
   if (!page) notFound();
 
-  const MDX = page.data.body as any;
+  type MDXContent = React.ComponentType<{ components?: MDXComponents }>;
+  const MDX = page.data.body as MDXContent;
   const apiSlug = slug.length > 0 ? slug.join('/') : 'index';
 
   return (
