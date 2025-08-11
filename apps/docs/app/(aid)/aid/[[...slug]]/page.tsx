@@ -10,7 +10,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
   const page = aidSource.getPage(slug);
   if (!page) notFound();
 
-  const MDX = page.data.body;
+  const MDX = page.data.body as any;
   const apiSlug = slug.length > 0 ? slug.join('/') : 'index';
 
   return (
@@ -31,3 +31,20 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
 export async function generateStaticParams() {
   return aidSource.generateParams();
 }
+
+export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
+  const params = await props.params;
+  const slug = params.slug || [];
+  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const aidPage = aidSource.getPage(slug);
+  if (aidPage) {
+    return {
+      title: aidPage.data.title,
+      description: aidPage.data.description,
+      alternates: { canonical: `${base}/aid/${slug.join('/')}` },
+    } as const;
+  }
+  return {};
+}
+
+

@@ -1,3 +1,8 @@
+export async function getLLMText(_page: { data: { body: any } }): Promise<string> {
+  // Minimal implementation for blog: return empty string to satisfy endpoint.
+  return '';
+}
+
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
