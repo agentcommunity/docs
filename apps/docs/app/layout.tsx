@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Agent Community Docs',
     description: 'Documentation for the .agent Community projects and AID specification.',
-    url: '/docs',
+    url: '/',
     siteName: 'Agent Community Docs',
     type: 'website',
   },
@@ -95,13 +95,13 @@ export default async function Layout({
                   {
                     title: '.agent Community',
                     description: 'The home for open source agent collaboration',
-                    url: '/docs',
+                    url: '/',
                     icon: <Lucide.Book className="size-4" />,
                   },
                   {
                     title: 'Agent Interface Discovery (AID) v1.0.0',
                     description: 'Define interfaces between agent systems',
-                    url: '/docs/aid',
+                    url: '/aid',
                     icon: <Lucide.Globe className="size-4" />,
                   },
                 ],
