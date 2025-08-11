@@ -5,6 +5,9 @@ import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import * as Lucide from 'lucide-react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { source, aidSource } from '@/lib/source';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,11 +68,33 @@ function mapIcons(node: TreeNode): TreeNode {
 }
 
 export default async function Layout({ children }: { children: ReactNode }) {
+  const hdrs = await headers();
+  const pathname = hdrs.get('x-pathname') || '';
+  const first = pathname.split('/').filter(Boolean)[0];
+  const isAID = first === 'aid';
+
+  const rawTree = (isAID ? aidSource.pageTree : source.pageTree) as unknown as TreeNode;
+  const treeWithIcons = mapIcons(rawTree) as unknown as Parameters<typeof DocsLayout>[0]['tree'];
+
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <RootProvider>{children}</RootProvider>
+          <RootProvider>
+            <DocsLayout
+              tree={treeWithIcons}
+              nav={{ enabled: true }}
+              sidebar={{
+                defaultOpenLevel: 0,
+                tabs: [
+                  { title: '.agent Community', description: 'The home for open source agent collaboration', url: '/', icon: <Lucide.Book className="size-4" /> },
+                  { title: 'Agent Interface Discovery (AID) v1.0.0', description: 'Define interfaces between agent systems', url: '/aid', icon: <Lucide.Globe className="size-4" /> },
+                ],
+              }}
+            >
+              {children}
+            </DocsLayout>
+          </RootProvider>
         </ThemeProvider>
       </body>
     </html>
