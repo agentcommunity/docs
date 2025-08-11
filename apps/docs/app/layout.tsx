@@ -3,6 +3,7 @@ import { RootProvider } from 'fumadocs-ui/provider';
 import { ThemeProvider } from 'next-themes';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
+import * as Lucide from 'lucide-react';
 import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });

@@ -1,8 +1,8 @@
-import { blogSource } from '@/lib/source';
+import { blogSource } from '../../lib/source';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { MDXComponents } from 'mdx/types';
-import { LLMCopyButton, ViewOptions } from '@/components/ai/page-actions';
+import { LLMCopyButton, ViewOptions } from '../../components/ai/page-actions';
 import Script from 'next/script';
 
 interface BlogFrontmatter {
