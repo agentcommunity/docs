@@ -8,6 +8,9 @@ const withMDX = createMDX({
 const config = {
   reactStrictMode: true,
   basePath: '/docs',
+  experimental: {
+    externalDir: true,
+  },
 };
 
 export default withMDX(config);
