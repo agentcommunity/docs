@@ -13,9 +13,13 @@ Why basePath: it ensures client assets (`/_next/static`), data (`/_next/data`), 
 apps/
   docs/
     app/
-      [[...slug]]/page.tsx
-      aid/[[...slug]]/page.tsx
-      layout.tsx
+      (community)/
+        [[...slug]]/page.tsx
+        layout.tsx
+      (aid)/
+        aid/[[...slug]]/page.tsx
+        layout.tsx
+      layout.tsx  // providers only (no DocsLayout here)
     api/
       search/route.ts
       mdx/
@@ -41,16 +45,16 @@ content/
 ```
 
 ## Routing & Sources
-- Docs app switches between two local sources by slug prefix:
-  - `source` → baseUrl `/`
-  - `aidSource` → baseUrl `/aid`
+- Docs app renders two local sources using route groups:
+  - Community routes under `(community)` use `source` (baseUrl `/`)
+  - AID routes under `(aid)` use `aidSource` (baseUrl `/aid`)
 - Blog app uses a single local source with baseUrl `/`.
 
 ## Layout & Tabs (Docs)
-- `apps/docs/app/layout.tsx` renders `DocsLayout` with sidebar tabs:
-  - `.agent Community` → `/docs`
-  - `Agent Interface Discovery (AID) v1.0.0` → `/docs/aid`
-- Tree is chosen per request based on slug first segment.
+- Route-group layouts render `DocsLayout` and manage the sidebar and tree:
+  - `apps/docs/app/(community)/layout.tsx` → uses `source.pageTree`
+  - `apps/docs/app/(aid)/layout.tsx` → uses `aidSource.pageTree`
+- The root `apps/docs/app/layout.tsx` only provides providers (theme/root) so the correct group layout always drives the sidebar.
 
 ## API Routes
 - Docs:
@@ -73,3 +77,4 @@ This captures HTML, assets under `/_next/static`, and data under `/_next/data` v
 - No middleware required for source switching.
 - No complex asset proxying; basePath provides the namespace.
 - Each app builds independently and can be developed on separate ports. 
+- Ensure each app declares its own TypeScript and ESLint devDependencies so Vercel can run type-checking and linting in isolation.

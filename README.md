@@ -23,7 +23,7 @@ npm run dev
 
 ## Features
 - Separate Next.js apps with basePath for robust subpath hosting
-- Sidebar tabs (Community | AID) with AID badge v1.0.0
+- Sidebar tabs (Community | AID) driven by route-group layouts; AID badge v1.0.0
 - Scoped search under docs app (`/docs/api/search`)
 - Copy Markdown and “Open in” actions
 - Mermaid diagrams; SEO (canonical, robots, JSON‑LD)
@@ -36,6 +36,9 @@ npm run dev
 - Landing rewrites:
   - `/docs/:path*` → docs deployment `/docs/:path*`
   - `/blog/:path*` → blog deployment `/blog/:path*`
+
+### Notes for builds
+- Each app should declare its own TypeScript and ESLint devDependencies so Vercel can run type-checking and linting in isolation.
 
 ## Canonical and domains
 - Canonical: `agentcommunity.org/docs` and `/blog`

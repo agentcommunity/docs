@@ -18,7 +18,9 @@ npm run dev
 - Blog: `content/blog/`
 
 ## Tabs
-- Tabs are configured in `apps/docs/app/layout.tsx` using the two Fumadocs sources.
+- Tabs and trees are configured in route-group layouts:
+  - `apps/docs/app/(community)/layout.tsx`
+  - `apps/docs/app/(aid)/layout.tsx`
 - AID tab label includes version badge: `v1.0.0`.
 
 ## Search
@@ -50,3 +52,4 @@ npm run dev
 ## Troubleshooting
 - 404 for assets/data under main domain: ensure rewrites include the basePath (`/docs/_next/*`, `/blog/_next/*` are covered by the two wildcard rules).
 - Local: confirm pages load under the correct basePath and that SPA navigation doesn’t full-reload.
+- Blog builds on Vercel require devDependencies in `apps/blog/package.json` for TypeScript and ESLint (typescript, @types/node, @types/react, @types/react-dom, eslint, eslint-config-next).
