@@ -63,7 +63,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const base = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') + '/docs';
+  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
   const page = source.getPage(slug);
   if (page) {
