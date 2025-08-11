@@ -40,7 +40,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
   const apiSlug = slug.length > 0 ? slug.join('/') : 'index';
 
   return (
-    <DocsPage toc={page.data.toc} tableOfContent={{ enabled: true }} lastUpdate={page.data.lastModified}>
+    <DocsPage toc={page.data.toc} tableOfContent={{ enabled: true }} lastUpdate={page.data.lastModified}}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <div className="flex flex-row gap-2 mb-4 mt-2">
         <LLMCopyButton markdownUrl={`/api/mdx/docs/${apiSlug}`} />

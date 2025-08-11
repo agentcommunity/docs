@@ -1,3 +1,13 @@
+import remarkGfm from 'remark-gfm';
+import remarkMdx from 'remark-mdx';
+
+export async function getLLMText(page: { data: { body: any } }): Promise<string> {
+  const Body = page.data.body as any;
+  // Fallback: render MDX to plain text is non-trivial; for now, return empty or a basic marker.
+  // Blog LLM copy is optional; you can implement similar to docs if needed.
+  return '';
+}
+
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';

@@ -4,11 +4,6 @@ import { ThemeProvider } from 'next-themes';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-import { baseOptions } from './layout.config';
-import { source, aidSource } from '@/lib/source';
-import * as Lucide from 'lucide-react';
-import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -68,55 +63,12 @@ function mapIcons(node: TreeNode): TreeNode {
   return mapped;
 }
 
-export default async function Layout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: Promise<{ slug?: string[] }>;
-}) {
-  const { slug = [] } = await params;
-  const isAID = slug[0] === 'aid';
-  const rawTree = (isAID ? aidSource.pageTree : source.pageTree) as unknown as TreeNode;
-  const treeWithIcons = mapIcons(rawTree) as unknown as Parameters<typeof DocsLayout>[0]['tree'];
-
+export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <RootProvider>
-            <DocsLayout
-              tree={treeWithIcons}
-              {...baseOptions}
-              nav={{ ...baseOptions.nav }}
-              sidebar={{
-                defaultOpenLevel: 0,
-                tabs: [
-                  {
-                    title: '.agent Community',
-                    description: 'The home for open source agent collaboration',
-                    url: '/',
-                    icon: <Lucide.Book className="size-4" />,
-                  },
-                  {
-                    title: 'Agent Interface Discovery (AID) v1.0.0',
-                    description: 'Define interfaces between agent systems',
-                    url: '/aid',
-                    icon: <Lucide.Globe className="size-4" />,
-                  },
-                ],
-                footer: (
-                  <div className="flex flex-row gap-4 px-4 pb-4 items-center">
-                    <a href={(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000') + '/blog'} className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</a>
-                    <a href="https://github.com/orgs/agentcommunity/discussions" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Discussion</a>
-                    <a href="https://github.com/agentcommunity" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
-                  </div>
-                ),
-              }}
-            >
-              {children}
-            </DocsLayout>
-          </RootProvider>
+          <RootProvider>{children}</RootProvider>
         </ThemeProvider>
       </body>
     </html>
