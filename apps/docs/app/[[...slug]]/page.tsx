@@ -63,14 +63,14 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const base = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') + '/docs';
 
   const page = source.getPage(slug);
   if (page) {
     return {
       title: page.data.title,
       description: page.data.description,
-      alternates: { canonical: `${base}/docs/${slug.join('/')}` },
+      alternates: { canonical: `${base}/${slug.join('/')}` },
     } as const;
   }
 
@@ -81,7 +81,7 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
       return {
         title: aidPage.data.title,
         description: aidPage.data.description,
-        alternates: { canonical: `${base}/docs/aid/${aidSlug.join('/')}` },
+        alternates: { canonical: `${base}/aid/${aidSlug.join('/')}` },
       } as const;
     }
   }

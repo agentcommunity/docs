@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Agent Community Docs',
     description: 'Documentation for the .agent Community projects and AID specification.',
-    url: '/docs',
+    url: '/',
     siteName: 'Agent Community Docs',
     type: 'website',
   },
@@ -95,19 +95,19 @@ export default async function Layout({
                   {
                     title: '.agent Community',
                     description: 'The home for open source agent collaboration',
-                    url: '/docs',
+                    url: '/',
                     icon: <Lucide.Book className="size-4" />,
                   },
                   {
                     title: 'Agent Interface Discovery (AID) v1.0.0',
                     description: 'Define interfaces between agent systems',
-                    url: '/docs/aid',
+                    url: '/aid',
                     icon: <Lucide.Globe className="size-4" />,
                   },
                 ],
                 footer: (
                   <div className="flex flex-row gap-4 px-4 pb-4 items-center">
-                    <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link>
+                    <a href={(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000') + '/blog'} className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</a>
                     <a href="https://github.com/orgs/agentcommunity/discussions" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Discussion</a>
                     <a href="https://github.com/agentcommunity" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
                   </div>
