@@ -53,8 +53,26 @@ export default function CommunityLayout({ children }: { children: ReactNode }) {
       sidebar={{
         defaultOpenLevel: 0,
         tabs: [
-          { title: '.agent Community', description: 'The home for open source agent collaboration', url: '/', icon: <Lucide.Book className="size-4" /> },
-          { title: 'Agent Interface Discovery (AID) v1.0.0', description: 'Define interfaces between agent systems', url: '/aid', icon: <Lucide.Globe className="size-4" /> },
+          {
+            title: '.agent Community',
+            description: 'The home for open source agent collaboration',
+            url: '/',
+            icon: (
+              <span className="inline-flex items-center justify-center rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 size-5">
+                <Lucide.Book className="size-3.5" />
+              </span>
+            ),
+          },
+          {
+            title: 'Agent Interface Discovery (AID) v1.0.0',
+            description: 'Define interfaces between agent systems',
+            url: '/aid',
+            icon: (
+              <span className="inline-flex items-center justify-center rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 size-5">
+                <Lucide.Globe className="size-3.5" />
+              </span>
+            ),
+          },
         ],
       }}
     >
