@@ -38,14 +38,13 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
+  const canonicalBase = process.env.NEXT_PUBLIC_CANONICAL_BASE || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000/aid';
   const aidPage = aidSource.getPage(slug);
   if (aidPage) {
     return {
       title: aidPage.data.title,
       description: aidPage.data.description,
-      alternates: { canonical: `${base}${basePath}/aid/${slug.join('/')}` },
+      alternates: { canonical: `${canonicalBase}/aid/${slug.join('/')}` },
     } as const;
   }
   return {};

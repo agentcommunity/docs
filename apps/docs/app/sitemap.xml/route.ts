@@ -5,7 +5,7 @@ function xmlEscape(input: string) {
 }
 
 export async function GET() {
-  const appBase = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appBase = process.env.NEXT_PUBLIC_CANONICAL_BASE || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
 
   const communityParams = source.generateParams();

@@ -39,14 +39,13 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
+  const canonicalBase = process.env.NEXT_PUBLIC_CANONICAL_BASE || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const page = source.getPage(slug);
   if (page) {
     return {
       title: page.data.title,
       description: page.data.description,
-      alternates: { canonical: `${base}${basePath}${slug.length > 0 ? `/${slug.join('/')}` : ''}` },
+      alternates: { canonical: `${canonicalBase}${slug.length > 0 ? `/${slug.join('/')}` : ''}` },
     } as const;
   }
   return {};
