@@ -5,7 +5,8 @@ function xmlEscape(input: string) {
 }
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appBase = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
 
   const communityParams = source.generateParams();
   const aidParams = aidSource.generateParams();
@@ -15,13 +16,13 @@ export async function GET() {
   // Community docs under /docs
   for (const p of communityParams) {
     const slugPath = Array.isArray(p.slug) && p.slug.length > 0 ? p.slug.join('/') : '';
-    urls.push(`${base}/docs/${slugPath}`);
+    urls.push(`${appBase}${basePath}/${slugPath}`);
   }
 
   // AID docs under /docs/aid
   for (const p of aidParams) {
     const slugPath = Array.isArray(p.slug) && p.slug.length > 0 ? p.slug.join('/') : '';
-    urls.push(`${base}/docs/aid/${slugPath}`);
+    urls.push(`${appBase}${basePath}/aid/${slugPath}`);
   }
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n` +

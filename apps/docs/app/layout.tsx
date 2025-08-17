@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Agent Community Docs',
     description: 'Documentation for the .agent Community projects and AID specification.',
-    url: '/',
+    url: process.env.NEXT_PUBLIC_BASE_PATH ?? '/',
     siteName: 'Agent Community Docs',
     type: 'website',
   },

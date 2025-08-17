@@ -20,8 +20,8 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
     <DocsPage toc={page.data.toc} tableOfContent={{ enabled: true }} lastUpdate={page.data.lastModified}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <div className="flex flex-row gap-2 mb-4 mt-2">
-        <LLMCopyButton markdownUrl={`/api/mdx/aid/${apiSlug}`} />
-        <ViewOptions markdownUrl={`/api/mdx/aid/${apiSlug}`} githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${slug.join('/')}.md`} />
+        <LLMCopyButton markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/aid/${apiSlug}`} />
+        <ViewOptions markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/aid/${apiSlug}`} githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${slug.join('/')}.md`} />
       </div>
       {page.data.description && <DocsDescription>{page.data.description}</DocsDescription>}
       <DocsBody>
@@ -39,12 +39,13 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
   const params = await props.params;
   const slug = params.slug || [];
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
   const aidPage = aidSource.getPage(slug);
   if (aidPage) {
     return {
       title: aidPage.data.title,
       description: aidPage.data.description,
-      alternates: { canonical: `${base}/aid/${slug.join('/')}` },
+      alternates: { canonical: `${base}${basePath}/aid/${slug.join('/')}` },
     } as const;
   }
   return {};

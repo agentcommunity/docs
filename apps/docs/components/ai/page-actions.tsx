@@ -50,7 +50,9 @@ const optionVariants = cva('text-sm p-2 rounded-lg inline-flex items-center gap-
 
 export function ViewOptions({ markdownUrl, githubUrl }: { markdownUrl: string; githubUrl: string }) {
   const items = useMemo(() => {
-    const fullMarkdownUrl = typeof window !== 'undefined' ? new URL(markdownUrl, window.location.origin) : 'loading';
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    const normalized = markdownUrl.startsWith('http') ? markdownUrl : `${basePath}${markdownUrl}`;
+    const fullMarkdownUrl = typeof window !== 'undefined' ? new URL(normalized, window.location.origin) : 'loading';
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
     return [

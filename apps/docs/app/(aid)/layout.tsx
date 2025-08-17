@@ -53,8 +53,8 @@ export default function AIDLayout({ children }: { children: ReactNode }) {
       sidebar={{
         defaultOpenLevel: 0,
         tabs: [
-          { title: '.agent Community', description: 'The home for open source agent collaboration', url: '/', icon: <Lucide.Book className="size-4" /> },
-          { title: 'Agent Interface Discovery (AID) v1.0.0', description: 'Define interfaces between agent systems', url: '/aid', icon: <Lucide.Globe className="size-4" /> },
+          { title: '.agent Community', description: 'The home for open source agent collaboration', url: (process.env.NEXT_PUBLIC_BASE_PATH ?? '') + '/', icon: <Lucide.Book className="size-4" /> },
+          { title: 'Agent Interface Discovery (AID) v1.0.0', description: 'Define interfaces between agent systems', url: (process.env.NEXT_PUBLIC_BASE_PATH ?? '') + '/aid', icon: <Lucide.Globe className="size-4" /> },
         ],
       }}
     >

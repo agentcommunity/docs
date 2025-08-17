@@ -55,8 +55,10 @@ const optionVariants = cva(
 
 export function ViewOptions({ markdownUrl, githubUrl }: { markdownUrl: string; githubUrl: string }) {
   const items = useMemo(() => {
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '/blog';
+    const normalized = markdownUrl.startsWith('http') ? markdownUrl : `${basePath}${markdownUrl}`;
     const fullMarkdownUrl =
-      typeof window !== 'undefined' ? new URL(markdownUrl, window.location.origin) : 'loading';
+      typeof window !== 'undefined' ? new URL(normalized, window.location.origin) : 'loading';
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
     return [

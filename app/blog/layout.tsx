@@ -10,7 +10,7 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
         <div className="container flex h-16 items-center justify-between">
           <Link href="/blog" className="flex items-center space-x-2">
             <Image 
-              src="/assets/logo.svg" 
+              src="/blog/assets/logo.svg" 
               alt=".agent Community Logo" 
               width={24} 
               height={24}
@@ -49,7 +49,7 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="flex items-center space-x-2">
               <Image 
-                src="/assets/logo.svg" 
+                src="/blog/assets/logo.svg" 
                 alt=".agent Community Logo" 
                 width={20} 
                 height={20}
