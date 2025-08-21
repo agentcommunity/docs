@@ -17,8 +17,10 @@ npm run dev
 - AID docs: `content/docs/aid/`
 - Blog: `content/blog/`
 
-## Tabs
-- Tabs are configured in `apps/docs/app/layout.tsx` using the two Fumadocs sources.
+## Tabs & Navbar
+- Shared items live in `apps/docs/app/components/navigation/nav-items.tsx`.
+- `ClientLayoutWrapper` provides `sidebar.tabs` from those items and passes `links: []` to `DocsLayout` to avoid sidebar duplication.
+- `TopNavbar` renders the same items as pill buttons (icon + title) for consistent affordance.
 - AID tab label includes version badge: `v1.0.0`.
 
 ## Search
@@ -47,6 +49,26 @@ npm run dev
 - Path-first canonical: `agentcommunity.org/docs` and `/blog`
 - Set `NEXT_PUBLIC_APP_URL` for correct canonical/JSON‑LD.
 
+## Features & SEO
+
+### Favicon & Icons
+- Both apps now have proper favicon configuration using SVG icons (`/icon.svg`)
+- Apple touch icons supported via SVG format
+- Icons properly configured in Next.js metadata
+- SVG format ensures consistent display across all devices and browsers
+
+### SEO Optimization
+- **Open Graph images**: Dynamic OG image generation via `/api/og`
+- **Twitter Cards**: Large image cards with proper meta tags
+- **Meta tags**: Comprehensive SEO meta tags including keywords, authors, and publisher info
+- **Structured data**: JSON-LD schema markup for better search engine understanding
+
+### Social Media Sharing
+- Open Graph tags for Facebook, LinkedIn, and other platforms
+- Twitter Card support for rich previews
+- Proper image dimensions (1200x630) for optimal display
+
 ## Troubleshooting
 - 404 for assets/data under main domain: ensure rewrites include the basePath (`/docs/_next/*`, `/blog/_next/*` are covered by the two wildcard rules).
 - Local: confirm pages load under the correct basePath and that SPA navigation doesn’t full-reload.
+- Favicon not showing: ensure favicon.ico is in the correct public folder and metadata is configured.

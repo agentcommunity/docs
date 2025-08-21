@@ -107,10 +107,18 @@ export async function generateMetadata(props: {
   // Community first
   const page = source.getPage(slug);
   if (page) {
+    const image = ['/docs-og', ...slug, 'image.png'].join('/');
     return {
       title: page.data.title,
       description: page.data.description,
       alternates: { canonical: `${base}/docs/${slug.join('/')}` },
+      openGraph: {
+        images: image,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        images: image,
+      },
       other: {
         'script:ld+json': JSON.stringify({
           '@context': 'https://schema.org',
@@ -136,10 +144,18 @@ export async function generateMetadata(props: {
     const aidSlug = slug.slice(1);
     const aidPage = aidSource.getPage(aidSlug);
     if (aidPage) {
+      const image = ['/docs-og', ...slug, 'image.png'].join('/');
       return {
         title: aidPage.data.title,
         description: aidPage.data.description,
         alternates: { canonical: `${base}/docs/aid/${aidSlug.join('/')}` },
+        openGraph: {
+          images: image,
+        },
+        twitter: {
+          card: 'summary_large_image',
+          images: image,
+        },
         other: {
           'script:ld+json': JSON.stringify({
             '@context': 'https://schema.org',

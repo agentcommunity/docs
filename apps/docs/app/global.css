@@ -2,6 +2,11 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
+/* Reserve space for fixed custom navbar */
+:root {
+  --fd-nav-height: 56px !important;
+}
+
 /* Subtle hue background for the sidebar tab trigger */
 .fd-sidebar [data-fd-sidebar-tabs] button {
 	border-radius: 0.5rem;

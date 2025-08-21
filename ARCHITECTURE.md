@@ -15,26 +15,30 @@ apps/
     app/
       [[...slug]]/page.tsx
       aid/[[...slug]]/page.tsx
-      layout.tsx
+      layout.tsx (✅ favicon, SEO, OG images)
     api/
       search/route.ts
       mdx/
         docs/[...slug]/route.ts
         aid/[...slug]/route.ts
+      og/route.ts (OG image generation)
     lib/
       source.ts
     mdx-components.tsx
     next.config.mjs
+    icon.svg
   blog/
     app/
       [[...slug]]/page.tsx
-      layout.tsx
+      layout.tsx (✅ favicon, SEO, OG images)
     api/
       mdx/
         blog/[...slug]/route.ts
+      og/route.ts (OG image generation)
     lib/
       source.ts
     next.config.mjs
+    icon.svg
 content/
   docs/
   blog/
@@ -47,9 +51,11 @@ content/
 - Blog app uses a single local source with baseUrl `/`.
 
 ## Layout & Tabs (Docs)
-- `apps/docs/app/layout.tsx` renders `DocsLayout` with sidebar tabs:
-  - `.agent Community` → `/docs`
-  - `Agent Interface Discovery (AID) v1.0.0` → `/docs/aid`
+- `apps/docs/app/components/navigation/nav-items.tsx` defines shared section items (title, url, icon).
+- `ClientLayoutWrapper` renders `DocsLayout` with:
+  - `sidebar.tabs` built from the shared items (dropdown switcher)
+  - `links: []` spread into layout to avoid sidebar mirroring header links
+  - `nav.component` = custom TopNavbar which renders the same items as pill buttons
 - Tree is chosen per request based on slug first segment.
 
 ## API Routes
