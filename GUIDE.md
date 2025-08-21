@@ -1,28 +1,34 @@
-# How to Implement Sidebar Tabs with Local Sources in Fumadocs
+# Implementation Guide: Sidebar Tabs with Local Sources
 
 ## Overview
-Two local sources (Community and AID) are rendered inside the docs app. Tabs switch sources by URL prefix under basePath `/docs`.
 
-## Solution
-- Apps:
-  - `apps/docs` (basePath `/docs`) — Community + AID
-  - `apps/blog` (basePath `/blog`) — Blog
-- Source selection uses slug prefix (`slug[0] === 'aid'`) to switch between `source` and `aidSource`.
+This guide shows how to implement sidebar tabs that switch between multiple local content sources in Fumadocs. The example implements Community and AID documentation sections that switch based on URL prefix.
 
-## Implementation
+## Core Implementation
 
-### Dual local content sources
+### 1. Dual Source Configuration
+
+Create separate source loaders for each content section:
+
 ```ts
 // apps/docs/lib/source.ts
 import { docs, aid } from '../../../.source';
 import { loader } from 'fumadocs-core/source';
 
-export const source = loader({ baseUrl: '/', source: docs.toFumadocsSource() });
-export const aidSource = loader({ baseUrl: '/aid', source: aid.toFumadocsSource() });
+export const source = loader({
+  baseUrl: '/',
+  source: docs.toFumadocsSource()
+});
+
+export const aidSource = loader({
+  baseUrl: '/aid',
+  source: aid.toFumadocsSource()
+});
 ```
 
-### Layout and Tabs (shared items for sidebar + navbar)
-We keep a single source of truth for section items and use it in both the sidebar dropdown and the top navbar pills.
+### 2. Shared Navigation Items
+
+Define navigation items once, use everywhere:
 
 ```tsx
 // apps/docs/app/components/navigation/nav-items.tsx
@@ -32,20 +38,27 @@ export const navSectionItems = [
 ];
 ```
 
+### 3. Layout with Dynamic Tabs
+
+Use shared items for both sidebar tabs and navbar:
+
 ```tsx
 // apps/docs/app/components/navigation/ClientLayoutWrapper.tsx
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-import { baseOptions } from '@/app/layout.config';
 import { getNavSectionItems } from '@/app/components/navigation/nav-items';
-// ...
-const layoutBase = { ...baseOptions, links: [] }; // prevent sidebar mirroring navbar links
+
+const isAID = slug[0] === 'aid';
 
 <DocsLayout
-  {...layoutBase}
+  {...baseOptions}
   tree={isAID ? aidSource.pageTree : source.pageTree}
   sidebar={{
     defaultOpenLevel: 0,
-    tabs: getNavSectionItems().map(i => ({ title: i.title, url: i.url, icon: i.icon })),
+    tabs: getNavSectionItems().map(item => ({
+      title: item.title,
+      url: item.url,
+      icon: item.icon
+    })),
   }}
   nav={{ enabled: true, component: <TopNavbar /> }}
 >
@@ -53,83 +66,156 @@ const layoutBase = { ...baseOptions, links: [] }; // prevent sidebar mirroring n
 </DocsLayout>
 ```
 
-Top navbar renders matching pill buttons using the same items, so users see identical labels/icons for the section switcher.
+### 4. Dynamic Page Loading
 
-### Catch-all Page
+Switch sources based on URL prefix:
+
 ```tsx
 // apps/docs/app/[[...slug]]/page.tsx
-const isAID = slug[0] === 'aid';
-const page = isAID ? aidSource.getPage(slug.slice(1)) : source.getPage(slug);
+export default function Page({ params }: { params: { slug?: string[] } }) {
+  const { slug = [] } = params;
+  const isAID = slug[0] === 'aid';
+
+  const page = isAID
+    ? aidSource.getPage(slug.slice(1))
+    : source.getPage(slug);
+
+  if (!page) notFound();
+
+  return <PageContent page={page} />;
+}
 ```
 
-### Static params
-```ts
+### 5. Static Generation
+
+Generate params for both sources:
+
+```tsx
+// apps/docs/app/[[...slug]]/page.tsx
 export async function generateStaticParams() {
   const communityParams = source.generateParams();
-  const aidParams = aidSource.generateParams().map((p) => ({ slug: ['aid', ...p.slug] }));
+  const aidParams = aidSource.generateParams().map((p) => ({
+    slug: ['aid', ...p.slug]
+  }));
+
   return [...communityParams, ...aidParams];
 }
 ```
 
-## Deployment
-- Each app has its own basePath ensuring assets/data live under `/docs/_next/*` and `/blog/_next/*` for reliable rewrites on the landing project.
+## Advanced Patterns
 
-## SEO & Social Media Features
+### Custom Top Navbar
 
-### Favicon & Icons
-Both apps now have complete favicon and icon configuration:
-- **Favicon**: `/icon.svg` properly configured in metadata
-- **Apple Icons**: Apple touch icon support via SVG format
-- **Icon formats**: SVG format for consistent display across all devices
-- **Next.js optimized**: Uses Next.js built-in icon handling
+Create a navbar that matches sidebar tabs:
 
-### Open Graph & Twitter Cards
-- **Dynamic OG Images**: `/api/og` endpoint generates dynamic Open Graph images
-- **Twitter Cards**: Large image cards for rich social media previews
-- **Social Sharing**: Optimized for Facebook, LinkedIn, Twitter, and other platforms
-- **Image Optimization**: 1200x630px images for optimal display
-
-### Meta Tags & SEO
-- **Keywords**: Relevant keywords for better search engine ranking
-- **Author/Publisher**: Proper attribution and publisher information
-- **Format Detection**: Optimized for mobile and desktop
-- **Structured Data**: JSON-LD schema markup for search engines
-
-### Implementation Details
 ```tsx
-// apps/docs/app/layout.tsx & apps/blog/app/layout.tsx
-export const metadata: Metadata = {
-  // ✅ Favicon configuration
-  icons: {
-    icon: '/icon.svg',
-    apple: '/icon.svg',
-  },
+// apps/docs/app/components/navigation/TopNavbar.tsx
+import { getNavSectionItems } from './nav-items';
 
-  // ✅ SEO meta tags
-  keywords: ['relevant', 'keywords', 'here'],
-  authors: [{ name: 'Agent Community' }],
-  creator: 'Agent Community',
-  publisher: 'Agent Community',
+export function TopNavbar() {
+  const items = getNavSectionItems();
 
-  // ✅ Open Graph images
-  openGraph: {
-    images: [{
-      url: '/api/og',
-      width: 1200,
-      height: 630,
-      alt: 'Site description',
-    }],
-  },
-
-  // ✅ Twitter Cards
-  twitter: {
-    card: 'summary_large_image',
-    images: ['/api/og'],
-  },
+  return (
+    <div className="flex gap-2">
+      {items.map((item) => (
+        <Link
+          key={item.url}
+          href={item.url}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-muted"
+        >
+          {item.icon}
+          <span>{item.title}</span>
+        </Link>
+      ))}
+    </div>
+  );
 }
 ```
 
-## Notes
-- Keep content local in `content/docs`, `content/docs/aid`, `content/blog`.
-- The AID tab includes a small version badge in the label.
-- Both apps now have comprehensive SEO optimization out of the box. 
+### Error Boundaries
+
+Handle source switching errors gracefully:
+
+```tsx
+// apps/docs/app/[[...slug]]/page.tsx
+export default function Page({ params }: { params: { slug?: string[] } }) {
+  try {
+    const { slug = [] } = params;
+    const isAID = slug[0] === 'aid';
+
+    const page = isAID
+      ? aidSource.getPage(slug.slice(1))
+      : source.getPage(slug);
+
+    if (!page) notFound();
+
+    return <PageContent page={page} />;
+  } catch (error) {
+    console.error('Page loading error:', error);
+    return <ErrorPage />;
+  }
+}
+```
+
+## Best Practices
+
+### 1. Source Organization
+- Keep content in separate directories (`content/docs/`, `content/docs/aid/`)
+- Use consistent file naming conventions
+- Maintain separate meta.json files for each source
+
+### 2. Navigation Consistency
+- Single source of truth for navigation items
+- Consistent icons and labels across all UI components
+- Clear visual distinction between sections
+
+### 3. Performance Optimization
+- Generate static params for all sources
+- Implement proper caching strategies
+- Use dynamic imports for heavy components
+
+### 4. SEO Considerations
+- Proper canonical URLs for each section
+- Section-specific meta tags
+- Structured data for each content type
+
+## Troubleshooting
+
+### Common Issues
+
+**Tabs not switching**: Check URL prefix logic in `isAID` calculation
+
+**Missing pages**: Ensure both sources are properly configured in `source.ts`
+
+**Build errors**: Verify static params generation for all sources
+
+**Navigation mismatch**: Confirm nav items are consistently used across components
+
+### Debug Checklist
+
+- [ ] Sources properly imported and configured
+- [ ] Navigation items correctly defined
+- [ ] URL prefix logic working as expected
+- [ ] Static params generated for all sources
+- [ ] Layout components receiving correct props
+- [ ] Error boundaries in place
+
+## Migration Guide
+
+### From Single Source to Multi-Source
+
+1. **Create additional source configuration**
+2. **Update navigation items**
+3. **Modify page component for source switching**
+4. **Add static params generation**
+5. **Update layout components**
+6. **Test all routes and functionality**
+
+### Adding New Content Sections
+
+1. **Add new source configuration**
+2. **Create content directory structure**
+3. **Update navigation items**
+4. **Modify source switching logic**
+5. **Regenerate static params**
+6. **Test new section functionality**

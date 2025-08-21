@@ -1,14 +1,42 @@
-# Agent Community
+# Agent Community Documentation
 
-Monorepo for community docs and blog using Next.js + Fumadocs.
+A monorepo containing documentation and blog sites built with Next.js and Fumadocs.
 
-## Apps
+## 📖 Documentation Guide
 
-- apps/docs (basePath `/docs`)
-- apps/blog (basePath `/blog`)
+This repository contains multiple documentation files to help you understand and work with the codebase:
 
-## Getting started
+### 📋 README.md (This File)
+**Purpose**: Main entry point and developer guide
+- Project overview and architecture  
+- Quick start guide
+- Development workflows
+- Links to detailed documentation
 
+### 🏗️ ARCHITECTURE.md
+**Purpose**: System architecture and design decisions
+- High-level system overview
+- File structure and organization
+- Technical design decisions
+- Deployment architecture
+
+### 📚 GUIDE.md  
+**Purpose**: Implementation tutorials and how-to guides
+- Step-by-step implementation instructions
+- Code examples and patterns
+- Best practices and conventions
+- Troubleshooting guides
+
+### ⚙️ SETUP.md
+**Purpose**: Detailed setup and deployment instructions
+- Environment setup
+- Configuration details  
+- Deployment procedures
+- Platform-specific guides
+
+## 🚀 Quick Start
+
+### Local Development
 ```bash
 npm install
 npm run dev
@@ -16,30 +44,59 @@ npm run dev
 # blog → http://localhost:3001/blog
 ```
 
-## Content
-- Community docs: `content/docs/`
-- AID docs: `content/docs/aid/`
-- Blog: `content/blog/`
+### Project Structure
+- `apps/docs/` - Documentation site with Community and AID sections
+- `apps/blog/` - Blog site  
+- `content/docs/` - Community documentation content
+- `content/docs/aid/` - AID documentation content
+- `content/blog/` - Blog content
 
-## Features
-- Separate Next.js apps with basePath for robust subpath hosting
-- Sidebar tabs (Community | AID) with AID badge v1.0.0
-- Shared nav items power both sidebar tabs and top navbar pills
-- Scoped search under docs app (`/docs/api/search`)
-- Copy Markdown and “Open in” actions
-- Mermaid diagrams; SEO (canonical, robots, JSON‑LD)
+## 🎯 Key Features
 
-## Deploy (Vercel)
-- Create two projects pointing to this repo:
-  - agentcommunity-docs → Root Dir: `apps/docs`
-  - agentcommunity-blog → Root Dir: `apps/blog`
-- Set env: `NEXT_PUBLIC_APP_URL=https://agentcommunity.org`
-- Landing rewrites:
-  - `/docs/:path*` → docs deployment `/docs/:path*`
-  - `/blog/:path*` → blog deployment `/blog/:path*`
+- **Multi-zone architecture** with separate apps for docs and blog
+- **Sidebar tabs** switching between Community and AID documentation
+- **Shared navigation** with consistent UI across sections
+- **Scoped search** functionality
+- **SEO optimized** with proper meta tags and structured data
+- **Mermaid diagram support**
+- **Markdown processing** with copy and "Open in" actions
 
-## Canonical and domains
-- Canonical: `agentcommunity.org/docs` and `/blog`
-- Subdomains redirect:
-  - `docs.agentcommunity.org` → `https://agentcommunity.org/docs/:path*`
-  - `blog.agentcommunity.org` → `https://agentcommunity.org/blog/:path*`
+## 🔧 Development
+
+### Available Scripts
+- `npm run dev` - Start development servers
+- `npm run build` - Build all apps
+- `npm run build:docs` - Build docs app only
+- `npm run build:blog` - Build blog app only
+
+### Environment Variables
+Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` for proper canonical URLs.
+
+## 📦 Deployment
+
+Deploy to Vercel with two separate projects:
+- **agentcommunity-docs**: Root directory `apps/docs`
+- **agentcommunity-blog**: Root directory `apps/blog`
+
+Configure rewrites in your landing project:
+```json
+{
+  "rewrites": [
+    { "source": "/docs/:path*", "destination": "https://agentcommunitydocs.vercel.app/docs/:path*" },
+    { "source": "/blog/:path*", "destination": "https://agentcommunityblog.vercel.app/blog/:path*" }
+  ]
+}
+```
+
+## 🔗 Domains & URLs
+
+- **Canonical URLs**: `agentcommunity.org/docs` and `/blog`
+- **Subdomain redirects**:
+  - `docs.agentcommunity.org` → `agentcommunity.org/docs`
+  - `blog.agentcommunity.org` → `agentcommunity.org/blog`
+
+## 📚 Further Reading
+
+- [🏗️ Architecture](ARCHITECTURE.md) - System design and technical overview
+- [📚 Implementation Guide](GUIDE.md) - How to implement features and patterns  
+- [⚙️ Setup Guide](SETUP.md) - Detailed setup and deployment instructions

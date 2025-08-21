@@ -1,81 +1,89 @@
-# Architecture: Multi‑Zone Next.js with BasePath
+# Architecture: Multi-Zone Next.js with BasePath
 
 ## System Overview
-Two Next.js apps live in this repo and are deployed separately, then proxied by a simple landing layer via rewrites. Each app uses basePath so all HTML, assets, and data are namespaced under the section path.
 
-- apps/docs (basePath `/docs`) — Community + AID
-- apps/blog (basePath `/blog`) — Blog
+A monorepo containing two independent Next.js applications deployed as separate Vercel projects, unified through a landing page with URL rewrites.
 
-Why basePath: it ensures client assets (`/_next/static`), data (`/_next/data`), and routes live under `/docs` or `/blog`, so a single rewrite forwards everything reliably. This avoids fragile proxy rules for top‑level assets.
+### Core Design Principles
 
-## File Structure
+- **BasePath Isolation**: Each app uses basePath (`/docs`, `/blog`) for complete namespace isolation
+- **Independent Deployment**: Apps deploy separately to avoid coupling and enable different scaling strategies
+- **Unified Access**: Single domain with path-based routing via Vercel rewrites
+- **Shared Infrastructure**: Common content structure and build tooling
+
+## Application Structure
+
+### Documentation App (`apps/docs`)
+- **Purpose**: Community documentation with AID integration
+- **BasePath**: `/docs`
+- **Sources**: Dual-source system (Community + AID)
+- **Features**: Tabbed navigation, scoped search, multi-source content
+
+### Blog App (`apps/blog`)
+- **Purpose**: Blog content and articles
+- **BasePath**: `/blog`
+- **Sources**: Single-source system
+- **Features**: Article listing, individual post pages
+
+## Content Architecture
+
 ```
-apps/
-  docs/
-    app/
-      [[...slug]]/page.tsx
-      aid/[[...slug]]/page.tsx
-      layout.tsx (✅ favicon, SEO, OG images)
-    api/
-      search/route.ts
-      mdx/
-        docs/[...slug]/route.ts
-        aid/[...slug]/route.ts
-      og/route.ts (OG image generation)
-    lib/
-      source.ts
-    mdx-components.tsx
-    next.config.mjs
-    icon.svg
-  blog/
-    app/
-      [[...slug]]/page.tsx
-      layout.tsx (✅ favicon, SEO, OG images)
-    api/
-      mdx/
-        blog/[...slug]/route.ts
-      og/route.ts (OG image generation)
-    lib/
-      source.ts
-    next.config.mjs
-    icon.svg
 content/
-  docs/
-  blog/
+├── docs/           # Community documentation
+│   ├── aid/        # AID-specific content
+│   └── [pages]     # Community pages
+└── blog/           # Blog posts
 ```
 
-## Routing & Sources
-- Docs app switches between two local sources by slug prefix:
-  - `source` → baseUrl `/`
-  - `aidSource` → baseUrl `/aid`
-- Blog app uses a single local source with baseUrl `/`.
+## Routing Architecture
 
-## Layout & Tabs (Docs)
-- `apps/docs/app/components/navigation/nav-items.tsx` defines shared section items (title, url, icon).
-- `ClientLayoutWrapper` renders `DocsLayout` with:
-  - `sidebar.tabs` built from the shared items (dropdown switcher)
-  - `links: []` spread into layout to avoid sidebar mirroring header links
-  - `nav.component` = custom TopNavbar which renders the same items as pill buttons
-- Tree is chosen per request based on slug first segment.
+### Source Switching (Docs App)
+- **Community Source**: `baseUrl = "/"`
+- **AID Source**: `baseUrl = "/aid"`
+- **Switching Logic**: URL prefix-based (`/aid/*` routes to AID source)
 
-## API Routes
-- Docs:
-  - `/docs/api/search` — merged search (Docs + AID)
-  - `/docs/api/mdx/docs/*`, `/docs/api/mdx/aid/*` — raw Markdown for copy/open
-- Blog:
-  - `/blog/api/mdx/blog/*` — raw Markdown for copy/open
+### API Architecture
+- **Search**: Merged results from both docs sources
+- **Content**: Raw MDX access for copy/open functionality
+- **OG Images**: Dynamic image generation for social sharing
 
-## Landing Project Rewrites
-- `/docs/:path* → {docs-deployment}/docs/:path*`
-- `/blog/:path* → {blog-deployment}/blog/:path*`
+## Deployment Architecture
 
-This captures HTML, assets under `/_next/static`, and data under `/_next/data` via a single rule per section.
+### Vercel Projects
+- **agentcommunity-docs**: `apps/docs/` root directory
+- **agentcommunity-blog**: `apps/blog/` root directory
 
-## Canonical & Domains
-- Canonical: path-first (`agentcommunity.org/docs`, `agentcommunity.org/blog`)
-- Subdomains: permanent redirects to canonical paths.
+### Rewrite Rules (Landing Project)
+```json
+{
+  "rewrites": [
+    { "source": "/docs/:path*", "destination": "https://docs.vercel.app/docs/:path*" },
+    { "source": "/blog/:path*", "destination": "https://blog.vercel.app/blog/:path*" }
+  ]
+}
+```
 
-## Notes
-- No middleware required for source switching.
-- No complex asset proxying; basePath provides the namespace.
-- Each app builds independently and can be developed on separate ports. 
+### Asset Management
+- **Static Assets**: Namespaced under respective basePaths (`/_next/static/docs/*`)
+- **Data Routes**: Namespaced under respective basePaths (`/_next/data/docs/*`)
+- **Build Independence**: Each app builds separately with no shared state
+
+## Navigation Architecture
+
+### Shared Navigation System
+- **Source of Truth**: `nav-items.tsx` defines section items
+- **Dual Rendering**: Same items rendered in sidebar tabs and top navbar pills
+- **Consistent UX**: Unified appearance across different navigation contexts
+
+### Layout Strategy
+- **Dynamic Tree Loading**: Page tree selected based on URL prefix
+- **Conditional Rendering**: Different layouts for different content sources
+- **SEO Optimization**: Proper meta tags and structured data per section
+
+## Technical Benefits
+
+- **Scalability**: Independent scaling of docs vs blog
+- **Maintainability**: Separate codebases reduce complexity
+- **Performance**: Optimized builds for specific content types
+- **Flexibility**: Different update cadences and feature sets
+- **Reliability**: Isolation prevents cascading failures 
