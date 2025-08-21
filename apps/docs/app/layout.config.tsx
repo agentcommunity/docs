@@ -1,5 +1,5 @@
 // apps/docs/app/layout.config.tsx
-import { Github } from 'lucide-react';
+import { Github, Twitter } from 'lucide-react';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Image from 'next/image';
 
@@ -23,6 +23,13 @@ export const baseOptions: BaseLayoutProps = {
       label: 'GitHub',
       icon: <Github size={16} />,
       url: 'https://github.com/agentcommunity',
+    },
+    {
+      type: 'icon',
+      text: 'X (Twitter)',
+      label: 'Follow us on X',
+      icon: <Twitter size={16} />,
+      url: 'https://x.com/agentcommunity_',
     },
   ],
   nav: {
