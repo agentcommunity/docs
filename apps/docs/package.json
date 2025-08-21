@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "fumadocs-mdx",
     "start": "next start"
   },
   "dependencies": {
