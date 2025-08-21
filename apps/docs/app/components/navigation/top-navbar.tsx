@@ -10,6 +10,7 @@ import { getNavSectionItems } from './nav-items';
 // adjust this import if your package path differs
 // search node_modules for "NavbarSidebarTrigger" if it fails
 import { NavbarSidebarTrigger } from 'fumadocs-ui/layouts/docs-client';
+import { Home } from 'lucide-react';
 
 function isActive(pathname: string, href = '', mode: 'url' | 'nested-url' | 'none' = 'nested-url') {
   if (!href || mode === 'none') return false;
@@ -37,6 +38,9 @@ export default function TopNavbar() {
     <div className="flex items-center justify-between h-14 px-4 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-3">
         <NavbarSidebarTrigger aria-label="Toggle sidebar" />
+        <Link href="https://agentcommunity.org" aria-label="Go to Agent Community home" className="opacity-80 hover:opacity-100">
+          <Home size={16} />
+        </Link>
       </div>
 
       <div className="hidden md:flex items-center gap-2">
