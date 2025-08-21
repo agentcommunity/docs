@@ -11,7 +11,40 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: { default: '.agent Community Blog', template: '%s — .agent Community Blog' },
   description: 'Insights, updates, and thoughts from the .agent community',
-  openGraph: { title: '.agent Community Blog', description: 'Insights, updates, and thoughts from the .agent community', url: '/blog', type: 'website' },
+  keywords: ['agent community', 'blog', 'updates', 'insights', 'technology', 'open source'],
+  authors: [{ name: 'Agent Community' }],
+  creator: 'Agent Community',
+  publisher: 'Agent Community',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    title: '.agent Community Blog',
+    description: 'Insights, updates, and thoughts from the .agent community',
+    url: '/blog',
+    siteName: '.agent Community Blog',
+    type: 'website',
+    images: [
+      {
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+        alt: '.agent Community Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '.agent Community Blog',
+    description: 'Insights, updates, and thoughts from the .agent community',
+    images: ['/api/og'],
+  },
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function Layout({ children }: { children: ReactNode }) {

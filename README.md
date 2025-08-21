@@ -24,6 +24,7 @@ npm run dev
 ## Features
 - Separate Next.js apps with basePath for robust subpath hosting
 - Sidebar tabs (Community | AID) with AID badge v1.0.0
+- Shared nav items power both sidebar tabs and top navbar pills
 - Scoped search under docs app (`/docs/api/search`)
 - Copy Markdown and “Open in” actions
 - Mermaid diagrams; SEO (canonical, robots, JSON‑LD)

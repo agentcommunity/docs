@@ -43,9 +43,9 @@ export default async function Page(props: {
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton markdownUrl={`/api/mdx/aid/${apiSlug}`} />
-          <ViewOptions 
+          <ViewOptions
             markdownUrl={`/api/mdx/aid/${apiSlug}`}
-            githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${aidSlug.join('/')}.md`}
+            githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`}
           />
         </div>
         {page.data.description && (
@@ -75,9 +75,9 @@ export default async function Page(props: {
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton markdownUrl={`/api/mdx/docs/${apiSlug}`} />
-          <ViewOptions 
+          <ViewOptions
             markdownUrl={`/api/mdx/docs/${apiSlug}`}
-            githubUrl={`https://github.com/agentcommunity/docs/blob/main/content/docs/${slug.join('/')}.mdx`}
+            githubUrl={`https://github.com/agentcommunity/docs/tree/main/content/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.mdx`}
           />
         </div>
         <DocsDescription>{page.data.description}</DocsDescription>
@@ -107,10 +107,18 @@ export async function generateMetadata(props: {
   // Community first
   const page = source.getPage(slug);
   if (page) {
+    const image = ['/docs-og', ...slug, 'image.png'].join('/');
     return {
       title: page.data.title,
       description: page.data.description,
       alternates: { canonical: `${base}/docs/${slug.join('/')}` },
+      openGraph: {
+        images: image,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        images: image,
+      },
       other: {
         'script:ld+json': JSON.stringify({
           '@context': 'https://schema.org',
@@ -136,10 +144,18 @@ export async function generateMetadata(props: {
     const aidSlug = slug.slice(1);
     const aidPage = aidSource.getPage(aidSlug);
     if (aidPage) {
+      const image = ['/docs-og', ...slug, 'image.png'].join('/');
       return {
         title: aidPage.data.title,
         description: aidPage.data.description,
         alternates: { canonical: `${base}/docs/aid/${aidSlug.join('/')}` },
+        openGraph: {
+          images: image,
+        },
+        twitter: {
+          card: 'summary_large_image',
+          images: image,
+        },
         other: {
           'script:ld+json': JSON.stringify({
             '@context': 'https://schema.org',

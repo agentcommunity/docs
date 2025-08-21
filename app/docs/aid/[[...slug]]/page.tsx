@@ -29,7 +29,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
         <LLMCopyButton markdownUrl={`/api/mdx/aid/${apiSlug}`} />
         <ViewOptions
           markdownUrl={`/api/mdx/aid/${apiSlug}`}
-          githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${slug.join('/')}.md`}
+          githubUrl={`https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`}
         />
       </div>
       {page.data.description && <DocsDescription>{page.data.description}</DocsDescription>}
