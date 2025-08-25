@@ -29,11 +29,11 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton
-            markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
-            pageUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/${isAID ? 'aid' : (process.env.NEXT_PUBLIC_APP_URL?.includes('docs.agentcommunity.org') ? '' : 'docs/')}${pageSlug.join('/') || 'index'}`}
+            markdownUrl={`/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
+            pageUrl={`/${isAID ? 'aid/' : ''}${pageSlug.join('/') || 'index'}`}
           />
           <ViewOptions
-            markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
+            markdownUrl={`/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
             githubUrl={
               isAID
                 ? `https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`

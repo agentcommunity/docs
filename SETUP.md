@@ -28,7 +28,10 @@ Create `.env.local` file:
 
 ```bash
 # Required for proper canonical URLs
-NEXT_PUBLIC_APP_URL=https://agentcommunity.org
+# For docs.agentcommunity.org deployment:
+NEXT_PUBLIC_APP_URL=https://docs.agentcommunity.org
+# For other deployments (e.g., agentcommunitydocs.vercel.app):
+# NEXT_PUBLIC_APP_URL=https://agentcommunitydocs.vercel.app
 ```
 
 ### 3. Development Servers
@@ -40,7 +43,7 @@ Start both apps simultaneously:
 pnpm run dev
 
 # Or start individually (path-based invocations)
-pnpm run dev:docs    # http://localhost:3000/docs
+pnpm run dev:docs    # http://localhost:3000 (serves docs at root or /docs based on NEXT_PUBLIC_APP_URL)
 pnpm run dev:blog    # http://localhost:3001/blog
 ```
 
@@ -110,7 +113,8 @@ Both apps use Next.js ESLint configuration:
    - Single project at repo root (advanced): uses root `vercel.json` to install/build both apps.
 
 2. **Environment Variables:**
-   - Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` on each project
+   - For docs.agentcommunity.org: Set `NEXT_PUBLIC_APP_URL=https://docs.agentcommunity.org`
+   - For traditional setup: Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org`
 
 3. **Build Settings (pnpm + Corepack):**
    - Install Command:
@@ -124,7 +128,7 @@ Both apps use Next.js ESLint configuration:
 
 ### Landing Page Configuration
 
-Create a landing Vercel project with rewrite rules:
+**For traditional setup:** Create a landing Vercel project with rewrite rules:
 
 **vercel.json (landing project):**
 ```json
@@ -142,8 +146,22 @@ Create a landing Vercel project with rewrite rules:
 }
 ```
 
+**For docs.agentcommunity.org as landing page:** The docs deployment serves as the landing page, so no additional landing project is needed. Configure the main agentcommunity.org domain with redirects to docs.agentcommunity.org if desired.
+
 ### Domain Configuration
 
+**Option 1: docs.agentcommunity.org as landing page (current setup):**
+1. **Primary Domains:**
+   - `docs.agentcommunity.org` (docs deployment - serves as landing page)
+   - `agentcommunity.org` (landing project with redirects)
+   - `blog.agentcommunity.org` (blog deployment)
+
+2. **DNS Setup:**
+   - Point `docs.agentcommunity.org` to docs deployment
+   - Point `agentcommunity.org` to landing project with rewrites to docs and blog
+   - Point `blog.agentcommunity.org` to blog deployment
+
+**Option 2: Traditional setup:**
 1. **Primary Domains:**
    - `agentcommunity.org` (landing project)
    - `docs.agentcommunity.org` → redirect to `agentcommunity.org/docs`
@@ -194,19 +212,24 @@ The documentation site includes a Copy Markdown feature that allows users to cop
 
 Every documentation page is available at a pretty `.mdx` URL:
 
+**For docs.agentcommunity.org deployment:**
+- **Community Docs:** `https://docs.agentcommunity.org/{page}.mdx`
+- **AID Docs:** `https://docs.agentcommunity.org/aid/{page}.mdx`
+
+**For traditional deployment:**
 - **Community Docs:** `https://agentcommunity.org/docs/{page}.mdx`
 - **AID Docs:** `https://agentcommunity.org/aid/{page}.mdx`
 
-**Examples:**
+**Examples (docs.agentcommunity.org):**
 ```bash
 # Copy community docs
-curl https://agentcommunity.org/docs/getting-started.mdx
+curl https://docs.agentcommunity.org/getting-started.mdx
 
 # Copy AID specification
-curl https://agentcommunity.org/aid/specification.mdx
+curl https://docs.agentcommunity.org/aid/specification.mdx
 
 # Copy with specific tool
-curl https://agentcommunity.org/docs/getting-started.mdx | pbcopy
+curl https://docs.agentcommunity.org/getting-started.mdx | pbcopy
 ```
 
 ### Copy Button
@@ -221,16 +244,21 @@ Each documentation page includes a "Copy Markdown" button that:
 
 Direct API access for automation:
 
+**For docs.agentcommunity.org deployment:**
+- **Community Docs:** `https://docs.agentcommunity.org/api/mdx/docs/{page}`
+- **AID Docs:** `https://docs.agentcommunity.org/api/mdx/aid/{page}`
+
+**For traditional deployment:**
 - **Community Docs:** `https://agentcommunity.org/api/mdx/docs/{page}`
 - **AID Docs:** `https://agentcommunity.org/api/mdx/aid/{page}`
 
-**Examples:**
+**Examples (docs.agentcommunity.org):**
 ```bash
 # Get raw markdown via API
-curl https://agentcommunity.org/api/mdx/docs/index
+curl https://docs.agentcommunity.org/api/mdx/docs/index
 
 # Use in scripts
-curl https://agentcommunity.org/api/mdx/aid/specification > aid-spec.md
+curl https://docs.agentcommunity.org/api/mdx/aid/specification > aid-spec.md
 ```
 
 ### Content Format
@@ -247,6 +275,22 @@ The exported markdown includes:
 
 ### Usage Examples
 
+**For docs.agentcommunity.org deployment:**
+```bash
+# Download entire AID docs section
+for page in index specification security versioning; do
+  curl -s https://docs.agentcommunity.org/aid/${page}.mdx > ${page}.md
+done
+
+# Create offline documentation bundle
+curl -s https://docs.agentcommunity.org/index.mdx > docs.md
+curl -s https://docs.agentcommunity.org/aid/index.mdx >> docs.md
+
+# Use with documentation tools
+curl https://docs.agentcommunity.org/api.mdx | pandoc -f markdown -t pdf > api-docs.pdf
+```
+
+**For traditional deployment:**
 ```bash
 # Download entire AID docs section
 for page in index specification security versioning; do
