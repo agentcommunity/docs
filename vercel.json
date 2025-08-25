@@ -1,16 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm install --frozen-lockfile && pnpm run build",
   "installCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm install --frozen-lockfile",
-  "buildCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm run build",
+  "ignoreCommand": "[ -n \"$(git diff --name-only HEAD^ HEAD | grep -E '^(apps\/docs|apps\/blog|package.json|pnpm-lock.yaml|pnpm-workspace.yaml|source.config.ts)')\" ] || echo 'skip'",
   "rewrites": [
     { "source": "/_next/:path*", "destination": "/_next/:path*" },
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/assets/:path*", "destination": "/assets/:path*" },
-    { "source": "/", "destination": "/blog" },
-    { "source": "/:path*", "destination": "/blog/:path*" }
+    { "source": "/assets/:path*", "destination": "/assets/:path*" }
   ]
 }
-
-

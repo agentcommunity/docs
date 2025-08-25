@@ -4,53 +4,35 @@ import {
   frontmatterSchema,
   metaSchema,
 } from 'fumadocs-mdx/config';
-import { z } from 'zod';
 import remarkMermaidToComponent from '../../lib/remark/mermaid-to-component.js';
 
-// Schema for blog posts
-const blogSchema = frontmatterSchema.extend({
-  author: z.string().optional(),
-  date: z.string().datetime().or(z.date()).optional(),
-  tags: z.array(z.string()).optional(),
-});
-
-// You can customise Zod schemas for frontmatter and `meta.json` here
-// see https://fumadocs.vercel.app/docs/mdx/collections#define-docs
+// Basic schemas without Zod for simpler frontmatter
 export const docs = defineDocs({
   dir: 'content/docs',
   docs: {
     schema: frontmatterSchema,
   },
   meta: {
-    // allow optional Lucide icon name in meta.json
-    schema: metaSchema.extend({ icon: z.string().optional() }),
+    schema: metaSchema,
   },
 });
 
 // AID docs (local-only, separate source for proper tab isolation)
-// Allow extra fields commonly present in upstream AID docs
-const aidFrontmatterSchema = frontmatterSchema.extend({
-  icon: z.string().optional(),
-  edit_url: z.string().url().optional(),
-  extra_css_class: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-});
-
+// Using basic frontmatter schema without extra fields
 export const aid = defineDocs({
   dir: 'content/docs/aid',
   docs: {
-    schema: aidFrontmatterSchema,
+    schema: frontmatterSchema,
   },
   meta: {
-    // allow optional Lucide icon name in meta.json
-    schema: metaSchema.extend({ icon: z.string().optional() }),
+    schema: metaSchema,
   },
 });
 
 export const blog = defineDocs({
   dir: 'content/blog',
   docs: {
-    schema: blogSchema,
+    schema: frontmatterSchema,
   },
   meta: {
     schema: metaSchema,

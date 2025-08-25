@@ -5,7 +5,6 @@ import {
   frontmatterSchema,
   metaSchema
 } from "fumadocs-mdx/config";
-import { z } from "zod";
 
 // ../../lib/remark/mermaid-to-component.js
 function remarkMermaidToComponent() {
@@ -40,41 +39,28 @@ function visit(node, type, callback, index = null, parent = null) {
 }
 
 // source.config.ts
-var blogSchema = frontmatterSchema.extend({
-  author: z.string().optional(),
-  date: z.string().datetime().or(z.date()).optional(),
-  tags: z.array(z.string()).optional()
-});
 var docs = defineDocs({
   dir: "content/docs",
   docs: {
     schema: frontmatterSchema
   },
   meta: {
-    // allow optional Lucide icon name in meta.json
-    schema: metaSchema.extend({ icon: z.string().optional() })
+    schema: metaSchema
   }
-});
-var aidFrontmatterSchema = frontmatterSchema.extend({
-  icon: z.string().optional(),
-  edit_url: z.string().url().optional(),
-  extra_css_class: z.string().optional(),
-  tags: z.array(z.string()).optional()
 });
 var aid = defineDocs({
   dir: "content/docs/aid",
   docs: {
-    schema: aidFrontmatterSchema
+    schema: frontmatterSchema
   },
   meta: {
-    // allow optional Lucide icon name in meta.json
-    schema: metaSchema.extend({ icon: z.string().optional() })
+    schema: metaSchema
   }
 });
 var blog = defineDocs({
   dir: "content/blog",
   docs: {
-    schema: blogSchema
+    schema: frontmatterSchema
   },
   meta: {
     schema: metaSchema

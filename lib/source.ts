@@ -17,4 +17,5 @@ export const blogSource = loader({
 export const aidSource = loader({
   baseUrl: '/docs/aid',
   source: aid.toFumadocsSource(),
+  
 });

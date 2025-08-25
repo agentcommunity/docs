@@ -2,9 +2,18 @@
   "name": "agent-community",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": "22.x"
+  },
   "workspaces": [
     "apps/*"
   ],
+  "pnpm": {
+    "overrides": {
+      "fumadocs-mdx": "11.6.11"
+    }
+  },
   "scripts": {
     "build": "npm run -w @agentcommunity/docs build && npm run -w @agentcommunity/blog build",
     "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 npm run dev -w @agentcommunity/docs\" \"PORT=3001 npm run dev -w @agentcommunity/blog\"",
@@ -20,7 +29,7 @@
     "@mui/icons-material": "^7.3.1",
     "class-variance-authority": "^0.7.1",
     "fumadocs-core": "15.6.4",
-    "fumadocs-mdx": "^11.6.11",
+    "fumadocs-mdx": "11.6.11",
     "fumadocs-ui": "15.6.4",
     "lucide-react": "^0.525.0",
     "mermaid": "^10.9.4",
