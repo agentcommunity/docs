@@ -9,11 +9,7 @@
   "workspaces": [
     "apps/*"
   ],
-  "pnpm": {
-    "overrides": {
-      "zod": "4.1.1"
-    }
-  },
+  "pnpm": {},
   "scripts": {
     "build": "npm run -w @agentcommunity/docs build && npm run -w @agentcommunity/blog build",
     "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 npm run dev -w @agentcommunity/docs\" \"PORT=3001 npm run dev -w @agentcommunity/blog\"",
