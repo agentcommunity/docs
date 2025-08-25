@@ -1,4 +1,4 @@
-// ../../source.config.ts
+// source.config.ts
 import {
   defineConfig,
   defineDocs,
@@ -39,7 +39,7 @@ function visit(node, type, callback, index = null, parent = null) {
   }
 }
 
-// ../../source.config.ts
+// source.config.ts
 var blogSchema = frontmatterSchema.extend({
   author: z.string().optional(),
   date: z.string().datetime().or(z.date()).optional(),
@@ -94,5 +94,6 @@ var source_config_default = defineConfig({
 export {
   aid,
   blog,
+  source_config_default as default,
   docs
 };

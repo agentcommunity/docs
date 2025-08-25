@@ -6,7 +6,18 @@ description: The home for open source agent collaboration. Build the agentic fut
 import { Card, Cards } from 'fumadocs-ui/components/card';
 
 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-  <img src="/docs/assets/logo.svg" alt="Agent Community Logo" style={{ maxWidth: '200px', height: 'auto' }} />
+  <img
+    src="/assets/logo_docs_lm.svg"
+    alt="Agent Community Logo"
+    style={{ maxWidth: '200px', height: 'auto' }}
+    className="dark:hidden"
+  />
+  <img
+    src="/assets/logo_docs_dm.svg"
+    alt="Agent Community Logo"
+    style={{ maxWidth: '200px', height: 'auto' }}
+    className="hidden dark:block"
+  />
 </div>
 
 # Welcome to the .agent Community

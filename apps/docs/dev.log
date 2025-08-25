@@ -1,0 +1,24 @@
+
+> dev
+> next dev
+
+[MDX] updated map file in 4.640625ms
+[MDX] started dev server
+ ⚠ Port 3000 is in use by process 59599, using available port 3001 instead.
+   ▲ Next.js 15.4.1
+   - Local:        http://localhost:3001
+   - Network:      http://172.20.10.13:3001
+   - Experiments (use with caution):
+     ✓ externalDir
+
+ ✓ Starting...
+ ✓ Ready in 1787ms
+[MDX] updated map file in 2.592540999999983ms
+[MDX] updated map file in 3.431790999999066ms
+[MDX] updated map file in 4.13758300000336ms
+[MDX] updated map file in 7.8519170000217855ms
+[MDX] updated map file in 3.0977910000365227ms
+[MDX] updated map file in 4.905416999943554ms
+[MDX] updated map file in 1.8599999999860302ms
+[MDX] updated map file in 3.4563330000964925ms
+[MDX] updated map file in 6.487542000133544ms
