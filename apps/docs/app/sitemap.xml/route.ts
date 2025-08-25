@@ -6,23 +6,29 @@ function xmlEscape(input: string) {
 
 export async function GET() {
   const appBase = process.env.NEXT_PUBLIC_CANONICAL_BASE || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/docs';
+  const isDocsSubdomain = appBase.includes('docs.agentcommunity.org');
 
   const communityParams = source.generateParams();
   const aidParams = aidSource.generateParams();
 
   const urls: string[] = [];
 
-  // Community docs under /docs
+  // Community docs - different paths based on deployment
   for (const p of communityParams) {
     const slugPath = Array.isArray(p.slug) && p.slug.length > 0 ? p.slug.join('/') : '';
-    urls.push(`${appBase}${basePath}/${slugPath}`);
+    if (isDocsSubdomain) {
+      // On docs.agentcommunity.org, community docs are at root level
+      urls.push(`${appBase}/${slugPath}`);
+    } else {
+      // On other deployments, community docs are under /docs
+      urls.push(`${appBase}/docs/${slugPath}`);
+    }
   }
 
-  // AID docs under /docs/aid
+  // AID docs under /aid
   for (const p of aidParams) {
     const slugPath = Array.isArray(p.slug) && p.slug.length > 0 ? p.slug.join('/') : '';
-    urls.push(`${appBase}${basePath}/aid/${slugPath}`);
+    urls.push(`${appBase}/aid/${slugPath}`);
   }
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n` +

@@ -30,7 +30,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton
             markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
-            pageUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/${isAID ? 'aid' : 'docs'}/${pageSlug.join('/') || 'index'}`}
+            pageUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/${isAID ? 'aid' : (process.env.NEXT_PUBLIC_APP_URL?.includes('docs.agentcommunity.org') ? '' : 'docs/')}${pageSlug.join('/') || 'index'}`}
           />
           <ViewOptions
             markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
@@ -69,9 +69,20 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
   const page = currentSource.getPage(pageSlug);
 
   if (page) {
-    const canonicalUrl = isAID
-      ? `${canonicalBase}/aid/${pageSlug.join('/')}`
-      : `${canonicalBase}/${pageSlug.join('/')}`;
+    // For docs.agentcommunity.org, use direct paths
+    // For other deployments, use /docs prefix for community content
+    const isDocsSubdomain = canonicalBase.includes('docs.agentcommunity.org');
+
+    let canonicalUrl: string;
+    if (isAID) {
+      canonicalUrl = `${canonicalBase}/aid/${pageSlug.join('/') || 'index'}`;
+    } else if (isDocsSubdomain) {
+      // On docs.agentcommunity.org, community docs are at root level
+      canonicalUrl = `${canonicalBase}/${pageSlug.join('/') || 'index'}`;
+    } else {
+      // On other deployments, community docs are under /docs
+      canonicalUrl = `${canonicalBase}/docs/${pageSlug.join('/') || 'index'}`;
+    }
 
     return {
       title: page.data.title,
