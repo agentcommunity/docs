@@ -30,6 +30,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton
             markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
+            pageUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/${isAID ? 'aid' : 'docs'}/${pageSlug.join('/') || 'index'}`}
           />
           <ViewOptions
             markdownUrl={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}

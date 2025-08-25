@@ -170,6 +170,83 @@ Each content directory needs a `meta.json`:
 }
 ```
 
+## Copy Markdown Feature
+
+### Overview
+
+The documentation site includes a Copy Markdown feature that allows users to copy clean markdown content from any page. This feature provides both pretty URLs and fallback functionality.
+
+### .mdx URLs
+
+Every documentation page is available at a pretty `.mdx` URL:
+
+- **Community Docs:** `https://agentcommunity.org/docs/{page}.mdx`
+- **AID Docs:** `https://agentcommunity.org/aid/{page}.mdx`
+
+**Examples:**
+```bash
+# Copy community docs
+curl https://agentcommunity.org/docs/getting-started.mdx
+
+# Copy AID specification
+curl https://agentcommunity.org/aid/specification.mdx
+
+# Copy with specific tool
+curl https://agentcommunity.org/docs/getting-started.mdx | pbcopy
+```
+
+### Copy Button
+
+Each documentation page includes a "Copy Markdown" button that:
+
+1. **Tries pretty URL first:** `{page}.mdx`
+2. **Falls back to API:** `/api/mdx/{section}/{page}`
+3. **Copies to clipboard:** Clean markdown content with frontmatter, links, and code blocks preserved
+
+### API Endpoints
+
+Direct API access for automation:
+
+- **Community Docs:** `https://agentcommunity.org/api/mdx/docs/{page}`
+- **AID Docs:** `https://agentcommunity.org/api/mdx/aid/{page}`
+
+**Examples:**
+```bash
+# Get raw markdown via API
+curl https://agentcommunity.org/api/mdx/docs/index
+
+# Use in scripts
+curl https://agentcommunity.org/api/mdx/aid/specification > aid-spec.md
+```
+
+### Content Format
+
+The exported markdown includes:
+
+- **Page title and URL** as frontmatter
+- **Original description** from frontmatter
+- **Processed content** with:
+  - Code blocks preserved
+  - Internal links maintained as relative paths
+  - Frontmatter and metadata included
+  - JSX components rendered as markdown
+
+### Usage Examples
+
+```bash
+# Download entire AID docs section
+for page in index specification security versioning; do
+  curl -s https://agentcommunity.org/aid/${page}.mdx > ${page}.md
+done
+
+# Create offline documentation bundle
+curl -s https://agentcommunity.org/docs/index.mdx > docs.md
+curl -s https://agentcommunity.org/aid/index.mdx >> docs.md
+
+# Use with documentation tools
+curl https://agentcommunity.org/docs/api.mdx | pandoc -f markdown -t pdf > api-docs.pdf
+```
+
 ## Development Workflow
 
 ### Code Organization

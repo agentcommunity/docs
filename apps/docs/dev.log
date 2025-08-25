@@ -22,3 +22,21 @@
 [MDX] updated map file in 1.8599999999860302ms
 [MDX] updated map file in 3.4563330000964925ms
 [MDX] updated map file in 6.487542000133544ms
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.1
+   - Local:        http://localhost:3001
+   - Network:      http://172.20.10.13:3001
+   - Experiments (use with caution):
+     ✓ externalDir
+
+ ✓ Starting...
+ ✓ Ready in 1389ms
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.1
+   - Local:        http://localhost:3001
+   - Network:      http://172.20.10.13:3001
+   - Experiments (use with caution):
+     ✓ externalDir
+
+ ✓ Starting...
+ ✓ Ready in 1413ms

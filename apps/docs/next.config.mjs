@@ -10,6 +10,15 @@ const config = {
   experimental: {
     externalDir: true,
   },
+  async rewrites() {
+    return [
+      // Pretty .mdx export for docs and aid
+      {
+        source: '/:section(docs|aid)/:path*.mdx',
+        destination: '/api/mdx/:section/:path*',
+      },
+    ];
+  },
 };
 
 export default withMDX(config);

@@ -9,24 +9,45 @@ import { cva } from 'class-variance-authority';
 
 const cache = new Map<string, string>();
 
-export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
+export function LLMCopyButton({ markdownUrl, pageUrl }: { markdownUrl: string; pageUrl: string }) {
   const [isLoading, setLoading] = useState(false);
   const [checked, onClick] = useCopyButton(async () => {
-    const cached = cache.get(markdownUrl);
-    if (cached) return navigator.clipboard.writeText(cached);
+    // Try pretty URL first, then fallback to API URL
+    const urls = [`${pageUrl}.mdx`, markdownUrl];
 
     setLoading(true);
 
     try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/plain': fetch(markdownUrl).then(async (res) => {
-            const content = await res.text();
-            cache.set(markdownUrl, content);
-            return content;
-          }),
-        }),
-      ]);
+      for (const url of urls) {
+        const cached = cache.get(url);
+        if (cached) {
+          await navigator.clipboard.writeText(cached);
+          return;
+        }
+
+        try {
+          const response = await fetch(url, { cache: 'no-store' });
+          if (!response.ok) {
+            if (response.status === 404 && url.includes('.mdx')) {
+              // Try the next URL if .mdx URL fails
+              continue;
+            }
+            throw new Error(`Fetch failed ${response.status}`);
+          }
+
+          const content = await response.text();
+          cache.set(url, content);
+          await navigator.clipboard.writeText(content);
+          return;
+        } catch (error) {
+          // If this was the last URL, throw the error
+          if (url === urls[urls.length - 1]) {
+            throw error;
+          }
+          // Otherwise, try the next URL
+          continue;
+        }
+      }
     } finally {
       setLoading(false);
     }
