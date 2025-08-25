@@ -1,36 +1,56 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { use, useEffect, useId, useState } from 'react';
 import { useTheme } from 'next-themes';
 
 export function Mermaid({ chart }: { chart: string }) {
-  const id = useId();
-  const [svg, setSvg] = useState('');
-  const { resolvedTheme } = useTheme();
-
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const { default: mermaid } = await import('mermaid');
-      mermaid.initialize({
-        startOnLoad: false,
-        securityLevel: 'loose',
-        theme: resolvedTheme === 'dark' ? 'dark' : 'default',
-        fontFamily: 'inherit',
-      });
-      try {
-        const { svg } = await mermaid.render(id, chart.replaceAll('\\n', '\n'));
-        if (mounted) setSvg(svg);
-      } catch (err) {
-        console.error('Mermaid render error', err);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [chart, id, resolvedTheme]);
+    setMounted(true);
+  }, []);
+  if (!mounted) return null;
+  return <MermaidContent chart={chart} />;
+}
 
-  return <div dangerouslySetInnerHTML={{ __html: svg }} />;
+const cache = new Map<string, Promise<unknown>>();
+
+function cachePromise<T>(
+  key: string,
+  setPromise: () => Promise<T>,
+): Promise<T> {
+  const cached = cache.get(key);
+  if (cached) return cached as Promise<T>;
+  const promise = setPromise();
+  cache.set(key, promise);
+  return promise;
+}
+
+function MermaidContent({ chart }: { chart: string }) {
+  const id = useId();
+  const { resolvedTheme } = useTheme();
+  const { default: mermaid } = use(
+    cachePromise('mermaid', () => import('mermaid')),
+  );
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'loose',
+    fontFamily: 'inherit',
+    themeCSS: 'margin: 1.5rem auto 0;',
+    theme: resolvedTheme === 'dark' ? 'dark' : 'default',
+  });
+  const { svg, bindFunctions } = use(
+    cachePromise(`${chart}-${resolvedTheme}`, () => {
+      return mermaid.render(id, chart.replaceAll('\\n', '\n'));
+    }),
+  );
+  return (
+    <div
+      ref={(container) => {
+        if (container) bindFunctions?.(container);
+      }}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
 }
 
 
