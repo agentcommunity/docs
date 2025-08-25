@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Node.js 18+ 
-- npm or yarn
+- Node.js 22.x
+- pnpm (via Corepack)
 - Git
 
 ## Local Development Setup
@@ -13,7 +13,13 @@
 ```bash
 git clone <repository-url>
 cd agentcommunity-docs
-npm install
+
+# Enable Corepack and activate the workspace pnpm version
+corepack enable
+corepack prepare pnpm@10.12.1 --activate
+
+# Install dependencies using the workspace lockfile
+pnpm install --frozen-lockfile
 ```
 
 ### 2. Environment Variables
@@ -31,11 +37,11 @@ Start both apps simultaneously:
 
 ```bash
 # Start both docs and blog apps
-npm run dev
+pnpm run dev
 
-# Or start individually:
-npm run dev:docs    # http://localhost:3000/docs
-npm run dev:blog    # http://localhost:3001/blog
+# Or start individually (path-based invocations)
+pnpm run dev:docs    # http://localhost:3000/docs
+pnpm run dev:blog    # http://localhost:3001/blog
 ```
 
 ### 4. Content Structure
@@ -97,22 +103,30 @@ Both apps use Next.js ESLint configuration:
 
 ### Project Configuration
 
-1. **Create Vercel Projects:**
-   - **agentcommunity-docs**: Root directory `apps/docs`
-   - **agentcommunity-blog**: Root directory `apps/blog`
+1. **Choose deployment mode:**
+   - Separate projects per app (recommended):
+     - Project A: Root directory `apps/docs`
+     - Project B: Root directory `apps/blog`
+   - Single project at repo root (advanced): uses root `vercel.json` to install/build both apps.
 
 2. **Environment Variables:**
-   - Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` on both projects
+   - Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` on each project
 
-3. **Build Settings:**
-   - Build Command: `npm run build`
+3. **Build Settings (pnpm + Corepack):**
+   - Install Command:
+     `corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm install --frozen-lockfile`
+   - Build Command (per app projects): `pnpm run build`
+   - Build Command (root project): `pnpm run build` (builds docs then blog)
    - Output Directory: `.next` (default)
+
+4. **Caching & pinning notes:**
+   - We pin `fumadocs-mdx` to `11.6.11` via package.json and a pnpm override. If Vercel ever resolves a different version, redeploy with “Clear build cache”.
 
 ### Landing Page Configuration
 
 Create a landing Vercel project with rewrite rules:
 
-**vercel.json:**
+**vercel.json (landing project):**
 ```json
 {
   "rewrites": [
@@ -276,11 +290,11 @@ apps/
 
 ```bash
 # Test individual app builds
-npm run build:docs
-npm run build:blog
+pnpm run build:docs
+pnpm run build:blog
 
 # Test full monorepo build
-npm run build
+pnpm run build
 ```
 
 ## Troubleshooting
@@ -288,9 +302,10 @@ npm run build
 ### Common Issues
 
 **Build Failures:**
-- Check Next.js and Fumadocs versions
-- Verify content file formats
-- Check for broken imports
+- Ensure Node.js 22.x in CI (Vercel default is fine). Locally, use `pnpm env use --global 22` or nvm.
+- Clear Vercel build cache when bumping versions or lockfiles.
+- We intentionally pin `fumadocs-mdx` to `11.6.11` to avoid `zod` peer pulls in 11.8.x.
+- Verify content file formats and check for broken imports.
 
 **Content Not Loading:**
 - Verify file paths in content directories
@@ -307,7 +322,7 @@ npm run build
 Enable debug logging:
 
 ```bash
-DEBUG=* npm run dev
+DEBUG=* pnpm run dev
 ```
 
 ### Performance Monitoring
