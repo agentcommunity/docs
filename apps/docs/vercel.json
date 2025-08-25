@@ -1,6 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    { "source": "/_next/:path*", "destination": "/_next/:path*" },
+    { "source": "/favicon.ico", "destination": "/favicon.ico" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/assets/:path*", "destination": "/assets/:path*" },
     { "source": "/", "destination": "/docs" },
     { "source": "/aid", "destination": "/docs/aid" },
     { "source": "/aid/:path*", "destination": "/docs/aid/:path*" },
