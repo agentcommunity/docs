@@ -36,19 +36,11 @@ This repository contains multiple documentation files to help you understand and
 
 ## 🚀 Quick Start
 
-### Local Development
-```bash
-npm install
-npm run dev
-# docs → http://localhost:3000/docs
-# blog → http://localhost:3001/blog
-```
-
 ### Project Structure
 - `apps/docs/` - Documentation site with Community and AID sections
   - `.source/index.ts` - Auto-generated MDX source files
   - `source.config.ts` - Fumadocs configuration for content sources
-- `apps/blog/` - Blog site
+- `apps/blog/` - Blog site  
   - `.source/index.ts` - Auto-generated MDX source files
   - `source.config.ts` - Fumadocs configuration for content sources
 - `content/docs/` - Community documentation content
@@ -104,7 +96,23 @@ cd apps/docs && npm run prebuild  # runs fumadocs-mdx automatically
 The docs app automatically runs source generation during build via the `prebuild` script, while the blog app generates sources on-demand.
 
 ### Environment Variables
-Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` for proper canonical URLs.
+- Set `NEXT_PUBLIC_APP_URL=https://docs.agentcommunity.org` for the docs subdomain deployment (docs at root)
+- Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` for traditional deployment (docs under /docs)
+
+### Local Development
+```bash
+# Install once
+pnpm install --frozen-lockfile
+
+# Run both apps
+pnpm run dev
+
+# Or run individually
+pnpm run dev:docs   # http://localhost:3000
+pnpm run dev:blog   # http://localhost:3001/blog
+```
+
+If Corepack prompts appear, run `pnpm -v` then `pnpm run dev` again.
 
 ## 📦 Deployment
 
