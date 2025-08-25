@@ -15,8 +15,8 @@ A monorepo containing two independent Next.js applications deployed as separate 
 
 ### Documentation App (`apps/docs`)
 - **Purpose**: Community documentation with AID integration
-- **BasePath**: `/docs`
-- **Sources**: Dual-source system (Community + AID)
+- **Public Paths**: Community at `/` on docs subdomain; under `/docs` in traditional setup
+- **Sources**: Dual-source system (Community baseUrl `/`, AID baseUrl `/aid`)
 - **Features**: Tabbed navigation, scoped search, multi-source content
 
 ### Blog App (`apps/blog`)
@@ -38,7 +38,7 @@ content/
 ## Routing Architecture
 
 ### Source Switching (Docs App)
-- **Community Source**: `baseUrl = "/"`
+- **Community Source**: `baseUrl = "/"` (docs subdomain) or appears under `/docs` via rewrites in traditional setup
 - **AID Source**: `baseUrl = "/aid"`
 - **Switching Logic**: URL prefix-based (`/aid/*` routes to AID source)
 
@@ -57,8 +57,8 @@ content/
 ```json
 {
   "rewrites": [
-    { "source": "/docs/:path*", "destination": "https://docs.vercel.app/docs/:path*" },
-    { "source": "/blog/:path*", "destination": "https://blog.vercel.app/blog/:path*" }
+    { "source": "/docs/:path*", "destination": "https://agentcommunitydocs.vercel.app/docs/:path*" },
+    { "source": "/blog/:path*", "destination": "https://agentcommunityblog.vercel.app/blog/:path*" }
   ]
 }
 ```

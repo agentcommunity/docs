@@ -1,10 +1,27 @@
+import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
+import remarkMdx from 'remark-mdx';
+import { remarkInclude } from 'fumadocs-mdx/config';
 import type { InferPageType } from 'fumadocs-core/source';
 import type { source, aidSource } from './source';
 
 type DocsPage = InferPageType<typeof source>;
 type AIDPage = InferPageType<typeof aidSource>;
 
+const processor = remark()
+  .use(remarkMdx)
+  .use(remarkInclude)
+  .use(remarkGfm);
+
 export async function getLLMText(page: DocsPage | AIDPage) {
-  // Use the already processed content from the page data instead of trying to read from filesystem
-  return `# ${page.data.title}\nURL: ${page.url}\n\n${page.data.description || ''}\n\n${page.data.content}`;
+  const processed = await processor.process({
+    // avoid absolute FS paths for portability
+    path: page.path ?? page.url,
+    value: page.data.content,
+  });
+
+  return `# ${page.data.title}
+URL: ${page.url}
+
+${processed.value}`;
 }
