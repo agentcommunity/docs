@@ -65,16 +65,26 @@ Each app has specific Next.js settings:
 
 **apps/docs/next.config.mjs:**
 ```js
-import { createMDX } from 'fumadocs-mdx';
+import { createMDX } from 'fumadocs-mdx/next';
 
 const withMDX = createMDX({
   mdxOptions: { remarkPlugins: [], rehypePlugins: [] },
 });
 
-export default withMDX({
+/** @type {import('next').NextConfig} */
+const config = {
   reactStrictMode: true,
   experimental: { externalDir: true },
-});
+  async rewrites() {
+    return [
+      { source: '/aid/:path*.mdx', destination: '/api/mdx/aid/:path*' },
+      { source: '/docs/:path*.mdx', destination: '/api/mdx/docs/:path*' },
+      { source: '/:path*.mdx', destination: '/api/mdx/docs/:path*' }
+    ];
+  }
+};
+
+export default withMDX(config);
 ```
 
 **apps/blog/next.config.mjs:**
@@ -89,6 +99,19 @@ export default withMDX({
   reactStrictMode: true,
   experimental: { externalDir: true },
 });
+```
+
+**Fumadocs Sources:**
+
+We use dual sources for community and AID. Community pages are rooted at `/` on `docs.agentcommunity.org` and under `/docs` in traditional setups.
+
+```ts
+// apps/docs/lib/source.ts
+import { docs, aid } from '../.source';
+import { loader } from 'fumadocs-core/source';
+
+export const source = loader({ baseUrl: '/', source: docs.toFumadocsSource() });
+export const aidSource = loader({ baseUrl: '/aid', source: aid.toFumadocsSource() });
 ```
 
 ### ESLint Configuration
@@ -236,9 +259,11 @@ curl https://docs.agentcommunity.org/getting-started.mdx | pbcopy
 
 Each documentation page includes a "Copy Markdown" button that:
 
-1. **Tries pretty URL first:** `{page}.mdx`
+1. **Tries pretty URL first:** `{page}.mdx` (root for community, `/aid/{page}.mdx` for AID)
 2. **Falls back to API:** `/api/mdx/{section}/{page}`
 3. **Copies to clipboard:** Clean markdown content with frontmatter, links, and code blocks preserved
+
+The “Open in ChatGPT/Claude” actions copy the page Markdown first, then open the target.
 
 ### API Endpoints
 
