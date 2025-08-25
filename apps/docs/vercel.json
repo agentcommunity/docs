@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm install --frozen-lockfile",
+  "buildCommand": "corepack enable && corepack prepare pnpm@10.12.1 --activate && pnpm -v && pnpm run build",
   "rewrites": [
     { "source": "/_next/:path*", "destination": "/_next/:path*" },
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
