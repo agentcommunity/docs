@@ -1,6 +1,9 @@
 // @ts-nocheck -- skip type checking
+import * as blog_4 from "../../../content/blog/what_when_domain.mdx?collection=blog&hash=1756152198112"
+import * as blog_3 from "../../../content/blog/missing_record.mdx?collection=blog&hash=1756152198112"
+import * as blog_2 from "../../../content/blog/missing_grep_mcp.mdx?collection=blog&hash=1756152198112"
+import * as blog_1 from "../../../content/blog/finding_door_a2a.mdx?collection=blog&hash=1756152198112"
+import * as blog_0 from "../../../content/blog/door_or_address_book.md?collection=blog&hash=1756152198112"
 import { _runtime } from "fumadocs-mdx"
 import * as _source from "../source.config"
-export const aid = _runtime.docs<typeof _source.aid>([], [])
-export const blog = _runtime.docs<typeof _source.blog>([], [])
-export const docs = _runtime.docs<typeof _source.docs>([], [])
+export const blog = _runtime.docs<typeof _source.blog>([{ info: {"path":"door_or_address_book.md","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/door_or_address_book.md"}, data: blog_0 }, { info: {"path":"finding_door_a2a.mdx","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/finding_door_a2a.mdx"}, data: blog_1 }, { info: {"path":"missing_grep_mcp.mdx","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/missing_grep_mcp.mdx"}, data: blog_2 }, { info: {"path":"missing_record.mdx","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/missing_record.mdx"}, data: blog_3 }, { info: {"path":"what_when_domain.mdx","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/what_when_domain.mdx"}, data: blog_4 }], [{"info":{"path":"meta.json","absolutePath":"/Users/user/dev/side-projects/AgentCommunity/docs/content/blog/meta.json"},"data":{"title":"Blog","pages":["index"]}}])

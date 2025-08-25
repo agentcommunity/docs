@@ -12,11 +12,10 @@ const config = {
   },
   async rewrites() {
     return [
-      // Docs (root and nested)
-      { source: '/docs.mdx', destination: '/api/mdx/docs' },
+      // Community at root
+      { source: '/index.mdx', destination: '/api/mdx/docs' },
       { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
-      { source: '/docs/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
-      // AID (root and nested)
+      // AID under /aid
       { source: '/aid.mdx', destination: '/api/mdx/aid' },
       { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
     ];

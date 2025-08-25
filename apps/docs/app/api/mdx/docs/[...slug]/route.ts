@@ -14,7 +14,15 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     if (!page) return notFoundJson('docs', pageSlug);
 
     const text = await getLLMText(page);
-    return new NextResponse(text, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
+    const filename = `${pageSlug.length > 0 ? pageSlug.join('-') : 'index'}.mdx`;
+    return new NextResponse(text, {
+      headers: {
+        'Content-Type': 'text/markdown; charset=utf-8',
+        'Content-Disposition': `inline; filename="${filename}"`,
+        'x-mdx-section': 'docs',
+        'x-mdx-slug': JSON.stringify(pageSlug),
+      },
+    });
   } catch (error) {
     console.error('mdx/docs error', error);
     return serverErrorJson('export docs failed');

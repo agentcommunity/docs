@@ -1,4 +1,4 @@
-// ../../source.config.ts
+// source.config.ts
 import {
   defineConfig,
   defineDocs,
@@ -38,27 +38,9 @@ function visit(node, type, callback, index = null, parent = null) {
   }
 }
 
-// ../../source.config.ts
-var docs = defineDocs({
-  dir: "content/docs",
-  docs: {
-    schema: frontmatterSchema
-  },
-  meta: {
-    schema: metaSchema
-  }
-});
-var aid = defineDocs({
-  dir: "content/docs/aid",
-  docs: {
-    schema: frontmatterSchema
-  },
-  meta: {
-    schema: metaSchema
-  }
-});
+// source.config.ts
 var blog = defineDocs({
-  dir: "content/blog",
+  dir: "../../content/blog",
   docs: {
     schema: frontmatterSchema
   },
@@ -78,7 +60,6 @@ var source_config_default = defineConfig({
   }
 });
 export {
-  aid,
   blog,
-  docs
+  source_config_default as default
 };
