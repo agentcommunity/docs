@@ -1,12 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { getLLMText } from '@/lib/get-llm-text';
 import { source } from '@/lib/source';
-import { normalizeSlug, notFoundJson, serverErrorJson } from '../_lib';
+import { normalizeSlug, notFoundJson, serverErrorJson, methodGuard, buildDisposition } from '@/lib/mdx-export';
+import crypto from 'node:crypto';
 
 export const revalidate = false;
 export const runtime = 'nodejs';
 
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
+  const guard = methodGuard(req as unknown as Request);
+  if (guard) return guard as NextResponse;
   try {
     const raw = await params;
     const pageSlug = normalizeSlug(raw);
@@ -14,11 +17,19 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     if (!page) return notFoundJson('docs', pageSlug);
 
     const text = await getLLMText(page);
-    const filename = `${pageSlug.length > 0 ? pageSlug.join('-') : 'index'}.mdx`;
+    const url = new URL(req.url);
+    const fp = JSON.stringify({ id: page.url, updatedAt: page.data.lastModified ?? '' });
+    const etag = '"mdx-' + crypto.createHash('sha1').update(fp).digest('base64url') + '"';
+
+    if (req.headers.get('if-none-match') === etag) {
+      return new NextResponse(null, { status: 304, headers: { etag } });
+    }
     return new NextResponse(text, {
       headers: {
         'Content-Type': 'text/markdown; charset=utf-8',
-        'Content-Disposition': `inline; filename="${filename}"`,
+        'Content-Disposition': buildDisposition(pageSlug, url.searchParams),
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400',
+        etag,
         'x-mdx-section': 'docs',
         'x-mdx-slug': JSON.stringify(pageSlug),
       },
