@@ -3,9 +3,11 @@
   "icon": "globe",
   "pages": [
     "index",
-    "rationale",
-    "quickstart",
     "specification",
+    "quickstart",
+    "Reference",
+    "security",
+    "rationale",
     "versioning"
   ]
 }

@@ -1,8 +1,14 @@
 {
-  "title": "Quickstart",
+  "title": "Quickstarts",
   "icon": "rocket",
   "pages": [
     "index",
+    "quickstart_ts",
+    "quickstart_browser",
+    "quickstart_go",
+    "quickstart_python",
+    "quickstart_java",
+    "quickstart_dotnet",
     "quickstart_mcp",
     "quickstart_a2a",
     "quickstart_openapi"

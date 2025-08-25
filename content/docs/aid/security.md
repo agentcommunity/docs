@@ -1,6 +1,8 @@
 ---
 title: 'Security Best Practices'
 description: 'Operational and client guidance for secure AID usage.'
+icon: material/shield-lock
+edit_url: https://github.com/agentcommunity/agent-interface-discovery/edit/main/packages/docs/security.md
 ---
 
 # Security Best Practices

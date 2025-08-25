@@ -1,4 +1,4 @@
-import { docs, blog, aid } from '@/.source';
+import { docs, blog, aid } from '../apps/docs/.source';
 import { loader } from 'fumadocs-core/source';
 
 // Community docs

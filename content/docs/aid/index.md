@@ -1,7 +1,11 @@
 ---
 title: 'Agent Interface Discovery (AID)'
 description: 'The DNS-based discovery protocol for the agent web.'
+icon: material/dns
+edit_url: https://github.com/agentcommunity/agent-interface-discovery/edit/main/packages/docs/index.md
 ---
+
+[View raw markdown](https://github.com/agentcommunity/agent-interface-discovery/raw/main/packages/docs/specification.md)
 
 # Agent Interface Discovery (AID)
 
@@ -15,7 +19,7 @@ It's a simple, open standard that uses the internet's own directory—DNS—to a
 
 No more hunting through API docs. No more manual configuration. It's the zero-friction layer for a world of interconnected agents.
 
-[**Try it Now — Live Resolver & Generator**](https://aid.agentcommunity.org/workbench)
+[**:rocket: Try it Now — Live Resolver & Generator**](https://aid.agentcommunity.org/workbench){ .md-button .md-button--secondary target="\_blank" }
 
 ---
 
@@ -23,9 +27,13 @@ No more hunting through API docs. No more manual configuration. It's the zero-fr
 
 AID creates a seamless experience for everyone in the ecosystem.
 
-> For Users: It Just Works — no setup wizard, no MCP copy‑pasting.
->
-> For Agents: Autonomous discovery — the foundation for true agent‑to‑agent interoperability.
+!!! user "For Users: It Just Works - no setup wizard, no MCP copy-pasting."
+
+    You want to connect your Notion to a new AI assistant. You type `notion.so`. The connection happens automatically. Your experience is instant.
+
+!!! agent "For Agents: Autonomous Discovery - the foundation for true agent-to-agent interoperability"
+
+    As an autonomous agent, you're tasked with analyzing a dataset stored in a Supabase project. You don't need to be pre-configured. You can programmatically discover the `supabase.com` agent endpoint, negotiate a connection, and complete your task.
 
 ---
 
@@ -37,7 +45,7 @@ The entire mechanism is a single DNS lookup. It's simple, decentralized, and bui
 2.  **Discover:** A client, given `supabase.com`, makes a single DNS query for the `TXT` record at that address.
 3.  **Connect:** The record contains the agent's `uri`. The client uses it to connect directly.
 
-[Try this flow now](https://aid.agentcommunity.org/workbench)
+[Try this flow now](aid.agentcommunity.org/workbench)
 
 ```mermaid
 flowchart LR
