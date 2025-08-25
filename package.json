@@ -15,14 +15,14 @@
     }
   },
   "scripts": {
-    "build": "npm run -w @agentcommunity/docs build && npm run -w @agentcommunity/blog build",
-    "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 npm run dev -w @agentcommunity/docs\" \"PORT=3001 npm run dev -w @agentcommunity/blog\"",
-    "dev:docs": "PORT=3000 npm run -w @agentcommunity/docs dev",
-    "dev:blog": "PORT=3001 npm run -w @agentcommunity/blog dev",
-    "build:docs": "npm run -w @agentcommunity/docs build",
-    "build:blog": "npm run -w @agentcommunity/blog build",
-    "start:docs": "PORT=3000 npm run -w @agentcommunity/docs start",
-    "start:blog": "PORT=3001 npm run -w @agentcommunity/blog start"
+    "build": "pnpm -C apps/docs run build && pnpm -C apps/blog run build",
+    "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 pnpm -C apps/docs dev\" \"PORT=3001 pnpm -C apps/blog dev\"",
+    "dev:docs": "PORT=3000 pnpm -C apps/docs dev",
+    "dev:blog": "PORT=3001 pnpm -C apps/blog dev",
+    "build:docs": "pnpm -C apps/docs run build",
+    "build:blog": "pnpm -C apps/blog run build",
+    "start:docs": "PORT=3000 pnpm -C apps/docs start",
+    "start:blog": "PORT=3001 pnpm -C apps/blog start"
   },
   "dependencies": {
     "@fumadocs/mdx-remote": "^1.4.0",
