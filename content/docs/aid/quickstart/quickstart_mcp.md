@@ -2,7 +2,6 @@
 title: 'MCP start'
 description: 'Discover an MCP server endpoint with AID and start a session'
 icon: material/connection
-edit_url: https://github.com/agentcommunity/agent-interface-discovery/edit/main/packages/docs/quickstart/quickstart_mcp.md
 ---
 
 # MCP (Model Context Protocol)

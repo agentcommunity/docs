@@ -5,7 +5,7 @@ import {
   frontmatterSchema,
   metaSchema
 } from "fumadocs-mdx/config";
-import { z } from "zod";
+import { z } from "zod/index.js";
 
 // ../../lib/remark/mermaid-to-component.js
 function remarkMermaidToComponent() {
@@ -57,7 +57,6 @@ var docs = defineDocs({
 });
 var aidFrontmatterSchema = frontmatterSchema.extend({
   icon: z.string().optional(),
-  edit_url: z.string().url().optional(),
   extra_css_class: z.string().optional(),
   tags: z.array(z.string()).optional()
 });
