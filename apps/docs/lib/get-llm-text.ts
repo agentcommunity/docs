@@ -13,8 +13,12 @@ const processor = remark()
   .use(remarkInclude)
   .use(remarkGfm);
 
+interface PageFileMeta { absolutePath?: string }
+interface PageDataWithFile { _file?: PageFileMeta; content: string }
+
 export async function getLLMText(page: DocsPage | AIDPage) {
-  const includePath = (page as any)?.data?._file?.absolutePath || page.path || page.url;
+  const data = page.data as PageDataWithFile;
+  const includePath = data._file?.absolutePath ?? (page as { path?: string }).path ?? page.url;
   const processed = await processor.process({
     path: includePath,
     value: page.data.content,
