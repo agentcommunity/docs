@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     const text = await getLLMText(page);
     return new NextResponse(text, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
   } catch (error) {
-    console.error('mdx/docs error', error);
-    return NextResponse.json({ error: 'failed to generate markdown' }, { status: 500 });
+    console.error('mdx/docs error', { error, slug: (await params).slug });
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }

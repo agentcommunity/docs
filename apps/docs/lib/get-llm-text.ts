@@ -14,9 +14,9 @@ const processor = remark()
   .use(remarkGfm);
 
 export async function getLLMText(page: DocsPage | AIDPage) {
+  const includePath = (page as any)?.data?._file?.absolutePath || page.path || page.url;
   const processed = await processor.process({
-    // avoid absolute FS paths for portability
-    path: page.path ?? page.url,
+    path: includePath,
     value: page.data.content,
   });
 
