@@ -4,12 +4,19 @@ import { aidSource } from '@/lib/source';
 import { notFound } from 'next/navigation';
 
 export const revalidate = false;
+export const runtime = 'nodejs';
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
-  const { slug } = await params;
-  const pageSlug = slug.length === 1 && slug[0] === 'index' ? undefined : slug;
-  const page = aidSource.getPage(pageSlug);
-  if (!page) notFound();
+  try {
+    const { slug } = await params;
+    const pageSlug = slug.length === 1 && slug[0] === 'index' ? undefined : slug;
+    const page = aidSource.getPage(pageSlug);
+    if (!page) notFound();
 
-  return new NextResponse(await getLLMText(page), { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
+    const text = await getLLMText(page);
+    return new NextResponse(text, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
+  } catch (error) {
+    console.error('mdx/aid error', error);
+    return NextResponse.json({ error: 'failed to generate markdown' }, { status: 500 });
+  }
 }
