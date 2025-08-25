@@ -4,7 +4,7 @@ import {
   defineDocs,
   frontmatterSchema,
   metaSchema
-} from "fumadocs-mdx/config/zod-3";
+} from "fumadocs-mdx/config";
 import { z } from "zod";
 
 // ../../lib/remark/mermaid-to-component.js
