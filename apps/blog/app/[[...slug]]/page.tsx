@@ -150,11 +150,13 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const isRoot = !params.slug || params.slug.length === 0 || (params.slug.length === 1 && params.slug[0] === 'index');
   if (isRoot) {
-    return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog` } } as const;
+    const og = ['/blog-og', 'index', 'image.png'].join('/');
+    return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
   }
   const page = blogSource.getPage(params.slug);
   if (!page) notFound();
   const pageData = page.data as BlogPageData;
   const slugPath = params.slug && params.slug.length > 0 ? params.slug.join('/') : 'index';
-  return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}` } } as const;
+  const og = ['/blog-og', ...params.slug!, 'image.png'].join('/');
+  return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
 }
