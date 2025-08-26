@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     images: ['/api/og'],
   },
   icons: {
-    icon: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/blog/icon.svg',
+    apple: '/blog/icon.svg',
   },
 };
 
