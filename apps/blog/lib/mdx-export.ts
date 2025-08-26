@@ -8,7 +8,7 @@ export const ALLOW_METHODS = ['GET', 'HEAD'] as const;
 
 export function methodGuard(req: Request) {
   const m = req.method.toUpperCase();
-  if (!ALLOW_METHODS.includes(m as any)) {
+  if (!ALLOW_METHODS.includes(m as 'GET' | 'HEAD')) {
     return new Response(JSON.stringify({ error: 'METHOD_NOT_ALLOWED' }), {
       status: 405,
       headers: {
