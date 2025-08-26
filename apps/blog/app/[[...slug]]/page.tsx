@@ -44,6 +44,12 @@ export default async function BlogPage(props: { params: Promise<{ slug?: string[
   if (isRoot) {
     const pages = (blogSource.getPages() as unknown as LoadedBlogPage[]).filter((p) => p.slugs.join('/') !== 'index');
 
+    // Debug: Log all pages and their data
+    console.log('All blog pages:', pages.map(p => ({
+      slugs: p.slugs,
+      data: p.data
+    })));
+
     function getPublishedDate(p: LoadedBlogPage): Date | undefined {
       const data = p.data as Partial<BlogFrontmatter & { lastModified?: Date }>;
       if (data.date instanceof Date) return data.date;
@@ -70,20 +76,31 @@ export default async function BlogPage(props: { params: Promise<{ slug?: string[
         <ul className="space-y-6">
           {sorted.map((p) => {
             const data = p.data as BlogFrontmatter & { lastModified?: Date };
-            const href = `/blog/${p.slugs.join('/')}`;
+            const href = `/${p.slugs.join('/')}`;
             const publishedAt = getPublishedDate(p);
             const dateLabel = publishedAt ? publishedAt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' }) : undefined;
+
+            // Debug logging
+            console.log('Blog post data:', {
+              title: data.title,
+              date: data.date,
+              tags: data.tags,
+              publishedAt,
+              dateLabel,
+              slugs: p.slugs,
+              fullData: data // Log the full data object
+            });
 
             return (
               <li key={href} className="border rounded-lg p-5 hover:bg-muted/30 transition-colors">
                 <Link href={href} className="block">
                   <h2 className="text-xl font-semibold mb-1">{data.title}</h2>
-                  {data.description && (<p className="text-muted-foreground mb-2">{data.description}</p>)}
-                  <div className="flex flex-wrap items-center gap-2 text-sm">
-                    {dateLabel && <span className="text-muted-foreground">{dateLabel}</span>}
+                  {data.description && (<p className="text-gray-500 dark:text-gray-400 mb-2">{data.description}</p>)}
+                  <div className="flex flex-wrap items-center gap-2 text-sm mt-2">
+                    {dateLabel && <span className="text-gray-600 dark:text-gray-300 font-medium">{dateLabel}</span>}
                     {Array.isArray(data.tags) && data.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {data.tags.map((tag) => (<span key={tag} className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs">{tag}</span>))}
+                      <div className="flex flex-wrap gap-1">
+                        {data.tags.map((tag) => (<span key={tag} className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 text-xs font-medium">{tag}</span>))}
                       </div>
                     )}
                   </div>
@@ -133,11 +150,13 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const isRoot = !params.slug || params.slug.length === 0 || (params.slug.length === 1 && params.slug[0] === 'index');
   if (isRoot) {
-    return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog` } } as const;
+    const og = ['/blog-og', 'index', 'image.png'].join('/');
+    return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
   }
   const page = blogSource.getPage(params.slug);
   if (!page) notFound();
   const pageData = page.data as BlogPageData;
   const slugPath = params.slug && params.slug.length > 0 ? params.slug.join('/') : 'index';
-  return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}` } } as const;
+  const og = ['/blog-og', ...params.slug!, 'image.png'].join('/');
+  return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
 }

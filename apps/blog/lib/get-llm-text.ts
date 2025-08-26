@@ -1,32 +1,27 @@
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
-import { remarkInclude } from 'fumadocs-mdx/config';
+import type { InferPageType } from 'fumadocs-core/source';
+import type { blogSource } from './source';
 
-interface PageWithContent {
-  url: string;
-  data: {
-    title: string;
-    description?: string;
-    content: string;
-    _file: {
-      absolutePath: string;
-    };
-  };
-}
+type BlogPage = InferPageType<typeof blogSource>;
 
-const processor = remark().use(remarkMdx).use(remarkInclude).use(remarkGfm);
+const processor = remark().use(remarkMdx).use(remarkGfm);
 
-export async function getLLMText(page: PageWithContent): Promise<string> {
-  const processed = await processor.process({
-    path: page.data._file.absolutePath,
-    value: page.data.content,
-  });
-
-  return `# ${page.data.title}
+export async function getLLMText(page: BlogPage) {
+  try {
+    const processed = await processor.process({
+      path: (page as { path?: string }).path ?? page.url,
+      value: page.data.content,
+    });
+    return `# ${page.data.title}
 URL: ${page.url}
 
-${page.data.description || ''}
-
 ${processed.value}`;
+  } catch {
+    return `# ${page.data.title}
+URL: ${page.url}
+
+${page.data.content}`;
+  }
 }

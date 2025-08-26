@@ -12,21 +12,15 @@ const config = {
   },
   async rewrites() {
     return [
-      // Pretty .mdx export for AID at /aid/*
-      {
-        source: '/aid/:path*.mdx',
-        destination: '/api/mdx/aid/:path*',
-      },
-      // Pretty .mdx export for Community docs under /docs (traditional setup)
-      {
-        source: '/docs/:path*.mdx',
-        destination: '/api/mdx/docs/:path*',
-      },
-      // Pretty .mdx export for Community docs at root (docs.agentcommunity.org)
-      {
-        source: '/:path*.mdx',
-        destination: '/api/mdx/docs/:path*',
-      },
+      // Community at root
+      { source: '/index.mdx', destination: '/api/mdx/docs' },
+      { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
+      // Optional .md aliases
+      { source: '/:slug*.md', destination: '/api/mdx/docs/:slug*' },
+      // AID under /aid
+      { source: '/aid.mdx', destination: '/api/mdx/aid' },
+      { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
+      { source: '/aid/:slug*.md', destination: '/api/mdx/aid/:slug*' },
     ];
   },
 };

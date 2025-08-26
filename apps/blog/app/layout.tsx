@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { TopNavbar } from '../components/navigation/TopNavbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -42,8 +43,9 @@ export const metadata: Metadata = {
     images: ['/api/og'],
   },
   icons: {
-    icon: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/blog/assets/favicon.ico',
+    shortcut: '/blog/assets/favicon.ico',
+    apple: '/blog/assets/favicon.ico',
   },
 };
 
@@ -52,7 +54,10 @@ export default function Layout({ children }: { children: ReactNode }) {
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <RootProvider>{children}</RootProvider>
+          <RootProvider>
+            <TopNavbar />
+            {children}
+          </RootProvider>
         </ThemeProvider>
       </body>
     </html>
