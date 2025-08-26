@@ -47,6 +47,15 @@ content/
 - **Content**: Raw MDX access for copy/open functionality
 - **OG Images**: Dynamic image generation for social sharing
 
+#### MDX Export (Docs & Blog)
+- Pretty URLs rewrite to API export routes
+- GET/HEAD supported, ETag/Cache-Control headers, optional download via `?download=1`
+- 404 JSON on misses, no 500s for lookups
+
+#### OG Images (Blog)
+- Per-page OG images via `/blog-og/[...slug]/image.png`
+- Black background, white title, gray subtitle, `agentcommunity.org` watermark
+
 ## Deployment Architecture
 
 ### Vercel Projects

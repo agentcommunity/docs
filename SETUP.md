@@ -89,17 +89,32 @@ export default withMDX(config);
 
 **apps/blog/next.config.mjs:**
 ```js
-import { createMDX } from 'fumadocs-mdx';
+import { createMDX } from 'fumadocs-mdx/next';
 
-const withMDX = createMDX({
-  mdxOptions: { remarkPlugins: [], rehypePlugins: [] },
-});
+const withMDX = createMDX({ mdxOptions: { remarkPlugins: [], rehypePlugins: [] } });
 
 export default withMDX({
   reactStrictMode: true,
-  experimental: { externalDir: true },
+  basePath: '/blog',
+  env: { NEXT_PUBLIC_BASE_PATH: '/blog' },
+  async rewrites() {
+    return [
+      { source: '/blog/index.mdx', destination: '/blog/api/mdx/blog' },
+      { source: '/blog/:slug*.mdx', destination: '/blog/api/mdx/blog/:slug*' },
+      { source: '/blog/:slug*.md', destination: '/blog/api/mdx/blog/:slug*' }
+    ];
+  }
 });
 ```
+
+### MDX Export
+- Docs: pretty `/{slug}.mdx` and `/aid/{slug}.mdx` → `/api/mdx/docs/:slug*` and `/api/mdx/aid/:slug*`
+- Blog: pretty `/blog/{slug}.mdx` → `/blog/api/mdx/blog/:slug*`
+- Both support GET/HEAD, ETag, `?download=1`, and return 404 JSON on page misses.
+
+### Open Graph Images
+- Docs: Available via existing OG setup (if configured)
+- Blog: Per-page OG images at `/blog-og/{slug}/image.png` wired via generateMetadata
 
 **Fumadocs Sources:**
 

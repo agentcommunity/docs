@@ -2,8 +2,7 @@ import { ImageResponse } from 'next/og';
 import { blogSource } from '@/lib/source';
 import { notFound } from 'next/navigation';
 
-export const runtime = 'edge';
-export const revalidate = 300;
+export const runtime = 'nodejs';
 
 export async function GET(
   _req: Request,
@@ -46,8 +45,6 @@ export async function GET(
   );
 }
 
-export function generateStaticParams() {
-  return blogSource.generateParams().map((page) => ({ slug: [...page.slug, 'image.png'] }));
-}
+// No generateStaticParams on Edge runtime to avoid Next.js constraint conflicts
 
 
