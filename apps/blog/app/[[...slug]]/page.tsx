@@ -319,7 +319,13 @@ export default async function BlogPage(props: {
 }
 
 export async function generateStaticParams() {
-  return blogSource.getPages().map((page) => ({ slug: page.slugs }));
+  const posts = blogSource.getPages().map((page) => ({ slug: page.slugs }));
+  // Include root index and optional /index path so production build serves the landing page
+  return [
+    { slug: [] as string[] },
+    { slug: ['index'] as string[] },
+    ...posts,
+  ];
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
