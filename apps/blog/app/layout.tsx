@@ -43,9 +43,9 @@ export const metadata: Metadata = {
     images: ['/api/og'],
   },
   icons: {
-    icon: '/blog/assets/favicon.ico',
-    shortcut: '/blog/assets/favicon.ico',
-    apple: '/blog/assets/favicon.ico',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
 };
 
