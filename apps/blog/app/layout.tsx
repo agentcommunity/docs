@@ -43,9 +43,18 @@ export const metadata: Metadata = {
     images: ['/api/og'],
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.ico`,
+        sizes: 'any',
+      },
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/icon.svg`,
+        type: 'image/svg+xml',
+      },
+    ],
+    shortcut: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.ico`,
+    apple: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.ico`,
   },
 };
 

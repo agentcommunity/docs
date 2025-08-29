@@ -28,14 +28,14 @@ Now the catch. The program that turns signatures into a widely trusted “green 
 Agents are not simple crawlers. They act on behalf of someone, make decisions, and often negotiate terms. The current framing treats them as better-behaved bots that can be listed and filtered. That is serviceable, but it is not agent-first.
 
 * The identity model is request-level, which is fine. The **product** model is bot-first, where “agents” inherit the same verification funnel and labels used for crawlers.
-* There is no neutral path for agent semantics like purpose, consent, attribution, or receipts. Those live outside the scope and get pushed back to vendor features and rule phases.
+* There is no neutral path for agent semantics like purpose, consent, attribution, or receipts. Those live outside the scope and get pushed back to vendor features and proprietary filtering pipeline.
 * The result is an agent story that rides the bot wave, rather than a design that starts with agent value creation and works backward.
 
 ## The moat mechanics, spelled out
 
 These choices are not bugs.
 
-* **Curation equals signal quality**, and a signal you can sell. Manual vetting and traffic minimums keep the “verified” flag clean for enterprise buyers.
+* **Curation equals signal quality**, and a signal you can sell. Manual vetting and traffic minimums keep the “verified” badge trustworthy for enterprise buyers.
 * **Narrow interoperability equals lower support risk.** Fewer RFC features, one algorithm path, one directory pattern. This reduces edge cases at global scale.
 * **Bots first equals speed to revenue.** Extending a mature bot product is faster than building an agent identity layer from scratch.
 
@@ -56,7 +56,7 @@ None of this makes Web Bot Auth bad. It makes the current shape of the ecosystem
 This is not a purity test. It is a checklist for an agent-first future that still works in production.
 
 1. **Agent-first taxonomy and signals**
-   Treat agents as principals with roles and purposes, not just as crawlers with better manners. Expose portable fields that let sites reason about agent classes without vendor lock.
+   Treat agents as principals with roles and purposes, not just as crawlers with better manners. Provide standardized, portable metadata that let sites reason about agent classes without vendor lock.
 
 2. **Neutral directory and algorithm agility**
    Keep the happy path simple, but allow multiple modern signature algorithms and a discovery pattern that is not tied to any single verifier’s registry.
@@ -75,4 +75,5 @@ This is not a purity test. It is a checklist for an agent-first future that stil
 Web Bot Auth is the right primitive, delivered in a form that is excellent for Cloudflare customers and Cloudflare’s moat. For the agent community, it is a useful step, not the destination. If we want agents to be first-class citizens across the web, we should keep the signature transport, then push for neutral discovery, agent-level semantics, and verifiable policy that does not presume a single network at the center.
 
 
-[Join the .agent communnity](agentcommunity.org/join)
+* [Join the .agent communnity](agentcommunity.org/join)
+* [Cloudflare announcement of Web Bot Auth](https://developers.cloudflare.com/bots/reference/bot-verification/web-bot-auth/)
