@@ -334,15 +334,32 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const isRoot = !params.slug || params.slug.length === 0 || (params.slug.length === 1 && params.slug[0] === 'index');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const rawSlug = params.slug ?? [];
+  const normSlug = rawSlug.filter((s) => typeof s === 'string' && s.trim() !== '');
+  const isRoot = normSlug.length === 0 || (normSlug.length === 1 && normSlug[0] === 'index');
   if (isRoot) {
     const og = ['/blog-og', 'index', 'image.png'].join('/');
-    return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
+    const url = `${base}${basePath}`;
+    return {
+      title: '.agent Community Blog',
+      description: 'Latest posts from the .agent community',
+      alternates: { canonical: url },
+      openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url, images: og },
+      twitter: { card: 'summary_large_image', images: og },
+    } as const;
   }
   const page = blogSource.getPage(normSlug);
   if (!page) notFound();
   const pageData = page.data as BlogPageData;
   const slugPath = normSlug.length > 0 ? normSlug.join('/') : 'index';
   const og = ['/blog-og', ...normSlug, 'image.png'].join('/');
-  return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
+  const url = `${base}${basePath}/${slugPath}`;
+  return {
+    title: pageData.title,
+    description: pageData.description,
+    alternates: { canonical: url },
+    openGraph: { type: 'article', title: pageData.title, description: pageData.description, url, images: og },
+    twitter: { card: 'summary_large_image', images: og },
+  } as const;
 }
