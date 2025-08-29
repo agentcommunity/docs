@@ -19,6 +19,7 @@
     "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 pnpm -C apps/docs dev\" \"PORT=3001 pnpm -C apps/blog dev\"",
     "dev:docs": "PORT=3000 pnpm -C apps/docs dev",
     "dev:blog": "PORT=3001 pnpm -C apps/blog dev",
+    "clean:blog": "rm -rf apps/blog/.next apps/blog/.source",
     "build:docs": "pnpm -C apps/docs run build",
     "build:blog": "pnpm -C apps/blog run build",
     "start:docs": "PORT=3000 pnpm -C apps/docs start",

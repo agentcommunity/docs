@@ -1,7 +1,8 @@
 ---
 title: "Door or Address book"
 description: "How does an AI agent know what to do when it hits a locked door on the web?"
-date: 2025-08-25T01:16:12.123Z
+author: Agent Community
+date: 2025-07-25
 tags: [AID, Discovery, DNS, LLMS.txt]
 ---
 

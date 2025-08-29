@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import { LLMCopyButton, ViewOptions } from '@/components/ai/page-actions';
 import { headers } from 'next/headers';
+import Script from 'next/script';
 // Local-only: remove remote fetching
 
 export default async function Page(props: {
@@ -32,6 +33,24 @@ export default async function Page(props: {
     const MDX = page.data.body;
     const apiSlug = aidSlug.length > 0 ? aidSlug.join('/') : 'index';
 
+    const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const breadcrumb = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Docs', item: `${base}/docs` },
+        { '@type': 'ListItem', position: 2, name: 'AID', item: `${base}/docs/aid` },
+        ...(aidSlug.length > 0
+          ? aidSlug.map((s, i) => ({
+              '@type': 'ListItem',
+              position: i + 3,
+              name: s,
+              item: `${base}/docs/aid/${aidSlug.slice(0, i + 1).join('/')}`,
+            }))
+          : []),
+      ],
+    };
+
     return (
       <DocsPage
         toc={page.data.toc}
@@ -41,6 +60,9 @@ export default async function Page(props: {
         lastUpdate={page.data.lastModified}
       >
         <DocsTitle>{page.data.title}</DocsTitle>
+        <Script id="ld-docs-breadcrumbs" type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        />
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton markdownUrl={`/api/mdx/aid/${apiSlug}`} />
           <ViewOptions
@@ -64,6 +86,23 @@ export default async function Page(props: {
     const MDX = page.data.body;
     const apiSlug = slug.length > 0 ? slug.join('/') : 'index';
 
+    const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const breadcrumb = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Docs', item: `${base}/docs` },
+        ...(slug.length > 0
+          ? slug.map((s, i) => ({
+              '@type': 'ListItem',
+              position: i + 2,
+              name: s,
+              item: `${base}/docs/${slug.slice(0, i + 1).join('/')}`,
+            }))
+          : []),
+      ],
+    };
+
     return (
       <DocsPage
         toc={page.data.toc}
@@ -73,6 +112,9 @@ export default async function Page(props: {
         lastUpdate={page.data.lastModified}
       >
         <DocsTitle>{page.data.title}</DocsTitle>
+        <Script id="ld-docs-breadcrumbs" type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        />
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton markdownUrl={`/api/mdx/docs/${apiSlug}`} />
           <ViewOptions
