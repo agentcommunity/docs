@@ -47,7 +47,10 @@ export default async function BlogPage(props: {
 }) {
   const params = await props.params;
   const searchParams = props.searchParams ? await props.searchParams : {};
-  const isRoot = !params.slug || params.slug.length === 0 || (params.slug.length === 1 && params.slug[0] === 'index');
+  // Normalize slug: Treat empty string segments as no segment to avoid false 404 at root
+  const rawSlug = params.slug ?? [];
+  const normSlug = rawSlug.filter((s) => typeof s === 'string' && s.trim() !== '');
+  const isRoot = normSlug.length === 0 || (normSlug.length === 1 && normSlug[0] === 'index');
 
   if (isRoot) {
     const pages = (blogSource.getPages() as unknown as LoadedBlogPage[]).filter((p) => p.slugs.join('/') !== 'index');
@@ -250,12 +253,12 @@ export default async function BlogPage(props: {
     );
   }
 
-  const page = blogSource.getPage(params.slug);
+  const page = blogSource.getPage(normSlug);
   if (!page) notFound();
 
   const pageData = page.data as BlogPageData;
   const MDXContent = pageData.body;
-  const apiSlug = params.slug && params.slug.length > 0 ? params.slug.join('/') : 'index';
+  const apiSlug = normSlug.length > 0 ? normSlug.join('/') : 'index';
   async function readFrontmatterForSlug(slugParts: string[]): Promise<string[] | undefined> {
     try {
       const baseDir = path.join(process.cwd(), '../../content/blog');
@@ -336,10 +339,10 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
     const og = ['/blog-og', 'index', 'image.png'].join('/');
     return { title: '.agent Community Blog', description: 'Latest posts from the .agent community', alternates: { canonical: `${base}/blog` }, openGraph: { type: 'website', title: '.agent Community Blog', description: 'Latest posts from the .agent community', url: `${base}/blog`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
   }
-  const page = blogSource.getPage(params.slug);
+  const page = blogSource.getPage(normSlug);
   if (!page) notFound();
   const pageData = page.data as BlogPageData;
-  const slugPath = params.slug && params.slug.length > 0 ? params.slug.join('/') : 'index';
-  const og = ['/blog-og', ...params.slug!, 'image.png'].join('/');
+  const slugPath = normSlug.length > 0 ? normSlug.join('/') : 'index';
+  const og = ['/blog-og', ...normSlug, 'image.png'].join('/');
   return { title: pageData.title, description: pageData.description, alternates: { canonical: `${base}/blog/${slugPath}` }, openGraph: { type: 'article', title: pageData.title, description: pageData.description, url: `${base}/blog/${slugPath}`, images: og }, twitter: { card: 'summary_large_image', images: og } } as const;
 }
