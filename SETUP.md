@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js 22.x
+- Node.js 22.x (use `.nvmrc` + `nvm use 22`)
 - pnpm (via Corepack)
 - Git
 
@@ -113,8 +113,8 @@ export default withMDX({
 - Both support GET/HEAD, ETag, `?download=1`, and return 404 JSON on page misses.
 
 ### Open Graph Images
-- Docs: Available via existing OG setup (if configured)
-- Blog: Per-page OG images at `/blog-og/{slug}/image.png` wired via generateMetadata
+- Docs: Dynamic OG images at `/docs-og/{slug}/image.png` (dark bg, white title, gray mono subtitle)
+- Blog: Per-page OG images at `/blog-og/{slug}/image.png`
 
 **Fumadocs Sources:**
 
@@ -162,7 +162,25 @@ Both apps use Next.js ESLint configuration:
    - Output Directory: `.next` (default)
 
 4. **Caching & pinning notes:**
-   - We pin `fumadocs-mdx` to `11.6.11` via package.json and a pnpm override. If Vercel ever resolves a different version, redeploy with “Clear build cache”.
+  - We pin `fumadocs-mdx` to `11.6.11` via package.json and a pnpm override. If Vercel ever resolves a different version, redeploy with “Clear build cache”.
+
+## SEO & Social Setup
+
+- Ensure `NEXT_PUBLIC_APP_URL` is set in `.env.local` so canonical/OG URLs are absolute.
+- Docs pages emit BreadcrumbList JSON-LD.
+- Blog index emits Blog JSON-LD; posts emit Article JSON-LD.
+- Blog exposes `sitemap.xml` and `rss.xml` for discovery.
+
+## Content Conventions
+
+- Blog posts: place in `content/blog`, use frontmatter (`title`, `description`, `date` YYYY-MM-DD, `tags`, optional `image`).
+- Blog filenames should be date-prefixed: `YYYY-MM-DD-title.mdx`.
+- Blog images belong under `apps/blog/public/blog/` and are referenced as `/blog/<filename>`.
+
+## Troubleshooting
+
+- If blog changes don’t reflect (especially frontmatter):
+  - `pnpm clean:blog && pnpm dev:blog`
 
 ### Landing Page Configuration
 

@@ -178,6 +178,23 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 - Proper canonical URLs for each section
 - Section-specific meta tags
 - Structured data for each content type
+- Dynamic OG images for Docs and Blog
+- BreadcrumbList JSON-LD on docs pages
+- Blog JSON-LD on index and Article JSON-LD on posts
+- Blog `sitemap.xml` and `rss.xml` routes
+
+## Blog Authoring & Images
+
+- Blog posts live in `content/blog`.
+- Prefer date-prefixed filenames: `YYYY-MM-DD-title.mdx` for consistent ordering.
+- Frontmatter: `title`, `description`, `date` (YYYY-MM-DD), `tags`, optional `image`.
+- Blog images live in `apps/blog/public/blog/` and are referenced as `/blog/<filename>`.
+
+## Local Dev Tips
+
+- Use Node 22 (`.nvmrc`): `nvm use 22`.
+- If blog content/frontmatter changes don’t show up, clear caches:
+  - `pnpm clean:blog && pnpm dev:blog`
 
 ## Troubleshooting
 

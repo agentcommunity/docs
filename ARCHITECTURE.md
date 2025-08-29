@@ -89,6 +89,29 @@ content/
 - **Conditional Rendering**: Different layouts for different content sources
 - **SEO Optimization**: Proper meta tags and structured data per section
 
+## SEO & Social
+
+- OG images: Both apps generate dynamic OG images with Next’s ImageResponse.
+  - Docs: `app/docs-og/[...slug]/route.tsx` (dark background, white title, gray monospace subtitle).
+  - Blog: `apps/blog/app/blog-og/[...slug]/route.tsx` (same style).
+- Metadata: Both apps set `metadataBase` and per-page Open Graph/Twitter images (`summary_large_image`).
+- Docs breadcrumbs: BreadcrumbList JSON-LD via `<Script type="application/ld+json">` inside `app/docs/[[...slug]]/page.tsx`.
+- Blog structured data:
+  - Blog index: Blog JSON-LD with recent posts.
+  - Post pages: Article JSON-LD.
+- Sitemaps & feeds (blog): `apps/blog/app/sitemap.xml/route.ts` and `apps/blog/app/rss.xml/route.ts`.
+
+## Blog Content Conventions
+
+- Date-prefixed filenames: `YYYY-MM-DD-title.mdx` for reliable ordering.
+- Frontmatter: `title`, `description`, `date`, `tags`, optional `image` (thumbnail on index).
+- Inline images: Place under `apps/blog/public/blog/` and reference as `/blog/<filename>`.
+
+## Dev Notes
+
+- Node 22: `.nvmrc` committed; use `nvm use 22`.
+- Fumadocs cache: when changing content/frontmatter, clear blog caches: `pnpm clean:blog && pnpm dev:blog`.
+
 ## Technical Benefits
 
 - **Scalability**: Independent scaling of docs vs blog

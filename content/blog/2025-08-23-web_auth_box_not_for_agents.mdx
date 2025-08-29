@@ -1,0 +1,78 @@
+---
+title: "Web Bot Auth, not for agents"
+description: "signed interactions, or a product moat wrapped in a standard?"
+author: Agent Community
+date: 2025-08-23
+tags: [Cloudflare, web auth bot, bot, agent]
+---
+
+**TL;DR**
+Web Bot Auth solves a real problem with a real standard. Per-request signatures make automated traffic accountable, and that is the right long-term primitive. In Cloudflare’s hands, the current implementation is built first for **bots**, not **agents**. “Signed agents” read like a label added to a bot-centric system, not a first-class agent identity fabric. The design also centers Cloudflare as the arbiter and on-ramp, which is great for reliability inside their network and great for their business moat, but not great for an open, decentralized agentic web.
+
+---
+
+<img alt="Editorial illustration: an orange fortress labeled ." src="/blog/editorial-illustration-an-orange-fortress-labeled-.png" />
+
+## What Web Bot Auth promises
+
+At the protocol level, Web Bot Auth is straightforward. A requester signs specific parts of the HTTP message, a verifier checks the signature against a published key, and you get a deterministic signal that the request came from who it claims. That is cleaner than IP folklore and stronger than user-agent theater. As a building block for accountable machine traffic, it is the right move.
+
+## What Cloudflare actually ships
+
+Inside Cloudflare, the signature becomes one more input to an existing bot stack: scores, fingerprints, categories, managed rules, analytics. Practically, it works. You get knobs to allow or challenge signed traffic and to slice it in dashboards. For Cloudflare customers, that is useful on day one.
+
+Now the catch. The program that turns signatures into a widely trusted “green light” is centralized and curated. To become a “Verified Bot” or a “Signed Agent” you apply, meet policy, and hit volume thresholds. Entries are cached, delisted if traffic goes quiet, then relisted when it returns. This is quality control for paying customers, and gatekeeping in the broader web context. Both statements are true.
+
+## Agents feel bolted on
+
+Agents are not simple crawlers. They act on behalf of someone, make decisions, and often negotiate terms. The current framing treats them as better-behaved bots that can be listed and filtered. That is serviceable, but it is not agent-first.
+
+* The identity model is request-level, which is fine. The **product** model is bot-first, where “agents” inherit the same verification funnel and labels used for crawlers.
+* There is no neutral path for agent semantics like purpose, consent, attribution, or receipts. Those live outside the scope and get pushed back to vendor features and rule phases.
+* The result is an agent story that rides the bot wave, rather than a design that starts with agent value creation and works backward.
+
+## The moat mechanics, spelled out
+
+These choices are not bugs.
+
+* **Curation equals signal quality**, and a signal you can sell. Manual vetting and traffic minimums keep the “verified” flag clean for enterprise buyers.
+* **Narrow interoperability equals lower support risk.** Fewer RFC features, one algorithm path, one directory pattern. This reduces edge cases at global scale.
+* **Bots first equals speed to revenue.** Extending a mature bot product is faster than building an agent identity layer from scratch.
+
+All of that is rational from a vendor perspective. It is also why this looks and feels like a moat. The best experience is inside Cloudflare, where Cloudflare is the validator, the policy engine, and the analytics plane.
+
+## Why that matters to the agentic web
+
+If you care about a web where independent agents can operate on equal footing, there are real trade-offs.
+
+* **On-ramp dependence.** If the widely accepted “good” signal is tied to one network’s registry and policy, new or niche agents start on the back foot.
+* **Protocol shrink-wrap.** A trimmed feature set makes operations smoother, but it narrows cross-vendor interoperability and limits emergent use cases.
+* **Missing first-class agent concepts.** Identity is necessary, not sufficient. Agents need portable ways to express intent, accept terms, and present verifiable receipts, all without a single choke point.
+
+None of this makes Web Bot Auth bad. It makes the current shape of the ecosystem tilted toward Cloudflare’s strengths.
+
+## What a healthier direction would look like
+
+This is not a purity test. It is a checklist for an agent-first future that still works in production.
+
+1. **Agent-first taxonomy and signals**
+   Treat agents as principals with roles and purposes, not just as crawlers with better manners. Expose portable fields that let sites reason about agent classes without vendor lock.
+
+2. **Neutral directory and algorithm agility**
+   Keep the happy path simple, but allow multiple modern signature algorithms and a discovery pattern that is not tied to any single verifier’s registry.
+
+3. **Replay guidance that is portable**
+   Short expiries are fine, add a widely usable pattern for nonces or receipts so replay defenses do not depend on any one network.
+
+4. **Policy and receipts at the edge of the protocol**
+   Pair identity with machine-readable terms and verifiable receipts. Keep policy with the site, keep identity with the agent, and keep verification vendor-agnostic.
+
+5. **Interoperable analytics hooks**
+   Everyone needs telemetry. Define minimal, common failure codes and counters that any verifier can emit and any agent can parse.
+
+## Bottom line
+
+Web Bot Auth is the right primitive, delivered in a form that is excellent for Cloudflare customers and Cloudflare’s moat. For the agent community, it is a useful step, not the destination. If we want agents to be first-class citizens across the web, we should keep the signature transport, then push for neutral discovery, agent-level semantics, and verifiable policy that does not presume a single network at the center.
+
+
+[Join the .agent communnity](agentcommunity.org/join)
