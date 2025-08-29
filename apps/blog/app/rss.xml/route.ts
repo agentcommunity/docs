@@ -15,7 +15,8 @@ function parseDate(value: unknown): Date | undefined {
 
 export async function GET() {
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const origin = `${base}/blog`;
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const origin = `${base}${basePath}`;
   const pages = blogSource.getPages();
   const enriched = pages.map((p) => {
     const data = p.data as { title?: string; description?: string; date?: unknown };

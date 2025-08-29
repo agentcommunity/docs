@@ -162,12 +162,12 @@ export default async function BlogPage(props: {
             '@context': 'https://schema.org',
             '@type': 'Blog',
             name: '.agent Community Blog',
-            url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`,
+            url: `${(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000')}${process.env.NEXT_PUBLIC_BASE_PATH || ''}`,
             blogPost: enriched.slice(0, 50).map((e) => ({
               '@type': 'BlogPosting',
               headline: e.meta.title,
               description: e.meta.description,
-              url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog/${e.p.slugs.join('/')}`,
+              url: `${(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000')}${process.env.NEXT_PUBLIC_BASE_PATH || ''}/${e.p.slugs.join('/')}`,
               datePublished: e.parsedDate ? e.parsedDate.toISOString() : undefined,
             })),
           }) }}
