@@ -12,7 +12,7 @@ export const baseOptions: BaseLayoutProps = {
       secondary: false,
     },
     {
-      text: 'Agent Interface Discovery (AID)',
+      text: 'Agent Identity & Discovery (AID)',
       url: '/aid',
       active: 'nested-url',
       secondary: false,

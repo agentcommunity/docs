@@ -68,7 +68,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
             icon: <Lucide.Book className="size-4" />,
           },
           {
-            title: 'Agent Interface Discovery (AID)',
+            title: 'Agent Identity & Discovery (AID)',
             description: 'Define interfaces between agent systems',
             url: '/docs/aid',
             icon: <Lucide.Globe className="size-4" />,

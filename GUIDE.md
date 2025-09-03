@@ -34,7 +34,7 @@ Define navigation items once, use everywhere:
 // apps/docs/app/components/navigation/nav-items.tsx
 export const navSectionItems = [
   { title: '.agent Community', url: '/docs', icon: <Book /> },
-  { title: 'Agent Interface Discovery (AID) v1.0.0', url: '/docs/aid', icon: <Globe /> },
+  { title: ' Agent Identity & Discovery (AID) v1.1.0', url: '/docs/aid', icon: <Globe /> },
 ];
 ```
 

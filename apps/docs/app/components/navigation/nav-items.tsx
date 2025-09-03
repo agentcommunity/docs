@@ -20,7 +20,7 @@ export const navSectionItems: Readonly<NavSectionItem[]> = [
     ),
   },
   {
-    title: 'Agent Interface Discovery (AID) v1.0.0',
+    title: 'Agent Identity & Discovery (AID) v1.1.0',
     description: 'Define interfaces between agent systems',
     url: '/aid',
     icon: (

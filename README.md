@@ -37,14 +37,14 @@ This repository contains multiple documentation files to help you understand and
 ## 🚀 Quick Start
 
 ### Project Structure
-- `apps/docs/` - Documentation site with Community and AID sections
+- `apps/docs/` - Documentation for .agent Community and work items
   - `.source/index.ts` - Auto-generated MDX source files
-  - `source.config.ts` - Fumadocs configuration for content sources
+  - `source.config.ts` - Fumadocs configuration 
 - `apps/blog/` - Blog site  
   - `.source/index.ts` - Auto-generated MDX source files
-  - `source.config.ts` - Fumadocs configuration for content sources
-- `content/docs/` - Community documentation content
-- `content/docs/aid/` - AID documentation content
+  - `source.config.ts` - Fumadocs configuration 
+- `content/docs/` - Community documentation
+- `content/docs/aid/` - AID documentation 
 - `content/blog/` - Blog content
 
 ## 🎯 Key Features

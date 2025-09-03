@@ -24,7 +24,7 @@ The problem is that this approach mixes up two very different things: the *locat
 
 This is a subtle but crucial distinction. We don't need better notes; we need a better address book.
 
-This is where Agent Interface Discovery (AID) offers a more robust, foundational solution. AID doesn't leave instructions on the page. It publishes an address in the internet's most trusted, decentralized address book: DNS.
+This is where Agent Interface Discovery (AID) (new name: Agent Identity & Discovery) offers a more robust, foundational solution. AID doesn't leave instructions on the page. It publishes an address in the internet's most trusted, decentralized address book: DNS.
 
 The entire mechanism is a single, machine-readable `TXT` record.
 
