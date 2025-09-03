@@ -1,0 +1,51 @@
+---
+title: "Identity joins discovery - from v1 to v1.1"
+description: "Moving from discovery to trusted discovery"
+author: Agent Community
+date: 2025-08-31
+tags: [AID, v1.1, agent, identity]
+---
+
+# AID 1.1 change overview: identity joins discovery
+
+**TL;DR:** AID 1.1 keeps the one-record discovery model and adds optional endpoint proof. You can still type a domain and connect. Now you can also verify you are talking to the right agent. We added a pragmatic `.well-known` fallback and small metadata keys. No breaking changes.
+
+## What changed
+
+* **PKA (Public Key for Agent):** Domains can publish a public key in `_agent.<domain>`. Clients send a small challenge, the server signs, the client verifies. This proves endpoint control.
+* **`.well-known` fallback:** If DNS updates are slow, clients may read JSON at `https://<domain>/.well-known/agent`. DNS stays canonical.
+* **Metadata and aliases:** Short keys (`v, p, u, s, a, d, e, k, i`) keep records compact. Optional `docs` and `dep` improve operator UX and safe migrations.
+* **Protocol tokens expanded:** `grpc`, `graphql`, `websocket`, and `zeroconf` join `mcp`, `a2a`, `openapi`, and `local`.
+
+## What stayed the same
+
+* **Scope:** AID is still a minimal bootstrap. It discovers where and how to connect. It is not a capability registry or an auth system.
+* **DNS-first:** One TXT record at `_agent.<domain>` remains the standard path. Clients respect TTL. DNSSEC is recommended.
+* **Backward compatibility:** All valid v1.0 records continue to work.
+
+## Why this matters to builders
+
+* **Stronger trust with little work:** Add PKA for sensitive planes. Rotate keys with `kid`. Clients can warn on downgrade.
+* **Lower friction in real orgs:** `.well-known` helps teams who cannot touch DNS quickly. DNS remains the source of truth.
+* **Multi-protocol future:** Same discovery for MCP, A2A, gRPC, GraphQL, or WebSocket.
+
+## Migration notes
+
+* You do not need to change existing records.
+* When ready, add `k` and `i` for PKA, plus `d` for docs and `e` for deprecation timelines.
+* Consider publishing protocol-specific subdomains if you run multiple agent entry points.
+
+## What’s next
+
+* Planned v2 uses SRV/HTTPS records with the same `_agent` service label.
+* Community registries track tokens and public adoption.
+
+### Read more
+
+* [Specification](https://docs.agentcommunity.org/aid/specification)
+* [Rationale](https://docs.agentcommunity.org/aid/rationale)
+* [Identity & PKA](https://docs.agentcommunity.org/aid/Reference/identity_pka)
+* [What's new](https://docs.agentcommunity.org/aid/Reference/whats_new)
+* [aid-doctor CLI](https://docs.agentcommunity.org/aid/Tooling/aid_doctor)
+
+**Join the Agent Community** to help shape the roadmap and get early access to **.agent** domains: *\[agentcommunity.org]*
