@@ -6,7 +6,6 @@ import {
 } from 'fumadocs-mdx/config';
 import remarkMermaidToComponent from './lib/remark/mermaid-to-component.js';
 
-// Basic schemas without Zod for simpler frontmatter
 export const docs = defineDocs({
   dir: 'content/docs',
   docs: {
@@ -17,8 +16,6 @@ export const docs = defineDocs({
   },
 });
 
-// AID docs (local-only, separate source for proper tab isolation)
-// Using basic frontmatter schema without extra fields
 export const aid = defineDocs({
   dir: 'content/docs/aid',
   docs: {

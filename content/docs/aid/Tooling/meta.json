@@ -1,0 +1,9 @@
+{
+  "title": "Tooling",
+  "icon": "wrench",
+  "pages": [
+    "aid_doctor",
+    "aid_engine",
+    "conformance"
+  ]
+}

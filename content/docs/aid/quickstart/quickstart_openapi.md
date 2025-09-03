@@ -1,5 +1,5 @@
 ---
-title: 'OpenAPI start'
+title: 'OpenAPI'
 description: 'Discover an OpenAPI spec URL using AID and fetch it'
 icon: material/api
 ---
@@ -94,7 +94,11 @@ discoverAndAnalyzeApi('openapi.agentcommunity.org'); // Fictional example domain
 
 **Why AID here?** It turns a domain into the canonical OpenAPI spec URL, enabling dynamic client setup.
 
+For libraries in other languages (including Rust/.NET/Java WIP), see the [Package Overview](./index.md#package-overview).
+
 ---
+
+!!! info "Implementation Files" - [Generated spec types](../protocol/spec.ts) - [TypeScript constants](../packages/aid/src/constants.ts)
 
 **See also:**
 

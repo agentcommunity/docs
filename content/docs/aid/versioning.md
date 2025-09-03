@@ -1,11 +1,16 @@
 ---
-title: 'Versioning and Changelog'
+title: 'Versioning'
 description: 'How the AID specification evolves.'
+icon: material/git
+
+extra_css_class: aid-page
 ---
+
+[View raw markdown](https://github.com/agentcommunity/agent-interface-discovery/raw/main/packages/docs/versioning.md)
 
 # Versioning and Changelog
 
-The Agent Interface Discovery (AID) standard is designed to be a stable, living protocol. To ensure predictability for implementers while allowing for future improvements, we follow a clear and simple versioning strategy based on **Semantic Versioning (SemVer)** principles.
+The Agent Identity & Discovery (AID) standard is designed to be a stable, living protocol. To ensure predictability for implementers while allowing for future improvements, we follow a clear and simple versioning strategy based on **Semantic Versioning (SemVer)** principles.
 
 ## The `v` Key in the TXT Record
 

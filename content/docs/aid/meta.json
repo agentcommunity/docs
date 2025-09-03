@@ -4,10 +4,11 @@
   "pages": [
     "index",
     "specification",
+    "rationale",
     "quickstart",
     "Reference",
+    "Tooling",
     "security",
-    "rationale",
     "versioning"
   ]
 }

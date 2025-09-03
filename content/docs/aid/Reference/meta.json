@@ -4,7 +4,11 @@
   "pages": [
     "protocols",
     "troubleshooting",
-    "conformance"
+    "conformance",
+    "discovery_api",
+    "identity_pka",
+    "well_known_json",
+    "whats_new"
   ]
 }
 
