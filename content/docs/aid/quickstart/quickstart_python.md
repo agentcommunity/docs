@@ -62,14 +62,14 @@ Notes
 
 ## See also
 
-- [Quick Start index](./index.md)
-- [TypeScript / Node.js](./quickstart_ts.md)
-- [Browser](./quickstart_browser.md)
-- [Go](./quickstart_go.md)
-- [Java](./quickstart_java.md)
-- [.NET](./quickstart_dotnet.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
+- [Quick Start home](./quickstart)
+- [TypeScript / Node.js](./quickstart_ts)
+- [Browser](./quickstart_browser)
+- [Go](./quickstart_go)
+- [Java](./quickstart_java)
+- [.NET](./quickstart_dotnet)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](../packages/aid-py/aid_py/constants.py)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-py/aid_py/constants.py)

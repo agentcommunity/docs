@@ -50,14 +50,14 @@ Notes
 
 ## See also
 
-- [Quick Start index](./index.md)
-- [TypeScript / Node.js](./quickstart_ts.md)
-- [Browser](./quickstart_browser.md)
-- [Go](./quickstart_go.md)
-- [Python](./quickstart_python.md)
-- [.NET](./quickstart_dotnet.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
+- [Quick Start home](./quickstart)
+- [TypeScript / Node.js](./quickstart_ts)
+- [Browser](./quickstart_browser)
+- [Go](./quickstart_go)
+- [Python](./quickstart_python)
+- [.NET](./quickstart_dotnet)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](../packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)

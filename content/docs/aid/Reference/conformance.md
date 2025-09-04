@@ -39,8 +39,8 @@ Exit code is non-zero if any case fails; output includes a concise summary.
 
 ## See also
 
-- [Quick Start index](./quickstart/index.md)
-- [Protocols & Auth Tokens](./protocols.md)
-- [Troubleshooting](./troubleshooting.md)
+- [Quick Start home](/aid/quickstart)
+- [Protocols & Auth Tokens](./protocols)
+- [Troubleshooting](./troubleshooting)
 
 

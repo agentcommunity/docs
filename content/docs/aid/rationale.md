@@ -98,7 +98,7 @@ Practical outcomes:
 - **Vendor migration:** Publish new endpoint with `dep` on the old one; rotate PKA via `kid`; clients follow safely.
 - **Hybrid local/remote:** Local dev via `proto=local`/`zeroconf:` with explicit consent, production via remote `https://` + PKA.
 - **Multi-protocol exposure:** Same domain can expose `mcp`, `a2a`, or `openapi`; clients select supported protocol.
-- **Development and operations:** Use the [aid-doctor CLI](../Tooling/aid_doctor.md) for validation, security checks, record generation, and PKA key management.
+- **Development and operations:** Use the [aid-doctor CLI](../Tooling/aid_doctor) for validation, security checks, record generation, and PKA key management.
 
 ### **8. Conclusion**
 
@@ -108,8 +108,8 @@ AID v1 is a deliberately focused and pragmatic standard. It provides a simple, r
 
 **Next Steps:**
 
-- [Quick Start Guide](quickstart/index.md)
-- [Blog: The Missing MX Record](blog/missing_record.md)
+- [Quick Start Guide](/aid/quickstart/index)
+- [Blog: The Missing MX Record](blog.agentcommunity.org/missing_record.md)
 
 ---
 

@@ -51,6 +51,6 @@ The note-on-the-door approach is a clever workaround for a missing piece of infr
 
 **Related Reading:**
 
-- [AID Specification](../specification.md)
-- [Design Rationale](../rationale.md)
-- [The Missing MX Record for the Internet of Agents](missing-record.md)
+- [AID Specification](../specification)
+- [Design Rationale](../rationale)
+- [The Missing MX Record for the Internet of Agents](missing-record)

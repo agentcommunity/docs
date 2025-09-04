@@ -33,7 +33,7 @@ The AID specification and its surrounding tooling (libraries, validators) are ve
 A detailed, human-readable changelog will be maintained for each release. The changelog documents all changes, big or small, providing a clear history of the standard's evolution.
 
 You can find the full changelog here:
-[**View the Official Changelog**](changelog.md)
+[**View the Official Changelog**](/aid/changelog)
 
 ## Our Philosophy on Stability
 

@@ -48,14 +48,15 @@ Security
 
 ## See also
 
-- [Quick Start index](./index.md)
-- [TypeScript / Node.js](./quickstart_ts.md)
-- [Go](./quickstart_go.md)
-- [Python](./quickstart_python.md)
-- [Java](./quickstart_java.md)
-- [.NET](./quickstart_dotnet.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
+- [Quick Start home](./quickstart)
+- [TypeScript / Node.js](./quickstart_ts)
+- [Go](./quickstart_go)
+- [Python](./quickstart_python)
+- [Java](./quickstart_java)
+- [.NET](./quickstart_dotnet)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](../packages/aid/src/constants.ts) - [Generated spec types](../protocol/spec.ts)
+---
+ info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts) - [Generated spec types](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/spec.ts)

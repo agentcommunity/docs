@@ -61,12 +61,12 @@ flowchart LR
 
 ### Want the deep dive?
 
-- [**Specification**](specification.md) – _The exact format, algorithms, and security rules._
-- [**Identity & PKA**](Reference/identity_pka.md) – _How AID provides cryptographic proof of an agent's identity._
-- [**Rationale**](rationale.md) – _The design philosophy behind AID._
-- [**Security Best Practices**](security.md) – _DNSSEC, redirect handling, local execution, IDN safety, TTL & caching._
-- [**aid-doctor CLI**](Tooling/aid_doctor.md) – _Validate, secure, and generate AID records._
-- [**What’s New**](Reference/whats_new.md) – _Recent documentation updates._
+- [**Specification**](/aid/specification) – _The exact format, algorithms, and security rules._
+- [**Identity & PKA**](/aid/Reference/identity_pka) – _How AID provides cryptographic proof of an agent's identity._
+- [**Rationale**](/aid/rationale) – _The design philosophy behind AID._
+- [**Security Best Practices**](/aid/security) – _DNSSEC, redirect handling, local execution, IDN safety, TTL & caching._
+- [**aid-doctor CLI**](/aid/Tooling/aid_doctor) – _Validate, secure, and generate AID records._
+- [**What’s New**](/aid/Reference/whats_new) – _Recent documentation updates._
 
 ---
 
@@ -84,18 +84,18 @@ AID has official libraries and tools across multiple languages, with additional 
 - Java: `aid-java`
 - Web Workbench: Interactive generator/resolver
 
-See the full package overview in the [Quick Start](quickstart/index.md#package-overview) and the cross-language [Discovery API](Reference/discovery_api.md).
+See the full package overview in the [Quick Start](quickstart/index#package-overview) and the cross-language [Discovery API](Reference/discovery_api).
 
 !!! tip "Implementation Files"
-All SDKs share constants generated from a single source: [`protocol/constants.yml`](../protocol/constants.yml).
-View generated files: [TypeScript](../packages/aid/src/constants.ts), [Python](../packages/aid-py/aid_py/constants.py), [Go](../packages/aid-go/constants_gen.go), [Rust](../packages/aid-rs/src/constants_gen.rs), [.NET](../packages/aid-dotnet/src/Constants.g.cs), [Java](../packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
+All SDKs share constants generated from a single source: [`protocol/constants.yml`](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/constants.yml).
+View generated files: [TypeScript](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts), [Python](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-py/aid_py/constants.py), [Go](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-go/constants_gen.go), [Rust](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-rs/src/constants_gen.rs), [.NET](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-dotnet/src/Constants.g.cs), [Java](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
 
 ---
 
 ## Use Cases
 
 - Simple connections: Type a domain, connect automatically. No manual setup.
-- Stronger trust (optional): Add identity proof to ensure you’re talking to the right service. See [Identity & PKA](Reference/identity_pka.md).
+- Stronger trust (optional): Add identity proof to ensure you’re talking to the right service. See [Identity & PKA](/aid/Reference/identity_pka).
 - Local and dev workflows: Safely run local agents with explicit consent; discover dev agents on your network.
 - Multi-protocol ecosystems: Connect across MCP, A2A, OpenAPI, gRPC, GraphQL, or WebSocket.
 - Smooth migrations: Deprecate old endpoints gracefully with clear timelines.

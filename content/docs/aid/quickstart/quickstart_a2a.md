@@ -93,10 +93,10 @@ For libraries in other languages (including Rust/.NET/Java WIP), see the [Packag
 
 ---
 
-!!! info "Implementation Files" - [Generated spec types](../protocol/spec.ts) - [TypeScript constants](../packages/aid/src/constants.ts)
+!!! info "Implementation Files" - [Generated spec types](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/spec.ts) - [TypeScript constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts)
 
 **See also:**
 
-- [General Quick Start](./index.md)
-- [MCP Quick Start](./quickstart_mcp.md)
-- [OpenAPI Quick Start](./quickstart_openapi.md)
+- [General Quick home](./quickstart)
+- [MCP Quick Start](./quickstart_mcp)
+- [OpenAPI Quick Start](./quickstart_openapi)

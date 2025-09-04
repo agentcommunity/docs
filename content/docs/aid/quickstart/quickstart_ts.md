@@ -70,16 +70,16 @@ Notes
 
 ## See also
 
-- [Quick Start index](./index.md)
-- [Browser](./quickstart_browser.md)
-- [Go](./quickstart_go.md)
-- [Python](./quickstart_python.md)
-- [Rust](./quickstart_rust.md)
-- [Java](./quickstart_java.md)
-- [.NET](./quickstart_dotnet.md)
-- [MCP](./quickstart_mcp.md), [A2A](./quickstart_a2a.md), [OpenAPI](./quickstart_openapi.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
+- [Quick Start home](./quickstart)
+- [Browser](./quickstart_browser)
+- [Go](./quickstart_go)
+- [Python](./quickstart_python)
+- [Rust](./quickstart_rust)
+- [Java](./quickstart_java)
+- [.NET](./quickstart_dotnet)
+- [MCP](./quickstart_mcp), [A2A](./quickstart_a2a), [OpenAPI](./quickstart_openapi)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](../packages/aid/src/constants.ts) - [Generated spec types](../protocol/spec.ts)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts) - [Generated spec types](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/spec.ts)

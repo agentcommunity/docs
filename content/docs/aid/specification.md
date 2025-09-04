@@ -284,5 +284,5 @@ Providers MUST include `kid`/`i` with `pka`/`k`. Clients SHOULD warn on downgrad
 
 **Next Steps:**
 
-- [Quick Start Guide](quickstart/index.md)
-- [aid-doctor CLI Reference](Tooling/aid_doctor.md) – Official implementation and validation tool
+- [Quick Start Guide](quickstart/index)
+- [aid-doctor CLI Reference](Tooling/aid_doctor) – Official implementation and validation tool

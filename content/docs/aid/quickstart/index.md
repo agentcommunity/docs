@@ -124,13 +124,13 @@ Now let's write code to find an agent. We provide libraries in several languages
 
 ### Language Guides
 
-- [TypeScript / Node.js](./quickstart_ts.md)
-- [Browser](./quickstart_browser.md)
-- [Go](./quickstart_go.md)
-- [Python](./quickstart_python.md)
-- [Rust](./quickstart_rust.md)
-- [Java](./quickstart_java.md)
-- [.NET](./quickstart_dotnet.md)
+- [TypeScript / Node.js](./quickstart_ts)
+- [Browser](./quickstart_browser)
+- [Go](./quickstart_go)
+- [Python](./quickstart_python)
+- [Rust](./quickstart_rust)
+- [Java](./quickstart_java)
+- [.NET](./quickstart_dotnet)
 
 ### TypeScript / JavaScript
 
@@ -273,13 +273,13 @@ In production, `.well-known` must use HTTPS; the loopback relax is for local dev
 
 **Explore:**
 
-- [MCP Guide](./quickstart_mcp.md)
-- [A2A Guide](./quickstart_a2a.md)
-- [OpenAPI Guide](./quickstart_openapi.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
-- [Specification](../specification.md)
-- [Security Best Practices](../security.md)
-- [Rationale](../rationale.md)
-- [Blog](../blog/finding_door_a2a.md)
+- [MCP Guide](./quickstart_mcp)
+- [A2A Guide](./quickstart_a2a)
+- [OpenAPI Guide](./quickstart_openapi)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
+- [Specification](../specification)
+- [Security Best Practices](../security)
+- [Rationale](../rationale)
+- [Blog](../blog/finding_door_a2a)

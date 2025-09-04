@@ -65,14 +65,14 @@ Errors map to symbolic codes (e.g., `ERR_NO_RECORD`) and numeric codes (1000..10
 
 ## See also
 
-- [Quick Start index](./index.md)
-- [TypeScript / Node.js](./quickstart_ts.md)
-- [Browser](./quickstart_browser.md)
-- [Python](./quickstart_python.md)
-- [Java](./quickstart_java.md)
-- [.NET](./quickstart_dotnet.md)
-- [Protocols & Auth Tokens](../Reference/protocols.md)
-- [Troubleshooting](../Reference/troubleshooting.md)
-- [Conformance](../Tooling/conformance.md)
+- [Quick Start home](./quickstart)
+- [TypeScript / Node.js](./quickstart_ts)
+- [Browser](./quickstart_browser)
+- [Python](./quickstart_python)
+- [Java](./quickstart_java)
+- [.NET](./quickstart_dotnet)
+- [Protocols & Auth Tokens](../Reference/protocols)
+- [Troubleshooting](../Reference/troubleshooting)
+- [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](../packages/aid-go/constants_gen.go)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-go/constants_gen.go)

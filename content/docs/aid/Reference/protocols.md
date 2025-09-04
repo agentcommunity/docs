@@ -44,10 +44,10 @@ Notes
 - Prefer `proto`; `p` is a shorthand alias (don't set both).
 - `desc` is optional, ≤ 60 UTF-8 bytes.
 - Remote protocols must use `https://`; `local` uses approved schemes.
-- Use the [aid-doctor CLI](../aid_doctor.md) to validate your protocol implementation and generate compliant records.
+- Use the [aid-doctor CLI](../aid_doctor) to validate your protocol implementation and generate compliant records.
 
 ## See also
 
-- [Quick Start index](./quickstart/index.md)
-- [Troubleshooting](./troubleshooting.md)
-- [Conformance](./conformance.md)
+- [Quick Start index](/aid/quickstart)
+- [Troubleshooting](./troubleshooting)
+- [Conformance](./conformance)
