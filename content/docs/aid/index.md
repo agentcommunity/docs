@@ -84,7 +84,7 @@ AID has official libraries and tools across multiple languages, with additional 
 - Java: `aid-java`
 - Web Workbench: Interactive generator/resolver
 
-See the full package overview in the [Quick Start](quickstart/index#package-overview) and the cross-language [Discovery API](Reference/discovery_api).
+See the full package overview in the [Quick Start](/aid/quickstart) and the cross-language [Discovery API](/aid/Reference/discovery_api).
 
 !!! tip "Implementation Files"
 All SDKs share constants generated from a single source: [`protocol/constants.yml`](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/constants.yml).
