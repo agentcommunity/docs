@@ -4,11 +4,12 @@ import {
   frontmatterSchema,
   metaSchema,
 } from 'fumadocs-mdx/config';
+import lastModified from 'fumadocs-mdx/plugins/last-modified';
 import remarkMermaidToComponent from '../../lib/remark/mermaid-to-component.js';
 
 // Basic schemas without Zod for simpler frontmatter
 export const docs = defineDocs({
-  dir: 'content/docs',
+  dir: '../../content/docs',
   docs: {
     schema: frontmatterSchema,
   },
@@ -20,7 +21,7 @@ export const docs = defineDocs({
 // AID docs (local-only, separate source for proper tab isolation)
 // Using basic frontmatter schema without extra fields
 export const aid = defineDocs({
-  dir: 'content/docs/aid',
+  dir: '../../content/docs/aid',
   docs: {
     schema: frontmatterSchema,
   },
@@ -30,7 +31,7 @@ export const aid = defineDocs({
 });
 
 export const blog = defineDocs({
-  dir: 'content/blog',
+  dir: '../../content/blog',
   docs: {
     schema: frontmatterSchema,
   },
@@ -43,6 +44,7 @@ export const blog = defineDocs({
 // sidebar tab isolation in Fumadocs.
 
 export default defineConfig({
+  plugins: [lastModified()],
   mdxOptions: {
     remarkPlugins: [remarkMermaidToComponent],
     rehypeCodeOptions: {

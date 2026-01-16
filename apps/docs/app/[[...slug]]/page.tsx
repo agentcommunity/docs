@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
   const apiSlug = pageSlug.length > 0 ? pageSlug.join('/') : 'index';
 
   return (
-    <DocsLayout>
+    <DocsLayout isAID={isAID}>
       <DocsPage toc={page.data.toc} tableOfContent={{ enabled: true }} lastUpdate={page.data.lastModified}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="flex flex-row gap-2 mb-4 mt-2">

@@ -4,6 +4,7 @@ import {
   frontmatterSchema,
   metaSchema,
 } from 'fumadocs-mdx/config';
+import lastModified from 'fumadocs-mdx/plugins/last-modified';
 import remarkMermaidToComponent from './lib/remark/mermaid-to-component.js';
 
 export const docs = defineDocs({
@@ -40,6 +41,7 @@ export const blog = defineDocs({
 // sidebar tab isolation in Fumadocs.
 
 export default defineConfig({
+  plugins: [lastModified()],
   mdxOptions: {
     remarkPlugins: [remarkMermaidToComponent],
     rehypeCodeOptions: {

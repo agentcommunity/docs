@@ -5,6 +5,7 @@ import {
   frontmatterSchema,
   metaSchema
 } from "fumadocs-mdx/config";
+import lastModified from "fumadocs-mdx/plugins/last-modified";
 
 // ../../lib/remark/mermaid-to-component.js
 function remarkMermaidToComponent() {
@@ -49,6 +50,7 @@ var blog = defineDocs({
   }
 });
 var source_config_default = defineConfig({
+  plugins: [lastModified()],
   mdxOptions: {
     remarkPlugins: [remarkMermaidToComponent],
     rehypeCodeOptions: {

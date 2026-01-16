@@ -9,10 +9,10 @@ export default function Layout({ children }: { children: ReactNode }) {
       sourceTree={source.pageTree}
       aidSourceTree={aidSource.pageTree}
       baseOptions={baseOptions}
+      isAID
     >
       {children}
     </ClientLayoutWrapper>
   );
 }
-
 

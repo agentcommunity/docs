@@ -13,12 +13,12 @@ const config = {
   async rewrites() {
     return [
       // Community at root
-      { source: '/index.mdx', destination: '/api/mdx/docs' },
+      { source: '/index.mdx', destination: '/api/mdx/docs/index' },
       { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
       // Optional .md aliases
       { source: '/:slug*.md', destination: '/api/mdx/docs/:slug*' },
       // AID under /aid
-      { source: '/aid.mdx', destination: '/api/mdx/aid' },
+      { source: '/aid.mdx', destination: '/api/mdx/aid/index' },
       { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
       { source: '/aid/:slug*.md', destination: '/api/mdx/aid/:slug*' },
     ];

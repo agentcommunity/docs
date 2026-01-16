@@ -18,7 +18,7 @@ It's a simple, open standard that uses the internet's own directory—DNS—to a
 
 No more hunting through API docs. No more manual configuration. It's the zero-friction layer for a world of interconnected agents.
 
-[**:rocket: Try it Now — Live Resolver & Generator**](https://aid.agentcommunity.org/workbench){ .md-button .md-button--secondary target="\_blank" }
+<a class="not-prose inline-flex items-center justify-center gap-2 rounded-md border bg-fd-secondary px-3 py-2 text-sm font-medium text-fd-secondary-foreground transition-colors duration-100 hover:bg-fd-accent hover:text-fd-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring" href="https://aid.agentcommunity.org/workbench" target="_blank" rel="noreferrer noopener">:rocket: Try it Now — Live Resolver & Generator</a>
 
 ---
 

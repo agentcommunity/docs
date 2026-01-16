@@ -13,11 +13,21 @@ const processor = remark().use(remarkMdx).use(remarkGfm);
 // kept for future extension
 // interface PageDataWithFile { _file?: PageFileMeta; content: string }
 
+async function readRawContent(page: DocsPage | AIDPage) {
+  try {
+    return await page.data.getText('raw');
+  } catch {
+    const exported = (page.data._exports as { content?: unknown } | undefined)?.content;
+    return typeof exported === 'string' ? exported : '';
+  }
+}
+
 export async function getLLMText(page: DocsPage | AIDPage) {
+  const raw = await readRawContent(page);
   try {
     const processed = await processor.process({
       path: (page as { path?: string }).path ?? page.url,
-      value: page.data.content,
+      value: raw,
     });
 
     return `# ${page.data.title}
@@ -29,6 +39,6 @@ ${processed.value}`;
     return `# ${page.data.title}
 URL: ${page.url}
 
-${page.data.content}`;
+${raw}`;
   }
 }

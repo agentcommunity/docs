@@ -11,6 +11,7 @@ interface ClientLayoutWrapperProps {
   sourceTree: DocsLayoutProps['tree'];
   aidSourceTree: DocsLayoutProps['tree'];
   baseOptions: BaseLayoutProps;
+  isAID?: boolean;
   children: ReactNode;
 }
 
@@ -18,16 +19,17 @@ export function ClientLayoutWrapper({
   sourceTree,
   aidSourceTree,
   baseOptions,
+  isAID,
   children
 }: ClientLayoutWrapperProps) {
   const pathname = usePathname();
-  const isAID = pathname.startsWith('/aid');
+  const resolvedIsAID = isAID ?? pathname.startsWith('/aid');
 
   //
 
   // For clean navigation, only show the relevant section's tree
   // Don't mix Community and AID navigation items
-  const currentTree = isAID ? aidSourceTree : sourceTree;
+  const currentTree = resolvedIsAID ? aidSourceTree : sourceTree;
 
   // prevent sidebar from mirroring header links; keep header using baseOptions directly
   const layoutBase: BaseLayoutProps = { ...baseOptions, links: [] };
