@@ -1,26 +1,41 @@
-import * as MaterialIcons from '@mui/icons-material';
 import * as Lucide from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 import type React from 'react';
 
-// Map of common Material icon names to their actual component names
-const materialIconMap: Record<string, string> = {
-  'account-voice': 'RecordVoiceOver',
-  'connection': 'Link',
-  'api': 'Api',
-  'web': 'Web',
-  'code': 'Code',
-  'language-go': 'Go',
-  'language-python': 'Python',
-  'language-java': 'Java',
-  'language-dotnet': 'DotNet',
-  'language-typescript': 'TypeScript',
-  'settings': 'Settings',
-  'security': 'Security',
-  'book-open': 'BookOpen',
-  'globe': 'Globe',
-  'rocket': 'Rocket',
+// Map Material icon names to Lucide equivalents to avoid MUI/Emotion deps.
+const materialToLucide: Record<string, keyof typeof Lucide> = {
+  'account-voice': 'Mic',
+  'api': 'Plug',
   'book': 'Book',
+  'book-open': 'BookOpen',
+  'check-decagram': 'BadgeCheck',
+  'cogs': 'Cog',
+  'connection': 'Link',
+  'dns': 'Server',
+  'file-code': 'FileCode',
+  'file-document-outline': 'FileText',
+  'format-list-bulleted': 'List',
+  'git': 'GitBranch',
+  'globe': 'Globe',
+  'head-question-outline': 'HelpCircle',
+  'language-csharp': 'Hash',
+  'language-dotnet': 'Hash',
+  'language-go': 'Code',
+  'language-java': 'Coffee',
+  'language-python': 'Code',
+  'language-rust': 'Hammer',
+  'language-typescript': 'Braces',
+  'magnify-scan': 'Search',
+  'new-box': 'Sparkles',
+  'rocket': 'Rocket',
+  'rocket-launch': 'Rocket',
+  'security': 'Shield',
+  'settings': 'Settings',
+  'shield-lock': 'Shield',
+  'shield-lock-outline': 'Shield',
+  'stethoscope': 'Stethoscope',
+  'tools': 'Wrench',
+  'web': 'Globe',
 };
 
 // Capitalize first letter and handle special cases
@@ -35,43 +50,24 @@ function capitalizeIconName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-// Convert snake_case or kebab-case to PascalCase for Material icons
-function normalizeMaterialIconName(name: string): string {
-  // First check if it's already in our known map
-  if (materialIconMap[name]) {
-    return materialIconMap[name];
-  }
-
-  // Otherwise, try to convert it
-  return capitalizeIconName(name);
-}
-
 export function createIconHandler() {
-  const materialIconComponents = MaterialIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>;
   const lucideComponents = Lucide as unknown as Record<string, LucideIcon>;
 
-  return function IconRenderer(iconName: string) {
-    // Handle Material Design icons (format: "material/icon-name")
+  return function IconRenderer(iconName?: string) {
+    if (!iconName) {
+      return null;
+    }
+    // Handle Material Design icons (format: "material/icon-name") via Lucide mapping.
     if (iconName.startsWith('material/')) {
       const materialIconName = iconName.replace('material/', '');
-      const normalizedName = normalizeMaterialIconName(materialIconName);
+      const lucideName = materialToLucide[materialIconName];
+      const LucideIcon = lucideName ? lucideComponents[lucideName] : undefined;
 
-      // Get the icon component from Material Icons
-      const MaterialIcon = materialIconComponents[normalizedName];
-
-      if (MaterialIcon) {
-        return <MaterialIcon className="size-4" />;
+      if (LucideIcon) {
+        return <LucideIcon className="size-4" />;
       }
 
-      // Fallback: try with "Icon" suffix
-      const withIconSuffix = normalizedName + 'Icon';
-      const MaterialIconWithSuffix = materialIconComponents[withIconSuffix];
-
-      if (MaterialIconWithSuffix) {
-        return <MaterialIconWithSuffix className="size-4" />;
-      }
-
-      console.warn(`Material icon "${iconName}" not found. Tried: ${normalizedName}, ${withIconSuffix}`);
+      console.warn(`Material icon "${iconName}" not mapped to a Lucide icon`);
     }
 
     // Handle Lucide icons (direct name format)

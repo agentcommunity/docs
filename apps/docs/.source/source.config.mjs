@@ -5,6 +5,7 @@ import {
   frontmatterSchema,
   metaSchema
 } from "fumadocs-mdx/config";
+import lastModified from "fumadocs-mdx/plugins/last-modified";
 
 // ../../lib/remark/mermaid-to-component.js
 function remarkMermaidToComponent() {
@@ -40,7 +41,7 @@ function visit(node, type, callback, index = null, parent = null) {
 
 // source.config.ts
 var docs = defineDocs({
-  dir: "content/docs",
+  dir: "../../content/docs",
   docs: {
     schema: frontmatterSchema
   },
@@ -49,7 +50,7 @@ var docs = defineDocs({
   }
 });
 var aid = defineDocs({
-  dir: "content/docs/aid",
+  dir: "../../content/docs/aid",
   docs: {
     schema: frontmatterSchema
   },
@@ -58,7 +59,7 @@ var aid = defineDocs({
   }
 });
 var blog = defineDocs({
-  dir: "content/blog",
+  dir: "../../content/blog",
   docs: {
     schema: frontmatterSchema
   },
@@ -67,6 +68,7 @@ var blog = defineDocs({
   }
 });
 var source_config_default = defineConfig({
+  plugins: [lastModified()],
   mdxOptions: {
     remarkPlugins: [remarkMermaidToComponent],
     rehypeCodeOptions: {
