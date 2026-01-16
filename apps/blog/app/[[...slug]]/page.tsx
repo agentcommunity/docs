@@ -286,6 +286,18 @@ export default async function BlogPage(props: {
     : Array.isArray(exportedFm?.tags)
       ? exportedFm?.tags
       : await readFrontmatterForSlug(page.slugs);
+  async function resolveGitHubExtension(slugParts: string[]): Promise<'md' | 'mdx'> {
+    const baseDir = path.join(process.cwd(), '../../content/blog');
+    const baseName = slugParts.join('/');
+    const mdPath = path.join(baseDir, `${baseName}.md`);
+    try {
+      await fs.access(mdPath);
+      return 'md';
+    } catch {
+      return 'mdx';
+    }
+  }
+  const githubExt = await resolveGitHubExtension(page.slugs);
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-10">
@@ -295,7 +307,7 @@ export default async function BlogPage(props: {
           {pageData.description && (<p className="text-lg md:text-xl text-muted-foreground mb-4">{pageData.description}</p>)}
           <div className="flex flex-row flex-wrap gap-2 items-center border-b pt-2 pb-6">
             <LLMCopyButton markdownUrl={`/api/mdx/blog/${apiSlug}`} />
-            <ViewOptions markdownUrl={`/api/mdx/blog/${apiSlug}`} githubUrl={`https://github.com/agentcommunity/docs/blob/main/content/blog/${page.slugs.join('/')}.mdx`} />
+            <ViewOptions markdownUrl={`/api/mdx/blog/${apiSlug}`} githubUrl={`https://github.com/agentcommunity/docs/blob/main/content/blog/${page.slugs.join('/')}.${githubExt}`} />
             {Array.isArray(pageTags) && pageTags.length > 0 && (
               <div className="flex flex-wrap gap-2 ml-auto">
                 {pageTags.map((tag) => (
