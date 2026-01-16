@@ -77,9 +77,14 @@ const config = {
   experimental: { externalDir: true },
   async rewrites() {
     return [
-      { source: '/aid/:path*.mdx', destination: '/api/mdx/aid/:path*' },
-      { source: '/docs/:path*.mdx', destination: '/api/mdx/docs/:path*' },
-      { source: '/:path*.mdx', destination: '/api/mdx/docs/:path*' }
+      // Community at root
+      { source: '/index.mdx', destination: '/api/mdx/docs/index' },
+      { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
+      { source: '/:slug*.md', destination: '/api/mdx/docs/:slug*' },
+      // AID under /aid
+      { source: '/aid.mdx', destination: '/api/mdx/aid/index' },
+      { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
+      { source: '/aid/:slug*.md', destination: '/api/mdx/aid/:slug*' }
     ];
   }
 };
@@ -93,15 +98,23 @@ import { createMDX } from 'fumadocs-mdx/next';
 
 const withMDX = createMDX({ mdxOptions: { remarkPlugins: [], rehypePlugins: [] } });
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export default withMDX({
   reactStrictMode: true,
-  basePath: '/blog',
-  env: { NEXT_PUBLIC_BASE_PATH: '/blog' },
+  basePath: BASE,
+  env: { NEXT_PUBLIC_BASE_PATH: BASE },
   async rewrites() {
+    if (BASE === '/blog') {
+      return [
+        { source: '/blog/index.mdx', destination: '/blog/api/mdx/blog' },
+        { source: '/blog/:slug*.mdx', destination: '/blog/api/mdx/blog/:slug*' },
+        { source: '/blog/:slug*.md', destination: '/blog/api/mdx/blog/:slug*' }
+      ];
+    }
     return [
-      { source: '/blog/index.mdx', destination: '/blog/api/mdx/blog' },
-      { source: '/blog/:slug*.mdx', destination: '/blog/api/mdx/blog/:slug*' },
-      { source: '/blog/:slug*.md', destination: '/blog/api/mdx/blog/:slug*' }
+      { source: '/index.mdx', destination: '/api/mdx/blog' },
+      { source: '/:slug*.mdx', destination: '/api/mdx/blog/:slug*' },
+      { source: '/:slug*.md', destination: '/api/mdx/blog/:slug*' }
     ];
   }
 });
@@ -122,11 +135,14 @@ We use dual sources for community and AID. Community pages are rooted at `/` on 
 
 ```ts
 // apps/docs/lib/source.ts
-import { docs, aid } from '../.source';
+import { docs, aid } from '../.source/server';
 import { loader } from 'fumadocs-core/source';
+import { createIconHandler } from './icon-handler';
 
-export const source = loader({ baseUrl: '/', source: docs.toFumadocsSource() });
-export const aidSource = loader({ baseUrl: '/aid', source: aid.toFumadocsSource() });
+const icon = createIconHandler();
+
+export const source = loader({ baseUrl: '/', source: docs.toFumadocsSource(), icon });
+export const aidSource = loader({ baseUrl: '/aid', source: aid.toFumadocsSource(), icon });
 ```
 
 ### ESLint Configuration
@@ -162,7 +178,7 @@ Both apps use Next.js ESLint configuration:
    - Output Directory: `.next` (default)
 
 4. **Caching & pinning notes:**
-  - We pin `fumadocs-mdx` to `11.6.11` via package.json and a pnpm override. If Vercel ever resolves a different version, redeploy with “Clear build cache”.
+  - We pin `fumadocs-mdx` to `14.2.5` via package.json and a pnpm override. If Vercel ever resolves a different version, redeploy with “Clear build cache”.
 
 ## SEO & Social Setup
 
@@ -257,6 +273,7 @@ Each content directory needs a `meta.json`:
   "icon": "lucide-icon-name"
 }
 ```
+`material/*` names are supported and mapped to Lucide equivalents during rendering.
 
 ## Copy Markdown Feature
 
@@ -406,7 +423,7 @@ pnpm run build
 **Build Failures:**
 - Ensure Node.js 22.x in CI (Vercel default is fine). Locally, use `pnpm env use --global 22` or nvm.
 - Clear Vercel build cache when bumping versions or lockfiles.
-- We intentionally pin `fumadocs-mdx` to `11.6.11` to avoid `zod` peer pulls in 11.8.x.
+- We intentionally pin `fumadocs-mdx` to `14.2.5` to keep source generation consistent.
 - Verify content file formats and check for broken imports.
 
 **Content Not Loading:**

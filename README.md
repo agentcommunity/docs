@@ -38,10 +38,10 @@ This repository contains multiple documentation files to help you understand and
 
 ### Project Structure
 - `apps/docs/` - Documentation for .agent Community and work items
-  - `.source/index.ts` - Auto-generated MDX source files
+  - `.source/{server,browser,dynamic}.ts` - Auto-generated MDX source files
   - `source.config.ts` - Fumadocs configuration 
 - `apps/blog/` - Blog site  
-  - `.source/index.ts` - Auto-generated MDX source files
+  - `.source/{server,browser,dynamic}.ts` - Auto-generated MDX source files
   - `source.config.ts` - Fumadocs configuration 
 - `content/docs/` - Community documentation
 - `content/docs/aid/` - AID documentation 
@@ -70,7 +70,7 @@ This repository contains multiple documentation files to help you understand and
 Both the docs and blog apps use Fumadocs for content management. The MDX source files are automatically generated to optimize performance:
 
 #### What it does:
-- **Generates `.source/index.ts`** - Creates runtime objects for all MDX content
+- **Generates `.source/{server,browser,dynamic}.ts`** - Creates runtime objects for all MDX content
 - **Scans content directories** - Automatically discovers all `.md` and `.mdx` files
 - **Creates type-safe imports** - Generates TypeScript interfaces for content
 - **Optimizes build performance** - Pre-processes content for faster runtime loading
@@ -79,18 +79,17 @@ Both the docs and blog apps use Fumadocs for content management. The MDX source 
 - After adding new MDX files to content directories
 - After modifying `source.config.ts` configuration
 - After changing the directory structure
-- If the `.source/index.ts` file gets corrupted or deleted
+- If the `.source` output files get corrupted or deleted
 
 #### Commands:
 ```bash
 # Regenerate docs app sources
-cd apps/docs && npx fumadocs-mdx
+pnpm -C apps/docs run prebuild
 
 # Regenerate blog app sources
-cd apps/blog && npx fumadocs-mdx
+pnpm -C apps/blog exec fumadocs-mdx
 
-# Or use npm scripts (docs app only)
-cd apps/docs && npm run prebuild  # runs fumadocs-mdx automatically
+# The docs app also runs source generation during build via `prebuild`.
 ```
 
 The docs app automatically runs source generation during build via the `prebuild` script, while the blog app generates sources on-demand.

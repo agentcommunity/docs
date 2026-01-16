@@ -12,17 +12,22 @@ Create separate source loaders for each content section:
 
 ```ts
 // apps/docs/lib/source.ts
-import { docs, aid } from '../../../.source';
+import { docs, aid } from '../.source/server';
 import { loader } from 'fumadocs-core/source';
+import { createIconHandler } from './icon-handler';
+
+const icon = createIconHandler();
 
 export const source = loader({
   baseUrl: '/',
-  source: docs.toFumadocsSource()
+  source: docs.toFumadocsSource(),
+  icon
 });
 
 export const aidSource = loader({
   baseUrl: '/aid',
-  source: aid.toFumadocsSource()
+  source: aid.toFumadocsSource(),
+  icon
 });
 ```
 
@@ -33,8 +38,8 @@ Define navigation items once, use everywhere:
 ```tsx
 // apps/docs/app/components/navigation/nav-items.tsx
 export const navSectionItems = [
-  { title: '.agent Community', url: '/docs', icon: <Book /> },
-  { title: ' Agent Identity & Discovery (AID) v1.1.0', url: '/docs/aid', icon: <Globe /> },
+  { title: '.agent Community', url: '/', icon: <Book /> },
+  { title: 'Agent Identity & Discovery (AID) v1.1.0', url: '/aid', icon: <Globe /> },
 ];
 ```
 
