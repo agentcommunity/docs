@@ -1,0 +1,75 @@
+
+---
+title: "Add AID to ERC-8004: keep discovery fast, keep identity portable"
+description: "Why ERC-8004 needs a DNS-first discovery layer to stay fresh and portable"
+author: Balazs Nemethi
+date: 2026-01-30
+tags: [aid, erc-8004, discovery, identity, agent]
+---
+
+ERC-8004 (aka 8004 / “Trustless Agents”) gives agents a portable on-chain identity and a flexible registration file that can list endpoints like MCP, A2A, web, ENS, DID, and more. That is the right shape for identity and trust signals.
+
+The weak spot is discovery drift.
+
+Endpoints change. Protocol choices change. Infra moves. Keeping a live service catalog synchronized through on-chain updates is slow, operationally heavy, and expensive. If discovery information is baked into on-chain anchored metadata, it will go stale unless everyone constantly updates it.
+
+That’s exactly where AID fits.
+
+## I - What is AID
+
+Agent Identity & Discovery (AID) is a minimal, DNS-first bootstrap standard that answers one question:
+
+“Given a domain, where is the agent and which protocol should I speak?”
+
+AID does this with a single DNS TXT record at a well-known subdomain: `_agent.<domain>`. The record returns a protocol token (like `mcp` or `a2a`) and a URI to connect to. Richer protocols like MCP and A2A then take over for capability negotiation and runtime behavior. AID deliberately avoids manifests, capability lists, orchestration, and trust scoring.
+
+Spec: [https://aid.agentcommunity.org](https://aid.agentcommunity.org)
+
+## II - The simple reason to add AID to 8004
+
+Adding AID to ERC-8004 is not about replacing the 8004 registration file. It is about giving it a stable, human-centered pointer that does not go stale.
+
+* ERC-8004 stays the portable identity and trust anchor.
+* DNS becomes the canonical “routing layer” for how to reach the agent today.
+* If services change, you update DNS, not the chain.
+
+This reduces friction for operators and makes clients more reliable in the real world.
+
+## III - Minimal integration, no spec changes
+
+You do not need to change ERC-8004. You only add a single entry to the existing `services[]` list in the agent registration file:
+
+```json
+{ "name": "AID", "endpoint": "acme.com" }
+```
+
+That’s it.
+
+The client behavior is straightforward:
+
+1. Find the `services[]` entry with `name == "AID"`.
+2. Treat `endpoint` as a domain.
+3. Query DNS TXT for `_agent.<domain>`.
+4. Parse the AID record to learn the current protocol (`mcp`, `a2a`, etc.) and connection URI.
+5. Connect, then let MCP or A2A handle capability negotiation.
+
+Optionally, the `endpoint` value may already include `_agent.` (for example `_agent.acme.com`). Clients can normalize either form.
+
+## IV - Why this improves the 8004 ecosystem
+
+This small convention gives the ecosystem a clean split of responsibilities:
+
+* **ERC-8004**: stable ownership, portable identifiers, reputation/validation signals, and a flexible directory.
+* **AID**: fast discovery updates tied to domain control, with normal DNS caching semantics and optional security upgrades (DNSSEC, endpoint proof).
+
+In practice, this means:
+
+* Operators can rotate endpoints without chain writes.
+* Clients can start from a domain, not just from an on-chain registry.
+* Agent identities become easier to share and remember, and harder to break accidentally.
+
+## V - Takeaway
+
+ERC-8004 is a strong identity and trust substrate. AID is a minimal, domain-first discovery bootstrap. Adding one `AID` service entry to an 8004 registration file lets DNS handle the “live routing” problem, while 8004 remains the stable on-chain anchor.
+
+Spec and reference implementation details: [https://aid.agentcommunity.org](https://aid.agentcommunity.org)
