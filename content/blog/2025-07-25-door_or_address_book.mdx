@@ -3,10 +3,8 @@ title: "Door or Address book"
 description: "How does an AI agent know what to do when it hits a locked door on the web?"
 author: Agent Community
 date: 2025-07-25
-tags: [AID, Discovery, DNS, LLMS.txt]
+tags: [aid, discovery, dns, llms-txt]
 ---
-
-### Instructions on the Door, or an Address in the Book?
 
 How does an AI agent know what to do when it hits a locked door on the web?
 
@@ -16,7 +14,7 @@ Vercel recently proposed a clever, intuitive solution. The idea is to leave a no
 
 It's a simple, elegant hack. And on the surface, it makes perfect sense. The instructions for what to do next are right where the agent gets stuck.
 
-But it has a hidden, dangerous flaw. It’s the digital equivalent of leaving a handwritten note on the front door of a bank that says, "New deposit procedure: please slide cash and checks under the loose floorboard in the alley."
+But it has a hidden, dangerous flaw. It’s the digital equivalent of leaving a handwritten note on the front door of a bank that says, "New deposit procedure: please slide cash and checks under the floorboard in the alley."
 
 You're asking an AI to trust and interpret instructions from a source that hasn't been verified. This opens up a massive security hole for something called prompt injection. An attacker could craft a malicious set of instructions on a compromised page, telling a visiting agent to send its data to a malicious endpoint or to leak its credentials. Because the instructions are just free-form text, the agent has no way to distinguish a legitimate instruction from a sophisticated trap. It’s being asked to *interpret*, not to *verify*.
 
@@ -24,18 +22,18 @@ The problem is that this approach mixes up two very different things: the *locat
 
 This is a subtle but crucial distinction. We don't need better notes; we need a better address book.
 
-This is where Agent Interface Discovery (AID) (new name: Agent Identity & Discovery) offers a more robust, foundational solution. AID doesn't leave instructions on the page. It publishes an address in the internet's most trusted, decentralized address book: DNS.
+This is where Agent Identity & Discovery (AID) offers a more robust, foundational solution. AID doesn't leave instructions on the page. It publishes an address in the internet's most trusted, decentralized address book: DNS.
 
 The entire mechanism is a single, machine-readable `TXT` record.
 
-`_agent.example.com. IN TXT "v=aid1;uri=https://api.example.com/mcp;p=mcp"`
+`_agent.example.com. IN TXT "v=aid1 p=mcp u=https://api.example.com/mcp"`
 
 Look at the difference. This isn't a paragraph of prose for an LLM to ponder. It's structured data. It says, "The agent for this domain lives at this specific URI and speaks this specific protocol."
 
 This solves the security problem at its root.
 
 1.  **It's Out-of-Band.** The discovery happens via DNS, a completely separate and more trusted channel than the HTTP content of a webpage. The agent finds the official front door *before* it ever gets to the potentially compromised house.
-2.  **It's Deterministic.** An AID client isn't interpreting natural language. It's parsing a `uri` field and a `proto` field. The attack surface for prompt injection is virtually eliminated because there's no ambiguous prose to inject into. The logic is handled by a simple, deterministic parser, not a complex LLM.
+2.  **It's Deterministic.** An AID client isn't interpreting natural language. It's parsing a `u` field and a `p` field. The attack surface for prompt injection is virtually eliminated because there's no ambiguous prose to inject into. The logic is handled by a simple, deterministic parser, not a complex LLM.
 3.  **It's Verifiable.** The AID specification strongly encourages using DNSSEC, which allows an agent to cryptographically verify that the address it received is authentic and hasn't been tampered with.
 
 Vercel’s proposal is a clever pattern. AID is boring, essential infrastructure. It’s the `MX` record for agents. Email works reliably because every mail server in the world agrees to first look up the `MX` record in DNS to find the right address. It doesn't fly to a domain's web server and read a note about where to send the mail.
@@ -44,13 +42,14 @@ To build a secure and scalable agentic web, we need the same clean separation of
 
 The note-on-the-door approach is a clever workaround for a missing piece of infrastructure. The right solution is to build that infrastructure. Let’s give our agents a proper, public address book, not just a series of scribbled notes.
 
-**Give your agent a permanent, public address at [aid.agentcommunity.org](https://aid.agentcommunity.org).**
-**Oiriginal Vercel LLMs.txt article at the blog**  [<script type="text/llms.txt>](https://vercel.com/blog/a-proposal-for-inline-llm-instructions-in-html)
+Give your agent a permanent, public address at [aid.agentcommunity.org](https://aid.agentcommunity.org).
+
+Original Vercel LLMs.txt article at the blog: [`<script type="text/llms.txt">`](https://vercel.com/blog/a-proposal-for-inline-llm-instructions-in-html)
 
 ---
 
 **Related Reading:**
 
-- [AID Specification](docs.agentcommunity.org/aid/specification)
-- [Design Rationale](docs.agentcommunity.org/aid/rationale)
-- [The Missing MX Record for the Internet of Agents](missing-record)
+- [AID Specification](https://aid.agentcommunity.org)
+- [Design Rationale](https://aid.agentcommunity.org)
+- [The Missing MX Record for the Internet of Agents](/blog/2025-07-21-missing_record)
