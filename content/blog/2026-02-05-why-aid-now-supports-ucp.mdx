@@ -1,0 +1,69 @@
+---
+title: "Why AID Now Supports UCP"
+description: "Universal Commerce Protocol (UCP) is now supported in AID, enabling agents to discover and transact with commerce endpoints via DNS."
+author: Agent Community
+date: 2026-02-05
+tags: [aid, ucp, commerce, discovery, agents]
+---
+
+AI agents are getting good at reasoning, planning, and using tools. What they cannot do well yet is buy things.
+
+If an agent needs to purchase, book, or subscribe to something, it relies on hand-wired integrations. It knows about Stripe because someone coded in Stripe. It knows your hotel API because someone hardcoded the endpoint. There is no general way for an agent to approach an unfamiliar domain and transact.
+
+Universal Commerce Protocol (UCP) is an emerging open standard that addresses this. It gives agents a shared protocol for discovering, negotiating, and executing commercial transactions — purchasing, payments, subscriptions — without requiring pre-built integrations per merchant.
+
+The missing piece is discovery. UCP defines what agents say to each other during commerce. It does not define how they find each other.
+
+That is where AID fits.
+
+## I — What Changed
+
+We added `ucp` as a protocol token in the AID Appendix B registry. A domain advertising a UCP endpoint now publishes:
+
+`_agent.shop.example.com. 300 IN TXT "v=aid1 p=ucp u=https://shop.example.com/ucp"`
+
+One DNS query. The agent now knows: this domain speaks UCP, connect here. No registry signup. No marketplace listing. No SDK pre-installed. If you own a domain and run a UCP endpoint, any AID-aware agent can resolve you.
+
+This is supported across all six AID SDKs (TypeScript, Python, Go, Rust, .NET, Java) and the web workbench.
+
+## II — Why DNS Matters for Commerce
+
+UCP on its own still has a bootstrapping problem. Agents need to know where UCP endpoints live before they can speak UCP to them. The common answers — a central directory, a curated marketplace, hardcoded lists — all introduce friction and gatekeeping.
+
+DNS solves this differently.
+
+- **No gatekeeping.** A small merchant in São Paulo and a Fortune 500 retailer publish their UCP endpoints the same way. A single TXT record. The agent does not care about the size of the business.
+- **Speed.** DNS is built for fast, cached lookups. An agent comparing prices across dozens of merchants is making dozens of DNS queries, each resolving in milliseconds and cached for the TTL window.
+- **Trust where it counts.** Commerce involves real money. AID supports DNSSEC for record integrity and PKA (Public Key Attestation) for endpoint authentication. An agent can verify that the UCP endpoint it discovered genuinely belongs to the domain it claims to represent, before initiating any transaction.
+- **No synchronization tax.** Endpoints move. Infra changes. With DNS, operators update a TXT record — not a registry entry, not a chain write, not a manifest redeploy. The discovery layer stays fresh without operational burden.
+
+## III — The Agentic Protocol Stack
+
+Look at what AID now resolves: MCP for capability exposure, A2A for agent-to-agent coordination, UCP for commerce. These are not competing standards. They are layers.
+
+An agent planning a trip might:
+
+1. Discover a travel service via `_agent.travel.example.com` → `p=a2a`
+2. Coordinate itinerary options through A2A
+3. Discover the booking endpoint via `_agent._ucp.travel.example.com` → `p=ucp`
+4. Execute the purchase over UCP
+
+Each step is a DNS query. Each protocol handles its own domain. The agent discovers everything at runtime, the way the web was meant to work.
+
+## IV — Why This Matters Now
+
+Agent commerce is not hypothetical. Agents are already being given budgets, credit cards, and purchasing authority in enterprise settings. The infrastructure for how they discover and verify merchants is lagging behind.
+
+Adding UCP to AID means:
+
+- **For UCP implementers** — one TXT record makes your commerce endpoint discoverable to the entire AID agent ecosystem. No integration work on the discovery side.
+- **For agent developers** — stop maintaining static lists of commerce-capable services. Query the domain, check for `p=ucp`, connect.
+- **For the ecosystem** — commerce discovery on credibly neutral infrastructure. No company controls DNS. No API key needed to query it. It scales to every domain that exists.
+
+## V — Try It
+
+The `ucp` token is live across all AID SDKs and the [https://agentcommunity.org/workbench](https://agentcommunity.org/workbench). The implementation landed in [https://github.com/agentcommunity/agent-interface-discovery/pull/78](https://github.com/agentcommunity/agent-interface-discovery/pull/78), tracking the proposal in [https://github.com/agentcommunity/agent-interface-discovery/issues/77](https://github.com/agentcommunity/agent-interface-discovery/issues/77).
+
+Commerce is the next frontier for autonomous agents. DNS is how they will find it.
+
+Spec: [https://aid.agentcommunity.org](https://aid.agentcommunity.org)

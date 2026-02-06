@@ -1,4 +1,6 @@
 // @ts-nocheck
+import * as __fd_glob_11 from "../../../content/blog/2026-02-05-why-aid-now-supports-ucp.mdx?collection=blog"
+import * as __fd_glob_10 from "../../../content/blog/2026-01-30-aid-to-8004.mdx?collection=blog"
 import * as __fd_glob_9 from "../../../content/blog/2026-01-16-agent-brief-agentic-news.md?collection=blog"
 import * as __fd_glob_8 from "../../../content/blog/2025-09-01-agent-identity-and-discovery.mdx?collection=blog"
 import * as __fd_glob_7 from "../../../content/blog/2025-08-31-identity-joins-discovery.mdx?collection=blog"
@@ -27,4 +29,4 @@ const create = server<typeof Config, import("fumadocs-mdx/runtime/types").Intern
   }
 }>({"doc":{"passthroughs":["extractedReferences","lastModified"]}});
 
-export const blog = await create.docs("blog", "../../content/blog", {"meta.json": __fd_glob_0, }, {"2025-07-21-missing_record.mdx": __fd_glob_1, "2025-07-22-what_when_domain.mdx": __fd_glob_2, "2025-07-23-finding_door_a2a.mdx": __fd_glob_3, "2025-07-24-missing_grep_mcp.mdx": __fd_glob_4, "2025-07-25-door_or_address_book.md": __fd_glob_5, "2025-08-23-web_auth_box_not_for_agents.mdx": __fd_glob_6, "2025-08-31-identity-joins-discovery.mdx": __fd_glob_7, "2025-09-01-agent-identity-and-discovery.mdx": __fd_glob_8, "2026-01-16-agent-brief-agentic-news.md": __fd_glob_9, });
+export const blog = await create.docs("blog", "../../content/blog", {"meta.json": __fd_glob_0, }, {"2025-07-21-missing_record.mdx": __fd_glob_1, "2025-07-22-what_when_domain.mdx": __fd_glob_2, "2025-07-23-finding_door_a2a.mdx": __fd_glob_3, "2025-07-24-missing_grep_mcp.mdx": __fd_glob_4, "2025-07-25-door_or_address_book.md": __fd_glob_5, "2025-08-23-web_auth_box_not_for_agents.mdx": __fd_glob_6, "2025-08-31-identity-joins-discovery.mdx": __fd_glob_7, "2025-09-01-agent-identity-and-discovery.mdx": __fd_glob_8, "2026-01-16-agent-brief-agentic-news.md": __fd_glob_9, "2026-01-30-aid-to-8004.mdx": __fd_glob_10, "2026-02-05-why-aid-now-supports-ucp.mdx": __fd_glob_11, });
