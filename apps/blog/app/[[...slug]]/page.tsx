@@ -138,7 +138,7 @@ export default async function BlogPage(props: {
     const enriched = await Promise.all(
       pages.map(async (p) => {
         const meta = await getDataWithFrontmatter(p);
-        const parsedDate = parseDate(meta.date) || parseDate(meta.lastModified) || extractDateFromSlugOrFile(p);
+        const parsedDate = parseDate(meta.date) || extractDateFromSlugOrFile(p) || parseDate(meta.lastModified);
         return { p, meta, parsedDate };
       })
     );
