@@ -59,4 +59,4 @@ Security
 - [Conformance](../Tooling/conformance)
 
 ---
- info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts) - [Generated spec types](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/spec.ts)
+ info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid/src/constants.ts) - [Generated spec types](https://github.com/agentcommunity/agent-identity-discovery/blob/main/protocol/spec.ts)

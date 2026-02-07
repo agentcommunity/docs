@@ -4,7 +4,7 @@ description: 'The DNS-based discovery protocol for the agentic web.'
 icon: material/dns
 ---
 
-[View raw markdown](https://github.com/agentcommunity/agent-interface-discovery/raw/main/packages/docs/specification.md)
+[View raw markdown](https://github.com/agentcommunity/agent-identity-discovery/raw/main/packages/docs/specification.md)
 
 # Agent Identity & Discovery (AID)
 
@@ -87,8 +87,8 @@ AID has official libraries and tools across multiple languages, with additional 
 See the full package overview in the [Quick Start](/aid/quickstart) and the cross-language [Discovery API](/aid/Reference/discovery_api).
 
 !!! tip "Implementation Files"
-All SDKs share constants generated from a single source: [`protocol/constants.yml`](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/constants.yml).
-View generated files: [TypeScript](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts), [Python](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-py/aid_py/constants.py), [Go](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-go/constants_gen.go), [Rust](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-rs/src/constants_gen.rs), [.NET](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-dotnet/src/Constants.g.cs), [Java](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
+All SDKs share constants generated from a single source: [`protocol/constants.yml`](https://github.com/agentcommunity/agent-identity-discovery/blob/main/protocol/constants.yml).
+View generated files: [TypeScript](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid/src/constants.ts), [Python](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-py/aid_py/constants.py), [Go](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-go/constants_gen.go), [Rust](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-rs/src/constants_gen.rs), [.NET](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-dotnet/src/Constants.g.cs), [Java](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
 
 ---
 

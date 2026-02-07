@@ -36,7 +36,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
             markdownUrl={`/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
             githubUrl={
               isAID
-                ? `https://github.com/agentcommunity/agent-interface-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`
+                ? `https://github.com/agentcommunity/agent-identity-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`
                 : `https://github.com/agentcommunity/docs/tree/main/content/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.mdx`
             }
           />

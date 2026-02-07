@@ -60,4 +60,4 @@ Notes
 - [Troubleshooting](../Reference/troubleshooting)
 - [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-java/src/main/java/org/agentcommunity/aid/Constants.java)

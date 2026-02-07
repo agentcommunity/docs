@@ -88,4 +88,4 @@ Notes
 - [Troubleshooting](../Reference/troubleshooting)
 - [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-rs/src/constants_gen.rs)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-rs/src/constants_gen.rs)

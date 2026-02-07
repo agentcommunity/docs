@@ -9,7 +9,7 @@ icon: material/language-go
 ## Install
 
 ```bash
-go get -u github.com/agentcommunity/agent-interface-discovery/aid-go
+go get -u github.com/agentcommunity/agent-identity-discovery/aid-go
 ```
 
 ## Discover by Domain
@@ -22,7 +22,7 @@ import (
     "log"
     "time"
 
-    aid "github.com/agentcommunity/agent-interface-discovery/aid-go"
+    aid "github.com/agentcommunity/agent-identity-discovery/aid-go"
 )
 
 func main() {
@@ -75,4 +75,4 @@ Errors map to symbolic codes (e.g., `ERR_NO_RECORD`) and numeric codes (1000..10
 - [Troubleshooting](../Reference/troubleshooting)
 - [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-go/constants_gen.go)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-go/constants_gen.go)

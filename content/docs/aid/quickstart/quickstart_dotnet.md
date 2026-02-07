@@ -62,4 +62,4 @@ Notes
 - [Troubleshooting](../Reference/troubleshooting)
 - [Conformance](../Tooling/conformance)
 
-!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid-dotnet/src/Constants.g.cs)
+!!! info "Implementation Files" - [Generated constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid-dotnet/src/Constants.g.cs)

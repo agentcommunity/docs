@@ -22,7 +22,7 @@ jobs:
 
       - name: Fetch AID Spec Repository
         run: |
-          git clone --depth 1 https://github.com/agentcommunity/agent-interface-discovery ../agent-interface-discovery
+          git clone --depth 1 https://github.com/agentcommunity/agent-identity-discovery ../agent-identity-discovery
 
       - name: Install Python Dependencies
         run: pip install -r requirements.txt

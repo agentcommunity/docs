@@ -98,7 +98,7 @@ For libraries in other languages (including Rust/.NET/Java WIP), see the [Packag
 
 ---
 
-!!! info "Implementation Files" - [Generated spec types](https://github.com/agentcommunity/agent-interface-discovery/blob/main/protocol/spec.ts) - [TypeScript constants](https://github.com/agentcommunity/agent-interface-discovery/blob/main/packages/aid/src/constants.ts)
+!!! info "Implementation Files" - [Generated spec types](https://github.com/agentcommunity/agent-identity-discovery/blob/main/protocol/spec.ts) - [TypeScript constants](https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/aid/src/constants.ts)
 
 **See also:**
 
