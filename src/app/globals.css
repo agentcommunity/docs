@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(0 0% 3.9%);
+  --color-muted: hsl(0 0% 96.1%);
+  --color-muted-foreground: hsl(0 0% 45.1%);
+  --color-border: hsl(0 0% 89.8%);
+  --color-primary: hsl(262 83% 58%);
+  --color-primary-foreground: hsl(0 0% 98%);
+}
+
+@variant dark {
+  @theme {
+    --color-background: hsl(0 0% 3.9%);
+    --color-foreground: hsl(0 0% 98%);
+    --color-muted: hsl(0 0% 14.9%);
+    --color-muted-foreground: hsl(0 0% 63.9%);
+    --color-border: hsl(0 0% 14.9%);
+    --color-primary: hsl(262 83% 68%);
+    --color-primary-foreground: hsl(0 0% 3.9%);
+  }
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
