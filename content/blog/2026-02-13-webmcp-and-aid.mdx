@@ -1,0 +1,137 @@
+---
+title: "WebMCP and AID: Browser-first tools meet Internet-first discovery"
+description: "Google’s WebMCP makes websites agent-ready inside the browser. AID stays DNS-native so agents can discover endpoints from any domain, with or without a website."
+author: Agent Community
+date: 2026-02-13
+tags: [aid, webmcp, mcp, discovery, agents, browser]
+----------------------------------------------------
+
+AI agents are getting good at using tools. The next bottleneck is not intelligence, it is integration.
+
+This week, Google published an early preview of **WebMCP**, a proposal to let websites expose structured tools directly to browser agents. ([Chrome for Developers][1])
+
+If you are building for the agentic web, WebMCP is worth paying attention to.
+
+It also highlights a key distinction in the emerging stack:
+
+* **WebMCP is browser-first.**
+* **AID is Internet-first.**
+
+Both matter, and they fit together cleanly.
+
+## I — What WebMCP is actually trying to do
+
+WebMCP proposes a browser API that lets a web app register “tools” as JavaScript functions with schemas and natural language descriptions. ([Web Machine Learning][2])
+
+Conceptually, it is:
+
+* a page registers tools with the browser (`navigator.modelContext`)
+* an agent can invoke those tools instead of guessing clicks and scraping DOM
+
+Google’s announcement frames this as making websites “agent-ready” with structured interactions, including both declarative (HTML-form friendly) and imperative (JavaScript) approaches. ([Chrome for Developers][1])
+
+The punchline: **WebMCP is about reliable interaction once an agent is already inside a webpage.**
+
+## II — What AID is trying to do
+
+AID answers a different question:
+
+> Given a domain, where is the agent and which protocol should I speak?
+
+AID is DNS-first discovery via `_agent.<domain>`.
+
+That matters because the “agentic web” is not only websites. Plenty of agent endpoints are:
+
+* pure APIs
+* gateways
+* MCP servers
+* A2A endpoints
+* commerce endpoints
+* local agents you run via a package reference
+
+AID stays Internet-native by design because **DNS is the common substrate**. It does not require the endpoint to be a website, or even to have a human-facing UI.
+
+## III — Browser-first vs Internet-first
+
+Here is the practical distinction:
+
+### WebMCP is browser-first
+
+WebMCP requires a webpage context because tools are registered by page JavaScript, via a browser API. ([Web Machine Learning][2])
+
+That is a feature, not a flaw. It makes WebMCP great for:
+
+* agent workflows that happen inside logged-in sessions
+* user-in-the-loop actions
+* websites that want a cleaner “agent integration surface” than raw DOM actuation ([Chrome for Developers][1])
+
+### AID is Internet-first
+
+AID works from a domain name alone, before any browsing happens.
+
+That makes AID useful for:
+
+* agents that start from a domain string (typed, copied, scanned, shared)
+* endpoints that are not websites
+* discovery in environments where there is no browser at all (server agents, CLI agents, local tools)
+
+Both assumptions are true in practice:
+
+* Yes, many agents will land on webpages.
+* Also yes, many agents will never touch a webpage and still need discovery.
+
+The stack needs both.
+
+## IV — How these fit together with MCP
+
+WebMCP explicitly frames pages as being “like MCP servers” that implement tools in client-side script. ([Web Machine Learning][2])
+
+That lines up with the broader MCP direction: MCP standardizes how tools and context are exposed between hosts, clients, and servers using a consistent protocol. ([Model Context Protocol][3])
+
+A clean, composable flow looks like this:
+
+1. **AID discovers an endpoint from a domain**
+
+   * `_agent.example.com` → `p=mcp; u=https://api.example.com/mcp`
+2. **Agent connects via MCP (or another protocol)**
+3. **If the workflow enters a website**
+
+   * the site can expose WebMCP tools to the browser agent for higher precision actions
+
+AID gets you to the right place. WebMCP helps you act reliably once you are there.
+
+## V — Why this matters now
+
+What WebMCP signals is simple:
+
+Websites are starting to treat “agents as users” and want a first-class interface for them. ([Chrome for Developers][1])
+
+That is good news for the ecosystem.
+
+It also reinforces a core AID thesis:
+
+If agents are going to navigate the Internet as participants, they need a neutral, universal, low-friction way to resolve domains into agent endpoints.
+
+That is what DNS is for.
+
+## VI — Practical guidance
+
+If you build a website and want agents to take actions inside it:
+
+* Watch WebMCP, prototype when you can, and design your “tool surface” intentionally.
+
+If you operate an agent endpoint, API, gateway, or service:
+
+* Publish AID records so any agent can discover you from your domain, without relying on a central registry or a specific browser.
+
+The agentic web will be multi-runtime by default.
+Browser-first tools and Internet-first discovery are complementary layers.
+
+Specs:
+
+* WebMCP draft: ([Web Machine Learning][2])
+* WebMCP early preview announcement: ([Chrome for Developers][1])
+
+[1]: https://developer.chrome.com/blog/webmcp-epp "WebMCP is available for early preview  |  Blog  |  Chrome for Developers"
+[2]: https://webmachinelearning.github.io/webmcp "WebMCP"
+[3]: https://modelcontextprotocol.io/specification/2025-11-25/basic?utm_source=chatgpt.com "Overview - Model Context Protocol"

@@ -15,7 +15,7 @@ export function Navbar() {
           </Link>
           <nav className="hidden sm:flex items-center gap-1 text-sm">
             <Link href="/docs" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Docs</Link>
-            <Link href="/blog" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Blog</Link>
+            <a href="https://blog.agentcommunity.org" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Blog</a>
             <a href="https://aid.agentcommunity.org" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">AID Spec</a>
           </nav>
         </div>

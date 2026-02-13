@@ -10,7 +10,7 @@ import { MobileTableOfContents } from '@/components/toc-mobile';
 import { Toolbar } from '@/components/toolbar';
 import type { Metadata } from 'next';
 
-const BASE_URL = 'https://docs.agentcommunity.org';
+const BASE_URL = 'https://blog.agentcommunity.org';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const ogImage = `/og/blog-${slug}.png`;
-  const canonical = `${BASE_URL}/blog/${slug}`;
+  const canonical = `${BASE_URL}/${slug}`;
 
   return {
     title: post.title,
