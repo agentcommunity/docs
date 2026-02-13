@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BLOG_HOST = 'blog.agentcommunity.org';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const hostname = request.headers.get('host') || '';
   const { pathname } = request.nextUrl;
 
