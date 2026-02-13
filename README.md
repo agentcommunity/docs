@@ -73,3 +73,8 @@ Deploys to Vercel as a single project. See `vercel.json` for config.
 ## Reusability
 
 The content engine (`src/lib/`) has zero React dependencies. It can be copied to another Next.js project or extracted as a package. The `meta.json` format and content structure are generic.
+
+## Further Reading
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) — System design: layers, routes, rendering pipeline, deployment
+- [BUILDING_BLOCKS.md](BUILDING_BLOCKS.md) — Reference for every module, component, and API route
