@@ -14,10 +14,10 @@ A monorepo containing two independent Next.js applications deployed as separate 
 ## Application Structure
 
 ### Documentation App (`apps/docs`)
-- **Purpose**: Community documentation with AID integration
+- **Purpose**: Community documentation
 - **Public Paths**: Community at `/` on docs subdomain; under `/docs` in traditional setup
-- **Sources**: Dual-source system (Community baseUrl `/`, AID baseUrl `/aid`)
-- **Features**: Tabbed navigation, scoped search, multi-source content
+- **Sources**: Single source (Community baseUrl `/`); AID docs have moved to [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs)
+- **Features**: Tabbed navigation, scoped search, 301 redirects from `/aid/*` to external AID site
 
 ### Blog App (`apps/blog`)
 - **Purpose**: Blog content and articles
@@ -30,20 +30,20 @@ A monorepo containing two independent Next.js applications deployed as separate 
 ```
 content/
 ├── docs/           # Community documentation
-│   ├── aid/        # AID-specific content
 │   └── [pages]     # Community pages
 └── blog/           # Blog posts
 ```
 
+> AID documentation has moved to [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs).
+
 ## Routing Architecture
 
-### Source Switching (Docs App)
+### Routing (Docs App)
 - **Community Source**: `baseUrl = "/"` (docs subdomain) or appears under `/docs` via rewrites in traditional setup
-- **AID Source**: `baseUrl = "/aid"`
-- **Switching Logic**: URL prefix-based (`/aid/*` routes to AID source)
+- **AID Redirects**: `/aid/*` routes 301-redirect to `https://aid.agentcommunity.org/docs/*`
 
 ### API Architecture
-- **Search**: Merged results from both docs sources
+- **Search**: Community docs search
 - **Content**: Raw MDX access for copy/open functionality
 - **OG Images**: Dynamic image generation for social sharing
 
@@ -79,14 +79,14 @@ content/
 
 ## Navigation Architecture
 
-### Shared Navigation System
-- **Source of Truth**: `nav-items.tsx` defines section items
-- **Dual Rendering**: Same items rendered in sidebar tabs and top navbar pills
-- **Consistent UX**: Unified appearance across different navigation contexts
+### Navigation System
+- **Layout Config**: `layout.config.tsx` defines navigation links including external AID link
+- **Sidebar Tabs**: Community tab (local) and AID Docs tab (external link)
+- **Consistent UX**: Unified appearance across navigation contexts
 
 ### Layout Strategy
-- **Dynamic Tree Loading**: Page tree selected based on URL prefix
-- **Conditional Rendering**: Different layouts for different content sources
+- **Page Tree**: Community source page tree rendered in sidebar
+- **External Links**: AID sidebar tab links to aid.agentcommunity.org/docs
 - **SEO Optimization**: Proper meta tags and structured data per section
 
 ## SEO & Social

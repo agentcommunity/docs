@@ -5,7 +5,7 @@
 - Docs already implement dynamic OG images via `fumadocs-ui/og`; blog needs a parallel implementation.
 
 ## Goals
-- Docs: Confirm and standardize OG image generation and meta tags across all docs routes (community and AID subsections).
+- Docs: Confirm and standardize OG image generation and meta tags across all docs routes (community docs; AID docs have moved to aid.agentcommunity.org).
 - Blog: Implement OG image generation and wire up meta tags for posts and the blog index.
 - Twitter cards: Use `summary_large_image` consistently with the same image URL as Open Graph.
 - Ensure output works with `metadataBase` so Next.js generates absolute URLs.
@@ -20,7 +20,7 @@
   - Uses `metadataBase` in `app/layout.tsx` so OG image URLs will resolve to absolute URLs.
 - Docs OG route: `app/docs-og/[...slug]/route.tsx`
   - Uses `generateOGImage` from `fumadocs-ui/og` with title/description and site label.
-  - Supports both community docs and AID docs (via `source` and `aidSource`).
+  - Supports community docs (via `source`). AID docs have moved to aid.agentcommunity.org.
 - Blog page meta: `app/blog/[[...slug]]/page.tsx`
   - Has `generateMetadata` but does NOT set `openGraph.images` or `twitter.images` for posts or the index.
   - No blog OG route exists.

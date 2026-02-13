@@ -71,10 +71,10 @@ export default async function Layout({
             icon: <Lucide.Book className="size-4" />,
           },
           {
-            title: 'Agent Identity & Discovery (AID)',
-            description: 'Define interfaces between agent systems',
-            url: 'https://aid.agentcommunity.org',
-            icon: <Lucide.Globe className="size-4" />,
+            title: 'AID Docs',
+            description: 'AID specification and reference (hosted externally)',
+            url: 'https://aid.agentcommunity.org/docs',
+            icon: <Lucide.ExternalLink className="size-4" />,
           },
         ],
         footer: (

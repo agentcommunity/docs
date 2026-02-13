@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     default: 'Agent Community Docs',
     template: '%s — Agent Community Docs',
   },
-  description: 'Documentation for the .agent Community projects and AID specification.',
+  description: 'Documentation for the .agent Community projects.',
   openGraph: {
     title: 'Agent Community Docs',
-    description: 'Documentation for the .agent Community projects and AID specification.',
+    description: 'Documentation for the .agent Community projects.',
     url: '/',
     siteName: 'Agent Community Docs',
     type: 'website',

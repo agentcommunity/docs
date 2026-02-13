@@ -12,10 +12,10 @@ export const baseOptions: BaseLayoutProps = {
       secondary: false,
     },
     {
-      text: 'Agent Identity & Discovery (AID)',
-      url: 'https://aid.agentcommunity.org',
+      text: 'AID Docs',
+      url: 'https://aid.agentcommunity.org/docs',
       active: 'none',
-      secondary: false,
+      secondary: true,
     },
     {
       type: 'icon',

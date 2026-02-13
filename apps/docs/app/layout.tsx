@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     default: 'Agent Community Docs',
     template: '%s — Agent Community Docs',
   },
-  description: 'Documentation for the .agent Community projects and AID specification.',
-  keywords: ['agent community', 'AID specification', 'documentation', 'API', 'developer tools', 'open source'],
+  description: 'Documentation for the .agent Community projects.',
+  keywords: ['agent community', 'documentation', 'API', 'developer tools', 'open source'],
   authors: [{ name: 'Agent Community' }],
   creator: 'Agent Community',
   publisher: 'Agent Community',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Agent Community Docs',
-    description: 'Documentation for the .agent Community projects and AID specification.',
+    description: 'Documentation for the .agent Community projects.',
     url: '/',
     siteName: 'Agent Community Docs',
     type: 'website',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Agent Community Docs',
-    description: 'Documentation for the .agent Community projects and AID specification.',
+    description: 'Documentation for the .agent Community projects.',
     images: ['/api/og'],
   },
   robots: {

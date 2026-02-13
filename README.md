@@ -44,13 +44,12 @@ This repository contains multiple documentation files to help you understand and
   - `.source/{server,browser,dynamic}.ts` - Auto-generated MDX source files
   - `source.config.ts` - Fumadocs configuration 
 - `content/docs/` - Community documentation
-- `content/docs/aid/` - AID documentation 
 - `content/blog/` - Blog content
 
 ## 🎯 Key Features
 
 - **Multi-zone architecture** with separate apps for docs and blog
-- **Sidebar tabs** switching between Community and AID documentation
+- **Sidebar tabs** with link to external AID documentation at aid.agentcommunity.org
 - **Shared navigation** with consistent UI across sections
 - **Scoped search** functionality
 - **SEO optimized** with proper meta tags and structured data

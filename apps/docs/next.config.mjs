@@ -14,12 +14,12 @@ const config = {
     return [
       {
         source: '/aid',
-        destination: 'https://aid.agentcommunity.org',
+        destination: 'https://aid.agentcommunity.org/docs',
         permanent: true,
       },
       {
         source: '/aid/:path*',
-        destination: 'https://aid.agentcommunity.org/:path*',
+        destination: 'https://aid.agentcommunity.org/docs/:path*',
         permanent: true,
       },
     ];

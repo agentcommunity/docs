@@ -1,18 +1,18 @@
-# Implementation Guide: Sidebar Tabs with Local Sources
+# Implementation Guide: Sidebar Tabs with External Links
 
 ## Overview
 
-This guide shows how to implement sidebar tabs that switch between multiple local content sources in Fumadocs. The example implements Community and AID documentation sections that switch based on URL prefix.
+This guide shows how to implement sidebar tabs in Fumadocs. The Community documentation is served locally, while AID documentation has moved to [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs) and is linked externally.
 
 ## Core Implementation
 
-### 1. Dual Source Configuration
+### 1. Source Configuration
 
-Create separate source loaders for each content section:
+Create a source loader for Community documentation:
 
 ```ts
 // apps/docs/lib/source.ts
-import { docs, aid } from '../.source/server';
+import { docs } from '../.source/server';
 import { loader } from 'fumadocs-core/source';
 import { createIconHandler } from './icon-handler';
 
@@ -23,67 +23,64 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   icon
 });
-
-export const aidSource = loader({
-  baseUrl: '/aid',
-  source: aid.toFumadocsSource(),
-  icon
-});
 ```
 
-### 2. Shared Navigation Items
+> AID documentation is hosted externally at [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs). Old `/aid/*` routes redirect there via 301.
 
-Define navigation items once, use everywhere:
+### 2. Navigation Items
+
+Navigation includes a link to the external AID documentation:
 
 ```tsx
-// apps/docs/app/components/navigation/nav-items.tsx
-export const navSectionItems = [
-  { title: '.agent Community', url: '/', icon: <Book /> },
-  { title: 'Agent Identity & Discovery (AID) v1.1.0', url: '/aid', icon: <Globe /> },
-];
+// apps/docs/app/layout.config.tsx  (links array)
+{
+  text: 'AID Docs',
+  url: 'https://aid.agentcommunity.org/docs',
+  active: 'none',
+  secondary: true,
+}
 ```
 
-### 3. Layout with Dynamic Tabs
+### 3. Layout with Sidebar Tabs
 
-Use shared items for both sidebar tabs and navbar:
+The sidebar includes a tab linking to the external AID docs:
 
 ```tsx
-// apps/docs/app/components/navigation/ClientLayoutWrapper.tsx
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-import { getNavSectionItems } from '@/app/components/navigation/nav-items';
-
-const isAID = slug[0] === 'aid';
-
+// app/docs/layout.tsx
 <DocsLayout
+  tree={treeWithIcons}
   {...baseOptions}
-  tree={isAID ? aidSource.pageTree : source.pageTree}
   sidebar={{
     defaultOpenLevel: 0,
-    tabs: getNavSectionItems().map(item => ({
-      title: item.title,
-      url: item.url,
-      icon: item.icon
-    })),
+    tabs: [
+      {
+        title: '.agent Community',
+        description: 'The home for open source agent collaboration',
+        url: '/docs',
+        icon: <Lucide.Book className="size-4" />,
+      },
+      {
+        title: 'AID Docs',
+        description: 'AID specification and reference (hosted externally)',
+        url: 'https://aid.agentcommunity.org/docs',
+        icon: <Lucide.ExternalLink className="size-4" />,
+      },
+    ],
   }}
-  nav={{ enabled: true, component: <TopNavbar /> }}
 >
   {children}
 </DocsLayout>
 ```
 
-### 4. Dynamic Page Loading
+### 4. Page Loading
 
-Switch sources based on URL prefix:
+Pages are loaded from the community source:
 
 ```tsx
 // apps/docs/app/[[...slug]]/page.tsx
 export default function Page({ params }: { params: { slug?: string[] } }) {
   const { slug = [] } = params;
-  const isAID = slug[0] === 'aid';
-
-  const page = isAID
-    ? aidSource.getPage(slug.slice(1))
-    : source.getPage(slug);
+  const page = source.getPage(slug);
 
   if (!page) notFound();
 
@@ -93,64 +90,27 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 
 ### 5. Static Generation
 
-Generate params for both sources:
+Generate params from the community source:
 
 ```tsx
 // apps/docs/app/[[...slug]]/page.tsx
 export async function generateStaticParams() {
-  const communityParams = source.generateParams();
-  const aidParams = aidSource.generateParams().map((p) => ({
-    slug: ['aid', ...p.slug]
-  }));
-
-  return [...communityParams, ...aidParams];
+  return source.generateParams();
 }
 ```
 
 ## Advanced Patterns
 
-### Custom Top Navbar
-
-Create a navbar that matches sidebar tabs:
-
-```tsx
-// apps/docs/app/components/navigation/TopNavbar.tsx
-import { getNavSectionItems } from './nav-items';
-
-export function TopNavbar() {
-  const items = getNavSectionItems();
-
-  return (
-    <div className="flex gap-2">
-      {items.map((item) => (
-        <Link
-          key={item.url}
-          href={item.url}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-muted"
-        >
-          {item.icon}
-          <span>{item.title}</span>
-        </Link>
-      ))}
-    </div>
-  );
-}
-```
-
 ### Error Boundaries
 
-Handle source switching errors gracefully:
+Handle page loading errors gracefully:
 
 ```tsx
 // apps/docs/app/[[...slug]]/page.tsx
 export default function Page({ params }: { params: { slug?: string[] } }) {
   try {
     const { slug = [] } = params;
-    const isAID = slug[0] === 'aid';
-
-    const page = isAID
-      ? aidSource.getPage(slug.slice(1))
-      : source.getPage(slug);
+    const page = source.getPage(slug);
 
     if (!page) notFound();
 
@@ -165,9 +125,9 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 ## Best Practices
 
 ### 1. Source Organization
-- Keep content in separate directories (`content/docs/`, `content/docs/aid/`)
+- Keep community content in `content/docs/`
 - Use consistent file naming conventions
-- Maintain separate meta.json files for each source
+- Maintain meta.json files for navigation ordering
 
 ### 2. Navigation Consistency
 - Single source of truth for navigation items
@@ -175,7 +135,7 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 - Clear visual distinction between sections
 
 ### 3. Performance Optimization
-- Generate static params for all sources
+- Generate static params from community source
 - Implement proper caching strategies
 - Use dynamic imports for heavy components
 
@@ -205,39 +165,26 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 
 ### Common Issues
 
-**Tabs not switching**: Check URL prefix logic in `isAID` calculation
+**Missing pages**: Ensure source is properly configured in `source.ts`
 
-**Missing pages**: Ensure both sources are properly configured in `source.ts`
-
-**Build errors**: Verify static params generation for all sources
+**Build errors**: Verify static params generation
 
 **Navigation mismatch**: Confirm nav items are consistently used across components
 
 ### Debug Checklist
 
-- [ ] Sources properly imported and configured
+- [ ] Source properly imported and configured
 - [ ] Navigation items correctly defined
-- [ ] URL prefix logic working as expected
-- [ ] Static params generated for all sources
+- [ ] Static params generated
 - [ ] Layout components receiving correct props
 - [ ] Error boundaries in place
+- [ ] `/aid/*` redirects working (301 to aid.agentcommunity.org/docs)
 
-## Migration Guide
+## Adding New Content Sections
 
-### From Single Source to Multi-Source
-
-1. **Create additional source configuration**
-2. **Update navigation items**
-3. **Modify page component for source switching**
+1. **Add new source configuration** in `source.config.ts` and `lib/source.ts`
+2. **Create content directory structure** under `content/`
+3. **Update navigation items**
 4. **Add static params generation**
 5. **Update layout components**
 6. **Test all routes and functionality**
-
-### Adding New Content Sections
-
-1. **Add new source configuration**
-2. **Create content directory structure**
-3. **Update navigation items**
-4. **Modify source switching logic**
-5. **Regenerate static params**
-6. **Test new section functionality**

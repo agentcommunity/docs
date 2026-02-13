@@ -52,10 +52,11 @@ pnpm run dev:blog    # http://localhost:3001/blog
 ```
 content/
 ├── docs/           # Community documentation
-│   ├── aid/        # AID-specific content
 │   └── [pages]     # Community pages
 └── blog/           # Blog posts
 ```
+
+> **Note:** AID documentation has moved to [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs). All `/aid/*` routes on this site redirect there via 301.
 
 ## Build Configuration
 
@@ -81,10 +82,7 @@ const config = {
       { source: '/index.mdx', destination: '/api/mdx/docs/index' },
       { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
       { source: '/:slug*.md', destination: '/api/mdx/docs/:slug*' },
-      // AID under /aid
-      { source: '/aid.mdx', destination: '/api/mdx/aid/index' },
-      { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
-      { source: '/aid/:slug*.md', destination: '/api/mdx/aid/:slug*' }
+      // AID routes redirect to aid.agentcommunity.org/docs (see redirects())
     ];
   }
 };
@@ -121,7 +119,7 @@ export default withMDX({
 ```
 
 ### MDX Export
-- Docs: pretty `/{slug}.mdx` and `/aid/{slug}.mdx` → `/api/mdx/docs/:slug*` and `/api/mdx/aid/:slug*`
+- Docs: pretty `/{slug}.mdx` → `/api/mdx/docs/:slug*`
 - Blog: pretty `/blog/{slug}.mdx` → `/blog/api/mdx/blog/:slug*`
 - Both support GET/HEAD, ETag, `?download=1`, and return 404 JSON on page misses.
 
@@ -131,18 +129,17 @@ export default withMDX({
 
 **Fumadocs Sources:**
 
-We use dual sources for community and AID. Community pages are rooted at `/` on `docs.agentcommunity.org` and under `/docs` in traditional setups.
+Community pages are rooted at `/` on `docs.agentcommunity.org` and under `/docs` in traditional setups. AID documentation has moved to [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs); `/aid/*` routes redirect there via 301.
 
 ```ts
 // apps/docs/lib/source.ts
-import { docs, aid } from '../.source/server';
+import { docs } from '../.source/server';
 import { loader } from 'fumadocs-core/source';
 import { createIconHandler } from './icon-handler';
 
 const icon = createIconHandler();
 
 export const source = loader({ baseUrl: '/', source: docs.toFumadocsSource(), icon });
-export const aidSource = loader({ baseUrl: '/aid', source: aid.toFumadocsSource(), icon });
 ```
 
 ### ESLint Configuration
@@ -248,8 +245,9 @@ Both apps use Next.js ESLint configuration:
 ### Adding Documentation Pages
 
 1. **Community Docs:** Add `.mdx` files to `content/docs/`
-2. **AID Docs:** Add `.mdx` files to `content/docs/aid/`
-3. **Blog Posts:** Add `.mdx` files to `content/blog/`
+2. **Blog Posts:** Add `.mdx` files to `content/blog/`
+
+> **AID Docs** are now maintained at [aid.agentcommunity.org](https://aid.agentcommunity.org/docs).
 
 ### Frontmatter Requirements
 
@@ -287,19 +285,16 @@ Every documentation page is available at a pretty `.mdx` URL:
 
 **For docs.agentcommunity.org deployment:**
 - **Community Docs:** `https://docs.agentcommunity.org/{page}.mdx`
-- **AID Docs:** `https://docs.agentcommunity.org/aid/{page}.mdx`
 
 **For traditional deployment:**
 - **Community Docs:** `https://agentcommunity.org/docs/{page}.mdx`
-- **AID Docs:** `https://agentcommunity.org/aid/{page}.mdx`
+
+> AID docs are now at [aid.agentcommunity.org/docs](https://aid.agentcommunity.org/docs). Old `/aid/*` URLs redirect there automatically.
 
 **Examples (docs.agentcommunity.org):**
 ```bash
 # Copy community docs
 curl https://docs.agentcommunity.org/getting-started.mdx
-
-# Copy AID specification
-curl https://docs.agentcommunity.org/aid/specification.mdx
 
 # Copy with specific tool
 curl https://docs.agentcommunity.org/getting-started.mdx | pbcopy
@@ -309,8 +304,8 @@ curl https://docs.agentcommunity.org/getting-started.mdx | pbcopy
 
 Each documentation page includes a "Copy Markdown" button that:
 
-1. **Tries pretty URL first:** `{page}.mdx` (root for community, `/aid/{page}.mdx` for AID)
-2. **Falls back to API:** `/api/mdx/{section}/{page}`
+1. **Tries pretty URL first:** `{page}.mdx`
+2. **Falls back to API:** `/api/mdx/docs/{page}`
 3. **Copies to clipboard:** Clean markdown content with frontmatter, links, and code blocks preserved
 
 The “Open in ChatGPT/Claude” actions copy the page Markdown first, then open the target.
@@ -321,19 +316,14 @@ Direct API access for automation:
 
 **For docs.agentcommunity.org deployment:**
 - **Community Docs:** `https://docs.agentcommunity.org/api/mdx/docs/{page}`
-- **AID Docs:** `https://docs.agentcommunity.org/api/mdx/aid/{page}`
 
 **For traditional deployment:**
 - **Community Docs:** `https://agentcommunity.org/api/mdx/docs/{page}`
-- **AID Docs:** `https://agentcommunity.org/api/mdx/aid/{page}`
 
 **Examples (docs.agentcommunity.org):**
 ```bash
 # Get raw markdown via API
 curl https://docs.agentcommunity.org/api/mdx/docs/index
-
-# Use in scripts
-curl https://docs.agentcommunity.org/api/mdx/aid/specification > aid-spec.md
 ```
 
 ### Content Format
@@ -352,14 +342,8 @@ The exported markdown includes:
 
 **For docs.agentcommunity.org deployment:**
 ```bash
-# Download entire AID docs section
-for page in index specification security versioning; do
-  curl -s https://docs.agentcommunity.org/aid/${page}.mdx > ${page}.md
-done
-
 # Create offline documentation bundle
 curl -s https://docs.agentcommunity.org/index.mdx > docs.md
-curl -s https://docs.agentcommunity.org/aid/index.mdx >> docs.md
 
 # Use with documentation tools
 curl https://docs.agentcommunity.org/api.mdx | pandoc -f markdown -t pdf > api-docs.pdf
@@ -367,14 +351,8 @@ curl https://docs.agentcommunity.org/api.mdx | pandoc -f markdown -t pdf > api-d
 
 **For traditional deployment:**
 ```bash
-# Download entire AID docs section
-for page in index specification security versioning; do
-  curl -s https://agentcommunity.org/aid/${page}.mdx > ${page}.md
-done
-
 # Create offline documentation bundle
 curl -s https://agentcommunity.org/docs/index.mdx > docs.md
-curl -s https://agentcommunity.org/aid/index.mdx >> docs.md
 
 # Use with documentation tools
 curl https://agentcommunity.org/docs/api.mdx | pandoc -f markdown -t pdf > api-docs.pdf
