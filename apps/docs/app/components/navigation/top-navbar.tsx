@@ -7,8 +7,7 @@ import { baseOptions } from '@/app/layout.config';
 import type { ReactNode } from 'react';
 import { getNavSectionItems } from './nav-items';
 
-
-import { House } from 'lucide-react';
+import { House, BookOpen } from 'lucide-react';
 
 function isActive(pathname: string, href = '', mode: 'url' | 'nested-url' | 'none' = 'nested-url') {
   if (!href || mode === 'none') return false;
@@ -35,7 +34,7 @@ export default function TopNavbar() {
   return (
     <div className="flex items-center justify-between h-14 px-4 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-3">
-      
+
         <Link href="https://agentcommunity.org" aria-label="Go to Agent Community home" className="opacity-80 hover:opacity-100">
           <House size={20} />
         </Link>
@@ -63,12 +62,21 @@ export default function TopNavbar() {
         })}
       </div>
 
-      <div className="hidden md:flex items-center gap-3">
+      <div className="flex items-center gap-3">
+        {/* Blog link - visible on all screen sizes */}
+        <Link href="/blog" aria-label="Blog" className="opacity-80 hover:opacity-100 md:hidden">
+          <BookOpen size={20} />
+        </Link>
+        {/* Social/secondary icons - visible on all screen sizes */}
         {secondary.map((item) => (
-          <Link key={item.url} href={item.url} aria-label={item.label} className="opacity-80 hover:opacity-100">
+          <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={item.label} className="opacity-80 hover:opacity-100">
             {item.icon}
-          </Link>
+          </a>
         ))}
+        {/* Blog link on desktop (text) */}
+        <Link href="/blog" className="hidden md:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Blog
+        </Link>
       </div>
     </div>
   );
