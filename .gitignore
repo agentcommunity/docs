@@ -42,3 +42,4 @@ tmp-spec-repo/
 # (Removed: AID docs are now kept locally and tracked)/.next/
 **/.next/
 /out/
+public/og/

@@ -3,6 +3,9 @@
   "icon": "book",
   "pages": [
     "index",
+    "why-agent",
+    "governance",
+    "get-involved",
     "work-items"
   ]
 }

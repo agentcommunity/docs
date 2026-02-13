@@ -14,22 +14,6 @@ jobs:
       - name: Checkout Docs Repo Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Fetch AID Spec Repository
-        run: |
-          git clone --depth 1 https://github.com/agentcommunity/agent-identity-discovery ../agent-identity-discovery
-
-      - name: Install Python Dependencies
-        run: pip install -r requirements.txt
-
-      - name: Build MkDocs Site
-        run: mkdocs build
-
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 

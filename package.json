@@ -1,58 +1,37 @@
 {
-  "name": "agent-community",
-  "version": "0.0.0",
+  "name": "agentcommunity-docs",
+  "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.12.1",
-  "engines": {
-    "node": "22.x"
-  },
-  "workspaces": [
-    "apps/*"
-  ],
-  "pnpm": {
-    "overrides": {
-      "fumadocs-mdx": "14.2.5"
-    }
-  },
   "scripts": {
-    "build": "pnpm -C apps/docs run build && pnpm -C apps/blog run build",
-    "dev": "concurrently -n docs,blog -c blue,magenta \"PORT=3000 pnpm -C apps/docs dev\" \"PORT=3001 pnpm -C apps/blog dev\"",
-    "dev:docs": "PORT=3000 pnpm -C apps/docs dev",
-    "dev:blog": "PORT=3001 pnpm -C apps/blog dev",
-    "clean:blog": "rm -rf apps/blog/.next apps/blog/.source",
-    "build:docs": "pnpm -C apps/docs run build",
-    "build:blog": "pnpm -C apps/blog run build",
-    "start:docs": "PORT=3000 pnpm -C apps/docs start",
-    "start:blog": "PORT=3001 pnpm -C apps/blog start"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "generate:og": "tsx scripts/generate-og-images.ts"
   },
   "dependencies": {
-    "@fumadocs/mdx-remote": "^1.4.4",
-    "class-variance-authority": "^0.7.1",
-    "fumadocs-core": "16.4.7",
-    "fumadocs-mdx": "14.2.5",
-    "fumadocs-ui": "16.4.7",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.562.0",
     "mermaid": "^10.9.4",
-    "next": "16.1.2",
+    "next": "^16.1.2",
+    "next-mdx-remote": "^6.0.0",
     "next-themes": "^0.4.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "remark": "^15.0.1",
-    "remark-gfm": "^4.0.1",
-    "remark-mdx": "^3.1.0",
-    "tailwind-merge": "^3.3.1"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/mdx": "^2.0.13",
-    "@types/node": "24.0.13",
+    "@types/node": "^24.0.13",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
-    "concurrently": "^8.2.2",
-    "eslint": "^9.39.2",
-    "eslint-config-next": "16.1.2",
     "postcss": "^8.5.6",
+    "satori": "^0.19.2",
     "tailwindcss": "^4.1.11",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3"
   }
 }

@@ -1,121 +1,120 @@
-# Architecture: Multi-Zone Next.js with BasePath
+# Architecture
 
 ## System Overview
 
-A monorepo containing two independent Next.js applications deployed as separate Vercel projects, unified through a landing page with URL rewrites.
+This is a single Next.js 16 app (App Router) that serves both documentation and blog content for the .agent Community. It replaced a Fumadocs monorepo in Feb 2026.
 
-### Core Design Principles
-
-- **BasePath Isolation**: Each app uses basePath (`/docs`, `/blog`) for complete namespace isolation
-- **Independent Deployment**: Apps deploy separately to avoid coupling and enable different scaling strategies
-- **Unified Access**: Single domain with path-based routing via Vercel rewrites
-- **Shared Infrastructure**: Common content structure and build tooling
-
-## Application Structure
-
-### Documentation App (`apps/docs`)
-- **Purpose**: Community documentation with AID integration
-- **Public Paths**: Community at `/` on docs subdomain; under `/docs` in traditional setup
-- **Sources**: Dual-source system (Community baseUrl `/`, AID baseUrl `/aid`)
-- **Features**: Tabbed navigation, scoped search, multi-source content
-
-### Blog App (`apps/blog`)
-- **Purpose**: Blog content and articles
-- **BasePath**: `/blog`
-- **Sources**: Single-source system
-- **Features**: Article listing, individual post pages
-
-## Content Architecture
+The system has three layers:
 
 ```
-content/
-├── docs/           # Community documentation
-│   ├── aid/        # AID-specific content
-│   └── [pages]     # Community pages
-└── blog/           # Blog posts
+content/          Markdown source files (MDX)
+    |
+src/lib/          Content engine (pure logic, zero React)
+    |
+src/app/          Next.js routes, renders MDX with custom components
+src/components/   React components for layout, sidebar, TOC, etc.
 ```
 
-## Routing Architecture
+## Content Layer
 
-### Source Switching (Docs App)
-- **Community Source**: `baseUrl = "/"` (docs subdomain) or appears under `/docs` via rewrites in traditional setup
-- **AID Source**: `baseUrl = "/aid"`
-- **Switching Logic**: URL prefix-based (`/aid/*` routes to AID source)
+All content lives in `content/` as MDX files:
 
-### API Architecture
-- **Search**: Merged results from both docs sources
-- **Content**: Raw MDX access for copy/open functionality
-- **OG Images**: Dynamic image generation for social sharing
+- `content/docs/*.mdx` — Documentation pages. Navigation order defined in `meta.json`.
+- `content/blog/YYYY-MM-DD-*.mdx` — Blog posts. Sorted by frontmatter `date` field.
 
-#### MDX Export (Docs & Blog)
-- Pretty URLs rewrite to API export routes
-- GET/HEAD supported, ETag/Cache-Control headers, optional download via `?download=1`
-- 404 JSON on misses, no 500s for lookups
+Content files use standard MDX. Custom components (`Card`, `Cards`, `Callout`) are injected at render time — no imports needed in MDX files.
 
-#### OG Images (Blog)
-- Per-page OG images via `/blog-og/[...slug]/image.png`
-- Black background, white title, gray subtitle, `agentcommunity.org` watermark
+### Navigation: meta.json
 
-## Deployment Architecture
-
-### Vercel Projects
-- **agentcommunity-docs**: `apps/docs/` root directory
-- **agentcommunity-blog**: `apps/blog/` root directory
-
-### Rewrite Rules (Landing Project)
 ```json
 {
-  "rewrites": [
-    { "source": "/docs/:path*", "destination": "https://agentcommunitydocs.vercel.app/docs/:path*" },
-    { "source": "/blog/:path*", "destination": "https://agentcommunityblog.vercel.app/blog/:path*" }
-  ]
+  "title": ".agent Community",
+  "pages": ["index", "work-items"]
 }
 ```
 
-### Asset Management
-- **Static Assets**: Namespaced under respective basePaths (`/_next/static/docs/*`)
-- **Data Routes**: Namespaced under respective basePaths (`/_next/data/docs/*`)
-- **Build Independence**: Each app builds separately with no shared state
+- `"index"` maps to `content/docs/index.mdx`, route `/docs`
+- Other entries resolve to `{name}.mdx` or `{name}/index.mdx`
+- Nested directories can have their own `meta.json` with a `pages` array for child nav items
 
-## Navigation Architecture
+### Blog naming convention
 
-### Shared Navigation System
-- **Source of Truth**: `nav-items.tsx` defines section items
-- **Dual Rendering**: Same items rendered in sidebar tabs and top navbar pills
-- **Consistent UX**: Unified appearance across different navigation contexts
+Filename: `2026-02-05-why-aid-now-supports-ucp.mdx`
+- Date prefix `YYYY-MM-DD-` is stripped to produce the slug: `why-aid-now-supports-ucp`
+- Route: `/blog/why-aid-now-supports-ucp`
+- The frontmatter `date` field takes precedence over the filename date for sorting
 
-### Layout Strategy
-- **Dynamic Tree Loading**: Page tree selected based on URL prefix
-- **Conditional Rendering**: Different layouts for different content sources
-- **SEO Optimization**: Proper meta tags and structured data per section
+## Content Engine (src/lib/)
 
-## SEO & Social
+Pure TypeScript, zero React dependencies. Can be extracted as a standalone package.
 
-- OG images: Both apps generate dynamic OG images with Next’s ImageResponse.
-  - Docs: `app/docs-og/[...slug]/route.tsx` (dark background, white title, gray monospace subtitle).
-  - Blog: `apps/blog/app/blog-og/[...slug]/route.tsx` (same style).
-- Metadata: Both apps set `metadataBase` and per-page Open Graph/Twitter images (`summary_large_image`).
-- Docs breadcrumbs: BreadcrumbList JSON-LD via `<Script type="application/ld+json">` inside `app/docs/[[...slug]]/page.tsx`.
-- Blog structured data:
-  - Blog index: Blog JSON-LD with recent posts.
-  - Post pages: Article JSON-LD.
-- Sitemaps & feeds (blog): `apps/blog/app/sitemap.xml/route.ts` and `apps/blog/app/rss.xml/route.ts`.
+| File | Purpose |
+|------|---------|
+| `types.ts` | `DocPage`, `BlogPost`, `Heading`, `NavItem` interfaces |
+| `docs.ts` | `getDoc(slug[])`, `getAllDocSlugs()`, `getDocNavigation()` |
+| `blog.ts` | `getPost(slug)`, `getAllPosts()`, `getAllTags()`, `getAllPostSlugs()` |
+| `search.ts` | `getSearchIndex()`, `search(query)` — in-memory substring matching |
 
-## Blog Content Conventions
+The content engine reads files from disk using `fs` and parses frontmatter with `gray-matter`. Headings are extracted via regex for the table of contents. No caching — filesystem is source of truth.
 
-- Date-prefixed filenames: `YYYY-MM-DD-title.mdx` for reliable ordering.
-- Frontmatter: `title`, `description`, `date`, `tags`, optional `image` (thumbnail on index).
-- Inline images: Place under `apps/blog/public/blog/` and reference as `/blog/<filename>`.
+## Rendering Pipeline
 
-## Dev Notes
+MDX is rendered server-side via `next-mdx-remote/rsc`:
 
-- Node 22: `.nvmrc` committed; use `nvm use 22`.
-- Fumadocs cache: when changing content/frontmatter, clear blog caches: `pnpm clean:blog && pnpm dev:blog`.
+```
+MDX source
+  -> remark-gfm (tables, task lists)
+  -> rehype-slug (heading IDs)
+  -> rehype-autolink-headings (anchor wrapping)
+  -> mdx-components.tsx (style overrides, Card/Cards, mermaid detection)
+  -> HTML output
+```
 
-## Technical Benefits
+Custom MDX components (`src/components/mdx-components.tsx`) override all HTML elements with Tailwind-styled versions. Mermaid code blocks are detected and routed to a client-side renderer.
 
-- **Scalability**: Independent scaling of docs vs blog
-- **Maintainability**: Separate codebases reduce complexity
-- **Performance**: Optimized builds for specific content types
-- **Flexibility**: Different update cadences and feature sets
-- **Reliability**: Isolation prevents cascading failures 
+## Routes
+
+| Route | Type | Description |
+|-------|------|-------------|
+| `/` | Static | Redirects to `/docs` |
+| `/docs` | SSG | Docs landing (catch-all `[[...slug]]`) |
+| `/docs/[slug]` | SSG | Individual doc pages |
+| `/blog` | Dynamic | Blog index with tag filtering via `?tag=` |
+| `/blog/[slug]` | SSG | Individual blog posts |
+| `/api/search` | Dynamic | Search API (`?q=query`) |
+| `/api/mdx/[...slug]` | Dynamic | Raw MDX export (`text/markdown` or `?format=json`) |
+| `/rss.xml` | Dynamic | RSS feed |
+| `/sitemap.xml` | Static | Auto-generated from all content |
+| `/robots.txt` | Static | Standard robots file |
+| `/aid/*` | Redirect | Permanent redirect to `aid.agentcommunity.org` |
+
+## Static Assets
+
+- `public/assets/` — Logos (light/dark SVGs)
+- `public/og/` — Build-time generated OG images (1200x630 PNG, gitignored)
+- `public/blog/` — Blog post images
+- `public/favicon.ico`
+
+OG images are generated by `scripts/generate-og-images.ts` using satori + resvg. They run at build time (not runtime), so Vercel serves them as static files with zero function invocations.
+
+## SEO
+
+- `metadataBase` set in root layout — all relative OG URLs resolve correctly
+- Canonical URLs on every page
+- OpenGraph + Twitter card meta tags with static OG images
+- JSON-LD structured data: Organization + WebSite (root layout)
+- RSS feed linked via `<link rel="alternate">`
+- Sitemap with all docs + blog URLs
+
+## Deployment
+
+Single Vercel project. `vercel.json` runs `pnpm generate:og && pnpm build`. No monorepo, no workspaces, no pnpm-workspace.yaml.
+
+## Key Design Decisions
+
+1. **No Fumadocs** — Custom renderer is simpler for our small content set and gives full control.
+2. **Server-side MDX** — `next-mdx-remote/rsc` means zero client JS for content pages.
+3. **Static OG images** — Built at build time to avoid Vercel function costs.
+4. **Reusable lib/** — Content engine has zero React deps for portability.
+5. **meta.json navigation** — Simple JSON ordering instead of filesystem-order or frontmatter-based nav.
+6. **Single app** — Blog and docs share layout, theme, search. No multi-zone complexity.
