@@ -2,10 +2,9 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import type { InferPageType } from 'fumadocs-core/source';
-import type { source, aidSource } from './source';
+import type { source } from './source';
 
 type DocsPage = InferPageType<typeof source>;
-type AIDPage = InferPageType<typeof aidSource>;
 
 const processor = remark().use(remarkMdx).use(remarkGfm);
 
@@ -13,7 +12,7 @@ const processor = remark().use(remarkMdx).use(remarkGfm);
 // kept for future extension
 // interface PageDataWithFile { _file?: PageFileMeta; content: string }
 
-async function readRawContent(page: DocsPage | AIDPage) {
+async function readRawContent(page: DocsPage) {
   try {
     return await page.data.getText('raw');
   } catch {
@@ -22,7 +21,7 @@ async function readRawContent(page: DocsPage | AIDPage) {
   }
 }
 
-export async function getLLMText(page: DocsPage | AIDPage) {
+export async function getLLMText(page: DocsPage) {
   const raw = await readRawContent(page);
   try {
     const processed = await processor.process({

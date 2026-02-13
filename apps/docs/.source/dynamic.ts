@@ -7,13 +7,6 @@ const create = await dynamic<typeof Config, import("fumadocs-mdx/runtime/types")
   }
 } & {
   DocData: {
-    aid: {
-      /**
-       * Last modified date of document file, obtained from version control.
-       *
-       */
-      lastModified?: Date;
-    },
     blog: {
       /**
        * Last modified date of document file, obtained from version control.

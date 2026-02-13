@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { source, aidSource, blogSource } from '@/lib/source';
+import { source, blogSource } from '@/lib/source';
 
 // Uses local filesystem via fumadocs sources; must run on Node.js runtime
 export const runtime = 'nodejs';
@@ -7,7 +7,6 @@ export const runtime = 'nodejs';
 export function GET() {
   const pages = [
     ...source.getPages(),
-    ...aidSource.getPages().map((p) => ({ ...p, url: p.url.replace('/docs', '/docs/aid') })),
     ...blogSource.getPages(),
   ];
 
@@ -24,4 +23,3 @@ export function GET() {
 
   return new NextResponse(xml, { headers: { 'Content-Type': 'application/xml' } });
 }
-

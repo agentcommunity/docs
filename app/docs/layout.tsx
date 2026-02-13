@@ -1,7 +1,7 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import type { ReactNode } from 'react';
 import { baseOptions } from '@/app/layout.config';
-import { source, aidSource } from '@/lib/source';
+import { source } from '@/lib/source';
 import Link from 'next/link';
 import * as Lucide from 'lucide-react';
 
@@ -21,7 +21,6 @@ function toPascalCase(input: string): string {
 }
 
 const iconAlias: Record<string, string> = {
-  aid: 'Globe',
   docs: 'Book',
   documentation: 'Book',
   book: 'Book',
@@ -49,23 +48,18 @@ function mapIcons(node: TreeNode): TreeNode {
 
 export default async function Layout({
   children,
-  params,
 }: {
   children: ReactNode;
-  params: Promise<{ slug?: string[] }>;
 }) {
-  const { slug = [] } = await params;
-  const isAID = slug[0] === 'aid';
-  const rawTree = isAID ? aidSource.pageTree : source.pageTree;
+  const rawTree = source.pageTree;
   const treeWithIcons = mapIcons(rawTree as unknown as TreeNode) as unknown as Parameters<typeof DocsLayout>[0]['tree'];
 
   return (
-    <DocsLayout 
+    <DocsLayout
       tree={treeWithIcons}
       {...baseOptions}
       nav={{
         ...baseOptions.nav,
-        // No Blog/Discussion/GitHub in nav
       }}
       sidebar={{
         defaultOpenLevel: 0,
@@ -79,11 +73,10 @@ export default async function Layout({
           {
             title: 'Agent Identity & Discovery (AID)',
             description: 'Define interfaces between agent systems',
-            url: '/docs/aid',
+            url: 'https://aid.agentcommunity.org',
             icon: <Lucide.Globe className="size-4" />,
           },
         ],
-        // Custom footer links at the bottom of the sidebar
         footer: (
           <div className="flex flex-row gap-4 px-4 pb-4 items-center">
             <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link>

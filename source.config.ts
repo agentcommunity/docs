@@ -17,16 +17,6 @@ export const docs = defineDocs({
   },
 });
 
-export const aid = defineDocs({
-  dir: 'content/docs/aid',
-  docs: {
-    schema: frontmatterSchema,
-  },
-  meta: {
-    schema: metaSchema,
-  },
-});
-
 export const blog = defineDocs({
   dir: 'content/blog',
   docs: {
@@ -36,9 +26,6 @@ export const blog = defineDocs({
     schema: metaSchema,
   },
 });
-
-// NOTE: We intentionally keep AID as a separate local source to enable
-// sidebar tab isolation in Fumadocs.
 
 export default defineConfig({
   plugins: [lastModified()],

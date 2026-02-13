@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import UnifiedLayout from './(community)/layout';
 
-export default function DocsLayout({ children, isAID }: { children: ReactNode; isAID?: boolean }) {
+export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
-    <UnifiedLayout isAID={isAID}>
+    <UnifiedLayout>
       {children}
     </UnifiedLayout>
   );

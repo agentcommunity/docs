@@ -13,8 +13,8 @@ export const baseOptions: BaseLayoutProps = {
     },
     {
       text: 'Agent Identity & Discovery (AID)',
-      url: '/aid',
-      active: 'nested-url',
+      url: 'https://aid.agentcommunity.org',
+      active: 'none',
       secondary: false,
     },
     {

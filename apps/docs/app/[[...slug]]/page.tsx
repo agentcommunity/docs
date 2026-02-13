@@ -1,4 +1,4 @@
-import { source, aidSource } from '@/lib/source';
+import { source } from '@/lib/source';
 import { DocsPage, DocsBody, DocsDescription, DocsTitle } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
@@ -10,35 +10,26 @@ import type { MDXComponents } from 'mdx/types';
 export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const isAID = slug.length > 0 && slug[0] === 'aid';
-  const pageSlug = isAID ? slug.slice(1) : slug;
 
-  // Select the appropriate source based on URL
-  const currentSource = isAID ? aidSource : source;
-  const page = currentSource.getPage(pageSlug);
-
+  const page = source.getPage(slug);
   if (!page) notFound();
 
   type MDXContent = React.ComponentType<{ components?: MDXComponents }>;
   const MDX = page.data.body as MDXContent;
-  const apiSlug = pageSlug.length > 0 ? pageSlug.join('/') : 'index';
+  const apiSlug = slug.length > 0 ? slug.join('/') : 'index';
 
   return (
-    <DocsLayout isAID={isAID}>
+    <DocsLayout>
       <DocsPage toc={page.data.toc} tableOfContent={{ enabled: true }} lastUpdate={page.data.lastModified}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="flex flex-row gap-2 mb-4 mt-2">
           <LLMCopyButton
-            markdownUrl={`/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
-            pageUrl={`/${isAID ? 'aid/' : ''}${pageSlug.join('/') || 'index'}`}
+            markdownUrl={`/api/mdx/docs/${apiSlug}`}
+            pageUrl={`/${slug.join('/') || 'index'}`}
           />
           <ViewOptions
-            markdownUrl={`/api/mdx/${isAID ? 'aid' : 'docs'}/${apiSlug}`}
-            githubUrl={
-              isAID
-                ? `https://github.com/agentcommunity/agent-identity-discovery/tree/main/packages/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.md`
-                : `https://github.com/agentcommunity/docs/tree/main/content/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.mdx`
-            }
+            markdownUrl={`/api/mdx/docs/${apiSlug}`}
+            githubUrl={`https://github.com/agentcommunity/docs/tree/main/content/docs/${page.slugs.join('/') || 'index'}${page.slugs.includes('index') ? '' : '/index'}.mdx`}
           />
         </div>
         {page.data.description && <DocsDescription>{page.data.description}</DocsDescription>}
@@ -51,38 +42,22 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
 }
 
 export async function generateStaticParams() {
-  // Generate params for both sources
-  const communityParams = source.generateParams().map(params => ({ slug: params.slug }));
-  const aidParams = aidSource.generateParams().map(params => ({ slug: ['aid', ...params.slug] }));
-
-  return [...communityParams, ...aidParams];
+  return source.generateParams().map(params => ({ slug: params.slug }));
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const slug = params.slug || [];
-  const isAID = slug.length > 0 && slug[0] === 'aid';
-  const pageSlug = isAID ? slug.slice(1) : slug;
 
   const canonicalBase = process.env.NEXT_PUBLIC_CANONICAL_BASE || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const currentSource = isAID ? aidSource : source;
-  const page = currentSource.getPage(pageSlug);
+  const page = source.getPage(slug);
 
   if (page) {
-    // For docs.agentcommunity.org, use direct paths
-    // For other deployments, use /docs prefix for community content
     const isDocsSubdomain = canonicalBase.includes('docs.agentcommunity.org');
 
-    let canonicalUrl: string;
-    if (isAID) {
-      canonicalUrl = `${canonicalBase}/aid/${pageSlug.join('/') || 'index'}`;
-    } else if (isDocsSubdomain) {
-      // On docs.agentcommunity.org, community docs are at root level
-      canonicalUrl = `${canonicalBase}/${pageSlug.join('/') || 'index'}`;
-    } else {
-      // On other deployments, community docs are under /docs
-      canonicalUrl = `${canonicalBase}/docs/${pageSlug.join('/') || 'index'}`;
-    }
+    const canonicalUrl = isDocsSubdomain
+      ? `${canonicalBase}/${slug.join('/') || 'index'}`
+      : `${canonicalBase}/docs/${slug.join('/') || 'index'}`;
 
     return {
       title: page.data.title,

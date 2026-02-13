@@ -49,15 +49,6 @@ var docs = defineDocs({
     schema: metaSchema
   }
 });
-var aid = defineDocs({
-  dir: "../../content/docs/aid",
-  docs: {
-    schema: frontmatterSchema
-  },
-  meta: {
-    schema: metaSchema
-  }
-});
 var blog = defineDocs({
   dir: "../../content/blog",
   docs: {
@@ -80,7 +71,6 @@ var source_config_default = defineConfig({
   }
 });
 export {
-  aid,
   blog,
   source_config_default as default,
   docs

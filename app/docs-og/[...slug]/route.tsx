@@ -1,4 +1,4 @@
-import { source, aidSource } from '@/lib/source';
+import { source } from '@/lib/source';
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
 export const runtime = 'nodejs';
@@ -13,15 +13,7 @@ export async function GET(
   // Handle image.png requests
   if (lastSegment === 'image.png') {
     const pageSlug = slug.slice(0, -1);
-    const isAID = pageSlug[0] === 'aid';
-
-    let page;
-    if (isAID) {
-      const aidSlug = pageSlug.slice(1);
-      page = aidSource.getPage(aidSlug);
-    } else {
-      page = source.getPage(pageSlug);
-    }
+    const page = source.getPage(pageSlug);
 
     if (!page) notFound();
 
@@ -78,14 +70,8 @@ export async function GET(
 }
 
 export async function generateStaticParams() {
-  const communityParams = source.generateParams().map((page) => ({
+  return source.generateParams().map((page) => ({
     ...page,
     slug: [...page.slug, 'image.png'],
   }));
-
-  const aidParams = aidSource.generateParams().map((page) => ({
-    slug: ['aid', ...page.slug, 'image.png'],
-  }));
-
-  return [...communityParams, ...aidParams];
 }

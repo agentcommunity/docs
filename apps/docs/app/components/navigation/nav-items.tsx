@@ -22,7 +22,7 @@ export const navSectionItems: Readonly<NavSectionItem[]> = [
   {
     title: 'Agent Identity & Discovery (AID) v1.1.0',
     description: 'Define interfaces between agent systems',
-    url: '/aid',
+    url: 'https://aid.agentcommunity.org',
     icon: (
       <span className="inline-flex items-center justify-center rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 size-5">
         <Lucide.Globe className="size-3.5" />

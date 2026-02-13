@@ -10,6 +10,20 @@ const config = {
   experimental: {
     externalDir: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/aid',
+        destination: 'https://aid.agentcommunity.org',
+        permanent: true,
+      },
+      {
+        source: '/aid/:path*',
+        destination: 'https://aid.agentcommunity.org/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       // Community at root
@@ -17,10 +31,6 @@ const config = {
       { source: '/:slug*.mdx', destination: '/api/mdx/docs/:slug*' },
       // Optional .md aliases
       { source: '/:slug*.md', destination: '/api/mdx/docs/:slug*' },
-      // AID under /aid
-      { source: '/aid.mdx', destination: '/api/mdx/aid/index' },
-      { source: '/aid/:slug*.mdx', destination: '/api/mdx/aid/:slug*' },
-      { source: '/aid/:slug*.md', destination: '/api/mdx/aid/:slug*' },
     ];
   },
 };
