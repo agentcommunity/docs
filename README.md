@@ -1,143 +1,75 @@
-# Agent Community Documentation
+# .agent Community Docs
 
-A monorepo containing documentation and blog sites built with Next.js and Fumadocs.
+Documentation and blog for the [.agent Community](https://agentcommunity.org) — the home for open source agent collaboration.
 
-## 📖 Documentation Guide
+## Stack
 
-This repository contains multiple documentation files to help you understand and work with the codebase:
+- **Next.js 16** (App Router) — single app with `/docs` and `/blog` routes
+- **next-mdx-remote** — server-side MDX rendering
+- **Tailwind CSS v4** — styling with dark/light mode
+- **Custom content engine** — filesystem-based MDX loader in `src/lib/`
 
-### 📋 README.md (This File)
-**Purpose**: Main entry point and developer guide
-- Project overview and architecture  
-- Quick start guide
-- Development workflows
-- Links to detailed documentation
+## Quick Start
 
-### 🏗️ ARCHITECTURE.md
-**Purpose**: System architecture and design decisions
-- High-level system overview
-- File structure and organization
-- Technical design decisions
-- Deployment architecture
-
-### 📚 GUIDE.md  
-**Purpose**: Implementation tutorials and how-to guides
-- Step-by-step implementation instructions
-- Code examples and patterns
-- Best practices and conventions
-- Troubleshooting guides
-
-### ⚙️ SETUP.md
-**Purpose**: Detailed setup and deployment instructions
-- Environment setup
-- Configuration details  
-- Deployment procedures
-- Platform-specific guides
-
-## 🚀 Quick Start
-
-### Project Structure
-- `apps/docs/` - Documentation for .agent Community and work items
-  - `.source/{server,browser,dynamic}.ts` - Auto-generated MDX source files
-  - `source.config.ts` - Fumadocs configuration 
-- `apps/blog/` - Blog site  
-  - `.source/{server,browser,dynamic}.ts` - Auto-generated MDX source files
-  - `source.config.ts` - Fumadocs configuration 
-- `content/docs/` - Community documentation
-- `content/docs/aid/` - AID documentation 
-- `content/blog/` - Blog content
-
-## 🎯 Key Features
-
-- **Multi-zone architecture** with separate apps for docs and blog
-- **Sidebar tabs** switching between Community and AID documentation
-- **Shared navigation** with consistent UI across sections
-- **Scoped search** functionality
-- **SEO optimized** with proper meta tags and structured data
-- **Mermaid diagram support**
-- **Markdown processing** with copy and "Open in" actions
-
-## 🔧 Development
-
-### Available Scripts
-- `npm run dev` - Start development servers
-- `npm run build` - Build all apps
-- `npm run build:docs` - Build docs app only
-- `npm run build:blog` - Build blog app only
-
-### Fumadocs Source Generation
-
-Both the docs and blog apps use Fumadocs for content management. The MDX source files are automatically generated to optimize performance:
-
-#### What it does:
-- **Generates `.source/{server,browser,dynamic}.ts`** - Creates runtime objects for all MDX content
-- **Scans content directories** - Automatically discovers all `.md` and `.mdx` files
-- **Creates type-safe imports** - Generates TypeScript interfaces for content
-- **Optimizes build performance** - Pre-processes content for faster runtime loading
-
-#### When to regenerate:
-- After adding new MDX files to content directories
-- After modifying `source.config.ts` configuration
-- After changing the directory structure
-- If the `.source` output files get corrupted or deleted
-
-#### Commands:
 ```bash
-# Regenerate docs app sources
-pnpm -C apps/docs run prebuild
-
-# Regenerate blog app sources
-pnpm -C apps/blog exec fumadocs-mdx
-
-# The docs app also runs source generation during build via `prebuild`.
+pnpm install
+pnpm dev          # http://localhost:3000
 ```
 
-The docs app automatically runs source generation during build via the `prebuild` script, while the blog app generates sources on-demand.
+## Content
 
-### Environment Variables
-- Set `NEXT_PUBLIC_APP_URL=https://docs.agentcommunity.org` for the docs subdomain deployment (docs at root)
-- Set `NEXT_PUBLIC_APP_URL=https://agentcommunity.org` for traditional deployment (docs under /docs)
+- `content/docs/*.mdx` — Documentation pages
+- `content/blog/*.mdx` — Blog posts (date-prefixed filenames)
+- `content/docs/meta.json` — Sidebar navigation ordering
 
-### Local Development
+### Adding a docs page
+
+1. Create `content/docs/my-page.mdx` with frontmatter:
+   ```yaml
+   ---
+   title: My Page
+   description: A description for SEO
+   ---
+   ```
+2. Add `"my-page"` to `content/docs/meta.json` under `pages`
+3. It's live at `/docs/my-page`
+
+### Adding a blog post
+
+1. Create `content/blog/YYYY-MM-DD-my-post.mdx` with frontmatter:
+   ```yaml
+   ---
+   title: "My Post Title"
+   description: "A description"
+   author: Agent Community
+   date: YYYY-MM-DD
+   tags: [tag1, tag2]
+   ---
+   ```
+2. It's live at `/blog/my-post`
+
+## Features
+
+- Dark/light theme
+- Mermaid diagram rendering
+- Cmd+K search across all content
+- Scroll-spy table of contents
+- Tag-based blog filtering
+- Static OG image generation
+- RSS feed at `/rss.xml`
+- Sitemap at `/sitemap.xml`
+- Raw MDX export at `/api/mdx/docs/{slug}` and `/api/mdx/blog/{slug}`
+- Copy Markdown toolbar on every page
+
+## Build & Deploy
+
 ```bash
-# Install once
-pnpm install --frozen-lockfile
-
-# Run both apps
-pnpm run dev
-
-# Or run individually
-pnpm run dev:docs   # http://localhost:3000
-pnpm run dev:blog   # http://localhost:3001/blog
+pnpm generate:og  # Generate OG images (runs automatically in Vercel build)
+pnpm build        # Production build
 ```
 
-If Corepack prompts appear, run `pnpm -v` then `pnpm run dev` again.
+Deploys to Vercel as a single project. See `vercel.json` for config.
 
-## 📦 Deployment
+## Reusability
 
-Deploy to Vercel with two separate projects:
-- **agentcommunity-docs**: Root directory `apps/docs`
-- **agentcommunity-blog**: Root directory `apps/blog`
-
-Configure rewrites in your landing project:
-```json
-{
-  "rewrites": [
-    { "source": "/docs/:path*", "destination": "https://agentcommunitydocs.vercel.app/docs/:path*" },
-    { "source": "/blog/:path*", "destination": "https://agentcommunityblog.vercel.app/blog/:path*" }
-  ]
-}
-```
-
-## 🔗 Domains & URLs
-
-- **Canonical URLs**: `agentcommunity.org/docs` and `/blog`
-- **Subdomain redirects**:
-  - `docs.agentcommunity.org` → `agentcommunity.org/docs`
-  - `blog.agentcommunity.org` → `agentcommunity.org/blog`
-
-## 📚 Further Reading
-
-- [🏗️ Architecture](ARCHITECTURE.md) - System design and technical overview
-- [📚 Implementation Guide](GUIDE.md) - How to implement features and patterns  
-- [⚙️ Setup Guide](SETUP.md) - Detailed setup and deployment instructions
+The content engine (`src/lib/`) has zero React dependencies. It can be copied to another Next.js project or extracted as a package. The `meta.json` format and content structure are generic.

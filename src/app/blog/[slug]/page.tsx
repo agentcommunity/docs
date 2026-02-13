@@ -7,7 +7,10 @@ import { getPost, getAllPostSlugs } from '@/lib/blog';
 import { mdxComponents } from '@/components/mdx-components';
 import { TableOfContents } from '@/components/toc';
 import { MobileTableOfContents } from '@/components/toc-mobile';
+import { Toolbar } from '@/components/toolbar';
 import type { Metadata } from 'next';
+
+const BASE_URL = 'https://docs.agentcommunity.org';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -21,15 +24,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
+
+  const ogImage = `/og/blog-${slug}.png`;
+  const canonical = `${BASE_URL}/blog/${slug}`;
+
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical },
     openGraph: {
       title: post.title,
       description: post.description,
+      url: canonical,
       type: 'article',
       publishedTime: post.date,
       tags: post.tags,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: [ogImage],
     },
   };
 }
@@ -38,6 +54,9 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+
+  // Find the actual filename for the toolbar
+  const fileSlug = slug;
 
   return (
     <div className="mx-auto max-w-7xl flex">
@@ -56,6 +75,7 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </div>
           </header>
+          <Toolbar rawContent={post.rawContent} slug={fileSlug} type="blog" />
           <MobileTableOfContents headings={post.headings} />
           <MDXRemote
             source={post.content}
