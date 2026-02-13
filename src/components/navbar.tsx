@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Github } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { SearchDialog } from './search-dialog';
 
 export function Navbar() {
   return (
@@ -19,6 +20,7 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <SearchDialog />
           <a href="https://github.com/agentcommunity" target="_blank" rel="noopener noreferrer" className="p-2 rounded-md hover:bg-muted transition-colors">
             <Github className="w-4 h-4" />
           </a>

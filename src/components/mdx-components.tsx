@@ -1,7 +1,25 @@
+import { Children, isValidElement } from 'react';
 import { HeadingLink } from './heading-link';
 import { Callout } from './callout';
+import { MermaidDiagram } from './mermaid-diagram';
 import type { MDXComponents } from 'mdx/types';
 import type { ReactNode, ComponentPropsWithoutRef } from 'react';
+
+function extractTextContent(node: ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (!isValidElement(node)) return '';
+  const children = (node.props as { children?: ReactNode }).children;
+  if (!children) return '';
+  return Children.toArray(children).map(extractTextContent).join('');
+}
+
+function isMermaidBlock(children: ReactNode): boolean {
+  const child = Children.only(children);
+  if (!isValidElement(child)) return false;
+  const className = (child.props as { className?: string }).className || '';
+  return className.includes('language-mermaid');
+}
 
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   const Tag = `h${level}` as const;
@@ -70,13 +88,23 @@ export const mdxComponents: MDXComponents = {
   td: (props) => <td className="px-4 py-2 border-t border-border" {...props} />,
   blockquote: (props) => <blockquote className="my-4 border-l-4 border-border pl-4 italic text-muted-foreground" {...props} />,
   code: (props) => <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono" {...props} />,
-  pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
-    <div className="group relative my-4">
-      <pre className="overflow-x-auto rounded-lg border border-border bg-muted/50 p-4 text-sm" {...props}>
-        {children}
-      </pre>
-    </div>
-  ),
+  pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => {
+    try {
+      if (children && isMermaidBlock(children)) {
+        const source = extractTextContent(children);
+        return <MermaidDiagram source={source} />;
+      }
+    } catch {
+      // Not a single-child or not mermaid — fall through to normal pre
+    }
+    return (
+      <div className="group relative my-4">
+        <pre className="overflow-x-auto rounded-lg border border-border bg-muted/50 p-4 text-sm" {...props}>
+          {children}
+        </pre>
+      </div>
+    );
+  },
   img: (props) => <img className="rounded-lg my-4 max-w-full" {...props} />,
   Card,
   Cards,
