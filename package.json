@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate:og": "tsx scripts/generate-og-images.ts"
+    "generate:og": "tsx scripts/generate-og-images.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -32,6 +34,7 @@
     "satori": "^0.19.2",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.21.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.18"
   }
 }
