@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -6,7 +6,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { getDoc, getAllDocSlugs } from '@/lib/docs';
 import { mdxComponents } from '@/components/mdx-components';
 import { TableOfContents } from '@/components/toc';
-import { MobileTableOfContents } from '@/components/toc-mobile';
+import { SetMobileHeadings } from '@/components/mobile-nav-context';
 import { Toolbar } from '@/components/toolbar';
 import type { Metadata } from 'next';
 
@@ -14,6 +14,17 @@ const BASE_URL = 'https://docs.agentcommunity.org';
 
 interface Props {
   params: Promise<{ slug?: string[] }>;
+}
+
+function normalizeSlug(slug?: string[]): { normalized: string[]; hasChanged: boolean } {
+  const raw = slug ?? [];
+  const normalized = [...raw];
+
+  while (normalized.length > 0 && normalized[normalized.length - 1] === 'index') {
+    normalized.pop();
+  }
+
+  return { normalized, hasChanged: normalized.length !== raw.length };
 }
 
 export async function generateStaticParams() {
@@ -26,12 +37,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const doc = getDoc(slug || []);
+  const { normalized } = normalizeSlug(slug);
+  const doc = getDoc(normalized);
   if (!doc) return {};
 
-  const ogSlug = slug && slug.length > 0 ? slug.join('/') : 'index';
+  const ogSlug = normalized.length > 0 ? normalized.join('/') : 'index';
   const ogImage = `/og/docs-${ogSlug.replace(/\//g, '-')}.png`;
-  const canonical = slug && slug.length > 0 ? `${BASE_URL}/docs/${slug.join('/')}` : `${BASE_URL}/docs`;
+  const canonical = normalized.length > 0 ? `${BASE_URL}/docs/${normalized.join('/')}` : `${BASE_URL}/docs`;
 
   return {
     title: doc.title,
@@ -54,16 +66,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DocsPage({ params }: Props) {
   const { slug } = await params;
-  const doc = getDoc(slug || []);
+  const { normalized, hasChanged } = normalizeSlug(slug);
+  if (hasChanged) {
+    const target = normalized.length > 0 ? `/docs/${normalized.join('/')}` : '/docs';
+    permanentRedirect(target);
+  }
+
+  const doc = getDoc(normalized);
   if (!doc) notFound();
 
-  const fileSlug = slug && slug.length > 0 ? slug.join('/') : 'index';
+  const fileSlug = normalized.length > 0 ? normalized.join('/') : 'index';
 
   return (
     <>
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-12">
+        <SetMobileHeadings headings={doc.headings} />
         <article className="max-w-3xl">
-          <MobileTableOfContents headings={doc.headings} />
           <Toolbar rawContent={doc.rawContent} slug={fileSlug} type="docs" />
           <MDXRemote
             source={doc.content}

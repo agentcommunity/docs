@@ -13,10 +13,10 @@ export function proxy(request: NextRequest) {
   if (isBlogHost) {
     // Redirect /blog or /blog/slug → / or /slug (keep URLs clean)
     if (pathname === '/blog' || pathname === '/blog/') {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/', request.url), 308);
     }
     if (pathname.startsWith('/blog/')) {
-      return NextResponse.redirect(new URL(pathname.slice('/blog'.length), request.url));
+      return NextResponse.redirect(new URL(pathname.slice('/blog'.length), request.url), 308);
     }
 
     // Rewrite / → /blog (index page)
@@ -33,13 +33,18 @@ export function proxy(request: NextRequest) {
   }
 
   // --- Docs host: redirect /blog/* to blog subdomain ---
+  if (!isBlogHost && (pathname === '/docs/index' || (pathname.startsWith('/docs/') && pathname.endsWith('/index')))) {
+    const normalized = pathname.replace(/\/index$/, '') || '/docs';
+    return NextResponse.redirect(new URL(normalized, request.url), 308);
+  }
+
   if (!isLocal) {
     if (pathname === '/blog' || pathname === '/blog/') {
-      return NextResponse.redirect(new URL(`https://${BLOG_HOST}`));
+      return NextResponse.redirect(new URL(`https://${BLOG_HOST}`), 308);
     }
     if (pathname.startsWith('/blog/')) {
       const rest = pathname.slice('/blog'.length);
-      return NextResponse.redirect(new URL(`https://${BLOG_HOST}${rest}`));
+      return NextResponse.redirect(new URL(`https://${BLOG_HOST}${rest}`), 308);
     }
   }
 

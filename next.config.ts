@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     },
     {
       source: '/aid/:path*',
-      destination: 'https://aid.agentcommunity.org/:path*',
+      destination: 'https://aid.agentcommunity.org/docs/:path*',
       permanent: true,
     },
   ],

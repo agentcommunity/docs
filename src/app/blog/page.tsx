@@ -4,9 +4,18 @@ import { BlogPostCard } from '@/components/blog-post-card';
 import { TagFilter } from '@/components/tag-filter';
 import type { Metadata } from 'next';
 
+const BASE_URL = 'https://blog.agentcommunity.org';
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Insights, updates, and thoughts from the .agent community.',
+  alternates: { canonical: BASE_URL },
+  openGraph: {
+    type: 'website',
+    url: BASE_URL,
+    title: '.agent Community Blog',
+    description: 'Insights, updates, and thoughts from the .agent community.',
+  },
 };
 
 interface Props {

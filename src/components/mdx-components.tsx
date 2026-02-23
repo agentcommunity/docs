@@ -21,6 +21,20 @@ function isMermaidBlock(children: ReactNode): boolean {
   return className.includes('language-mermaid');
 }
 
+function normalizeHref(href: string): string {
+  if (href.startsWith('.docs.agentcommunity.org/')) {
+    return `https://${href.slice(1)}`;
+  }
+  if (
+    href.startsWith('docs.agentcommunity.org/') ||
+    href.startsWith('blog.agentcommunity.org/') ||
+    href.startsWith('agentcommunity.org/')
+  ) {
+    return `https://${href}`;
+  }
+  return href;
+}
+
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   const Tag = `h${level}` as const;
   const sizes: Record<number, string> = {
@@ -73,7 +87,13 @@ export const mdxComponents: MDXComponents = {
   h5: createHeading(5),
   h6: createHeading(6),
   p: (props) => <p className="leading-7 mb-4" {...props} />,
-  a: (props) => <a className="text-primary underline underline-offset-4 hover:text-primary/80" {...props} />,
+  a: ({ href, ...props }) => (
+    <a
+      className="text-primary underline underline-offset-4 hover:text-primary/80"
+      href={typeof href === 'string' ? normalizeHref(href) : href}
+      {...props}
+    />
+  ),
   ul: (props) => <ul className="my-4 ml-6 list-disc space-y-2" {...props} />,
   ol: (props) => <ol className="my-4 ml-6 list-decimal space-y-2" {...props} />,
   li: (props) => <li className="leading-7" {...props} />,
