@@ -1,0 +1,122 @@
+---
+title: "Code Mode and AID: Massive tool scale, clean discovery"
+description: "Code Mode makes large APIs practical for agents by compressing tool surface area. AID stays focused on DNS-first discovery, so protocol routing remains simple and interoperable."
+author: Agent Community
+date: 2026-02-23
+tags: [aid, codemode, mcp, discovery, agent-infrastructure, protocols]
+---
+
+Agent tooling has a new bottleneck.  
+It is not model quality.  
+It is context budget.
+
+When an API has hundreds or thousands of operations, a traditional MCP server can expose a huge tool catalog. That helps capability coverage, but it also pushes large schemas into model context on every run.
+
+Cloudflare's new **Code Mode** approach, published on **February 20, 2026**, is a strong answer to that problem. It keeps MCP as the protocol, but radically changes how capabilities are presented to the model. [1]
+
+The important architecture point for AID is simple:
+
+- **Code Mode is an execution pattern for tools**
+- **AID is a discovery protocol for endpoints**
+
+Those are different layers. They complement each other, but they are not the same concern.
+
+## I. What Code Mode actually changes
+
+In Code Mode, the model does not call thousands of narrow tools one by one.  
+Instead, it writes code against a typed interface and executes that code in an isolated runtime.
+
+In Cloudflare's public MCP server implementation, this appears as a compact surface with two MCP tools, `search` and `execute`, instead of a full endpoint-per-tool catalog. [2]
+
+The result is significant context reduction. Cloudflare reports approximately:
+
+- `1,170,523` tokens for a full native MCP tool mapping of their API
+- `244,047` tokens for a minimal native mapping
+- `1,069` tokens for Code Mode
+
+That is why Code Mode feels like a step change for large APIs. It turns context growth from "scales with API size" into "roughly fixed." [2]
+
+## II. Why this is still MCP, not a new protocol
+
+Code Mode does not replace MCP transport or method semantics.  
+It still runs through standard MCP tool interactions.
+
+From a protocol perspective, the agent is still speaking MCP and invoking tools. The internal server strategy is different, but the external protocol identity is not. [3]
+
+This distinction matters for infrastructure decisions:
+
+- If the endpoint is MCP, discovery should still resolve to MCP.
+- The fact that the server internally uses Code Mode does not require a new discovery token.
+
+## III. Where AID fits
+
+AID answers this question:
+
+> Given a domain, where is the agent endpoint and which protocol should the client use?
+
+AID stays intentionally narrow. It resolves protocol and location from DNS TXT at `_agent.<domain>`, then hands off to the protocol runtime. In current AID spec terms, this is exactly what the `proto` (`p`) and `uri` (`u`) fields are for. [4]
+
+So if a provider runs a Code Mode-powered MCP server, the AID record should still look like MCP discovery, for example:
+
+```text
+v=aid1;u=https://mcp.example.com/mcp;p=mcp
+```
+
+That is correct and interoperable.
+
+## IV. Why "not related" is the right conclusion, technically
+
+Code Mode is highly relevant to agent platform design.  
+It is **not** a reason to change AID protocol taxonomy.
+
+A new AID protocol token is justified when the client must choose a different wire protocol or endpoint contract at discovery time. Code Mode does neither. It is a server-side tool orchestration and execution model behind an MCP endpoint.
+
+So the right stance is:
+
+- **Code Mode is excellent**
+- **Code Mode is not a new AID discovery protocol**
+- **Code Mode should be represented through existing MCP discovery**
+
+That keeps AID stable and prevents protocol drift.
+
+## V. Why this is still great for the AID ecosystem
+
+Code Mode strengthens the MCP side of the stack, and that indirectly benefits AID users:
+
+- Large providers can expose broad capability without exploding context costs.
+- Agents can connect to one MCP endpoint and still access deep API coverage.
+- Discovery remains simple and deterministic at the DNS layer.
+
+In other words, AID stays clean because Code Mode keeps complexity where it belongs, inside service implementation.
+
+## VI. Practical guidance for implementers
+
+If you run agent infrastructure today:
+
+1. Keep publishing AID records for protocol routing and endpoint location.
+2. Use `p=mcp` for Code Mode-powered MCP services.
+3. Evaluate Code Mode when your MCP tool catalog is large or fast-moving.
+4. Treat Code Mode as an MCP optimization pattern, not as discovery metadata.
+5. Keep security controls explicit, since code execution paths need strict sandboxing and approval design. [1][5]
+
+The stack is stronger when layers stay disciplined.
+
+- **AID** handles Internet-first discovery.
+- **MCP** handles tool protocol semantics.
+- **Code Mode** improves MCP tool scalability and efficiency.
+
+That separation is exactly what lets these technologies compose cleanly.
+
+Specs and references:
+
+- Code Mode announcement (Cloudflare Blog): [1]
+- Cloudflare MCP server and token comparisons: [2]
+- MCP tools model and semantics: [3]
+- AID v1.1 specification: [4]
+- Cloudflare Code Mode API reference: [5]
+
+[1]: https://blog.cloudflare.com/code-mode-mcp/ "Code Mode: give agents an entire API in 1,000 tokens"
+[2]: https://github.com/cloudflare/mcp "Cloudflare MCP Server"
+[3]: https://modelcontextprotocol.io/specification/2025-06-18/server/tools "MCP Tools Specification"
+[4]: https://github.com/agentcommunity/agent-identity-discovery/blob/main/packages/docs/specification.md "AID Specification v1.1"
+[5]: https://developers.cloudflare.com/agents/api-reference/codemode/ "Cloudflare Agents Codemode Reference"
