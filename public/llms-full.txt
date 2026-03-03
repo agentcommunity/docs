@@ -1,0 +1,208 @@
+# .agent Community — Full Reference
+
+> Open specs, governance, and infrastructure for the agentic web. Community-governed, not corporate-controlled.
+
+The .agent Community is building the open foundation for agent identity, discovery, and trust on the internet. Agents are shipping fast, but the ecosystem is fragmented — no shared naming, no discovery standard, no community governance. This project builds the alternative: an open, community-governed foundation.
+
+Our primary specification is AID (Agent Identity & Discovery) — a lightweight DNS-based protocol for discovering an agent's endpoint, capabilities, and configuration with a single query.
+
+---
+
+## Documentation
+
+### .agent Community Overview
+URL: https://docs.agentcommunity.org/docs
+
+The landing page for the documentation. Positions the project as building the open infrastructure layer for agents. Four key areas: the AID spec, the case for community-owned .agent TLD, governance, and getting involved.
+
+Current gaps the project addresses:
+- No naming layer for agents
+- No discovery standard
+- No community governance
+- No shared trust framework
+
+Key resources: Community hub (agentcommunity.org), AID spec (aid.agentcommunity.org), GitHub (github.com/agentcommunity), Discord, and blog.
+
+### Why .agent?
+URL: https://docs.agentcommunity.org/docs/why-agent
+
+Every platform shift follows the same pattern — machines connect first, then humans need a naming layer. IP addresses became DNS. User IDs became handles. Endpoint URLs need agent names. Without names, agents are anonymous strings. With names like `support.acme.agent`, trust and accountability become possible.
+
+The naming layer is inevitable — the question is who controls it. A single platform controlling it would control who can name agents, discovery, trust signals, and interoperability (similar to app stores and cloud lock-in).
+
+Community governance means: fair access, neutral ground, open standards, and collective decision-making. ICANN's next TLD application round is the mechanism to secure `.agent` for the community.
+
+### Governance
+URL: https://docs.agentcommunity.org/docs/governance
+
+Governance is actively being designed. Core principle: the people building and using agents should decide how the namespace works.
+
+What's being designed:
+- Working groups: Discovery, Verification, Safety, Tooling — each with a focus area, open for anyone to join
+- Community decision-making: registration policies, safety standards, dispute resolution, grant allocation
+- Transparent process: all proposals public on GitHub, discussion on Discord, published meeting notes, public voting records
+
+Two roles are separated: agentcommunity.org (governance, standards, policy) vs. the future registrar (technical operations, DNS, billing).
+
+Founding membership offers: policy voting rights, working group access, priority reservation windows, public recognition — no fees or binding contracts.
+
+### Get Involved
+URL: https://docs.agentcommunity.org/docs/get-involved
+
+Four ways to participate:
+1. Join the community — register at agentcommunity.org for founding membership (priority reservations, voting rights, working group access, recognition)
+2. Contribute to specs — review AID spec, file issues on GitHub, submit PRs, test implementations
+3. Join working groups — Discovery, Verification, Safety, Tooling; via Discord or collab@agentcommunity.org
+4. Spread the word — the stronger the community roster, the stronger the case for community-governed .agent
+
+Contact: Community site (agentcommunity.org), AID Spec (aid.agentcommunity.org), GitHub (github.com/agentcommunity), Discord, X/Twitter (@agentcommunity_), email (hello@agentcommunity.org), collaborations (collab@agentcommunity.org).
+
+### Work Items
+URL: https://docs.agentcommunity.org/docs/work-items
+
+Active spec: Agent Identity & Discovery (AID) — a lightweight DNS-based protocol for discovering an agent's endpoint, capabilities, and config with a single query. Status: v1 spec published, SDKs in development.
+
+What AID solves:
+- "Where is the API?" → DNS TXT record
+- "What can this agent do?" → structured capability declaration in aid.json
+- "Is this agent legitimate?" → tied to domain ownership
+- "How do I call it?" → endpoint, auth method, protocol in one place
+
+Future work items under discussion: agent verification (trust beyond DNS), inter-agent protocols, safety frameworks.
+
+---
+
+## Blog Posts
+
+### Code is State
+URL: https://blog.agentcommunity.org/code-is-state
+Date: 2026-03-03 | Author: Balazs Nemethi
+Tags: agents, self-modification, software-engineering, agentic-systems, philosophy
+
+Every variable in your program is mutable state. Your source code is not. That deal is off. We now have systems that rewrite their own code as a normal part of operation. Explores the philosophical and practical implications of agentic systems that treat code as mutable state.
+
+### Code Mode and AID: Massive tool scale, clean discovery
+URL: https://blog.agentcommunity.org/codemode-and-aid
+Date: 2026-02-23 | Author: Agent Community
+Tags: aid, codemode, mcp, discovery, agent-infrastructure, protocols
+
+Code Mode makes large APIs practical for agents by compressing tool surface area. AID stays focused on DNS-first discovery, so protocol routing remains simple and interoperable. Examines how these approaches complement each other.
+
+### WebMCP and AID: Browser-first tools meet Internet-first discovery
+URL: https://blog.agentcommunity.org/webmcp-and-aid
+Date: 2026-02-13 | Author: Agent Community
+Tags: aid, webmcp, mcp, discovery, agents, browser
+
+Google's WebMCP makes websites agent-ready inside the browser. AID stays DNS-native so agents can discover endpoints from any domain, with or without a website. Analyzes the different approaches and where they intersect.
+
+### Why AID Now Supports UCP
+URL: https://blog.agentcommunity.org/why-aid-now-supports-ucp
+Date: 2026-02-05 | Author: Agent Community
+Tags: aid, ucp, commerce, discovery, agents
+
+Universal Commerce Protocol (UCP) is now supported in AID, enabling agents to discover and transact with commerce endpoints via DNS. Explains the integration and why it matters for agent commerce.
+
+### Add AID to ERC-8004: keep discovery fast, keep identity portable
+URL: https://blog.agentcommunity.org/aid-to-8004
+Date: 2026-01-30 | Author: Balazs Nemethi
+Tags: aid, erc-8004, discovery, identity, agent
+
+Why ERC-8004 needs a DNS-first discovery layer to stay fresh and portable. Proposes integrating AID with the Ethereum standard for agent registry.
+
+### AgentBrief: a curation agent for the agentic web
+URL: https://blog.agentcommunity.org/agent-brief-agentic-news
+Date: 2026-01-16 | Author: Balazs Nemethi
+Tags: agent, curation, news, workflow
+
+A workflow-first newsroom built on taste, signal, and the agentic web. Describes a curation agent that curates and delivers relevant agentic web news.
+
+### Agent Identity & Discovery
+URL: https://blog.agentcommunity.org/agent-identity-and-discovery
+Date: 2025-09-01 | Author: Agent Community
+Tags: AID, v1.1, agent, identity
+
+Identity for the agentic web. Introduces the AID specification and its role in providing identity and discovery for agents.
+
+### Identity joins discovery — from v1 to v1.1
+URL: https://blog.agentcommunity.org/identity-joins-discovery
+Date: 2025-08-31 | Author: Agent Community
+Tags: AID, v1.1, agent, identity
+
+Moving from discovery to trusted discovery. Covers the evolution of the AID spec from pure discovery to incorporating identity and trust signals.
+
+### Web Bot Auth, not for agents
+URL: https://blog.agentcommunity.org/web_auth_box_not_for_agents
+Date: 2025-08-23 | Author: Agent Community
+Tags: Cloudflare, web auth bot, bot, agent
+
+Signed interactions, or a product moat wrapped in a standard? Critiques web bot authentication approaches that don't serve the needs of autonomous agents.
+
+### Door or Address book
+URL: https://blog.agentcommunity.org/door_or_address_book
+Date: 2025-07-25 | Author: Agent Community
+Tags: aid, discovery, dns, llms-txt
+
+How does an AI agent know what to do when it hits a locked door on the web? Compares different approaches to agent discovery and navigation.
+
+### Missing grep mcp
+URL: https://blog.agentcommunity.org/missing_grep_mcp
+Date: 2025-07-24 | Author: Agent Community
+Tags: AID, MCP, DNS, Discovery
+
+The discovery layer MCP forgot: AID uses a DNS TXT record to map domains to MCP endpoints so hosts can auto-connect. Argues that MCP needs a discovery mechanism.
+
+### Finding door a2a
+URL: https://blog.agentcommunity.org/finding_door_a2a
+Date: 2025-07-23 | Author: Agent Community
+Tags: AID, A2A, DNS, Discovery
+
+Use DNS to find an agent's front door: AID's TXT record points to an A2A AgentCard so clients can discover and connect cleanly. Shows how AID complements the A2A protocol.
+
+### What Should Happen When You Type a Domain Name?
+URL: https://blog.agentcommunity.org/what_when_domain
+Date: 2025-07-22 | Author: Agent Community
+Tags: AID, Discovery, DNS, MCP, A2A
+
+Typing a domain should just connect: AID adds a DNS-based address book so apps discover an agent's URI and protocol automatically. Envisions seamless agent discovery from domain names.
+
+### Missing record
+URL: https://blog.agentcommunity.org/missing_record
+Date: 2025-07-21 | Author: Agent Community
+Tags: AID, MCP, A2A, OpenAPI, DNS, Discovery
+
+The MX-like record for agents: AID's DNS TXT points any domain to its agent (MCP, A2A, or OpenAPI) for zero-friction discovery. The foundational argument for DNS-based agent discovery.
+
+---
+
+## Key Concepts
+
+### AID (Agent Identity & Discovery)
+A lightweight, DNS-based protocol. A single DNS TXT record points any domain to its agent endpoint. The aid.json file at the endpoint declares capabilities, supported protocols (MCP, A2A, OpenAPI, UCP), authentication methods, and configuration. Think of it as the MX record for agents.
+
+### .agent TLD
+A proposed top-level domain (like .com or .org) specifically for agents, to be governed by the community rather than a single corporation. The application will go through ICANN's next TLD round. Community members get priority reservation rights.
+
+### Working Groups
+Four open working groups guide the project:
+- **Discovery** — how agents find each other (AID spec)
+- **Verification** — trust and identity beyond DNS
+- **Safety** — safety standards and frameworks
+- **Tooling** — SDKs, developer tools, integrations
+
+### Founding Membership
+Free, non-binding membership that provides: policy voting rights, working group access, priority name reservation windows, and public recognition. No fees or contracts.
+
+---
+
+## Links
+
+- Community Site: https://agentcommunity.org
+- AID Specification: https://aid.agentcommunity.org
+- Documentation: https://docs.agentcommunity.org
+- Blog: https://blog.agentcommunity.org
+- GitHub: https://github.com/agentcommunity
+- RSS Feed: https://blog.agentcommunity.org/rss.xml
+- X/Twitter: https://x.com/agentcommunity_
+- LinkedIn: https://www.linkedin.com/company/agentcommunity/
+- Email: hello@agentcommunity.org
+- Collaborations: collab@agentcommunity.org

@@ -76,10 +76,44 @@ export default async function DocsPage({ params }: Props) {
   if (!doc) notFound();
 
   const fileSlug = normalized.length > 0 ? normalized.join('/') : 'index';
+  const canonical = normalized.length > 0 ? `${BASE_URL}/docs/${normalized.join('/')}` : `${BASE_URL}/docs`;
+
+  const breadcrumbItems = [
+    { '@type': 'ListItem' as const, position: 1, name: 'Docs', item: `${BASE_URL}/docs` },
+    ...(normalized.length > 0
+      ? [{ '@type': 'ListItem' as const, position: 2, name: doc.title, item: canonical }]
+      : []),
+  ];
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbItems,
+      },
+      {
+        '@type': 'TechArticle',
+        headline: doc.title,
+        description: doc.description,
+        url: canonical,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        publisher: {
+          '@type': 'Organization',
+          name: '.agent Community',
+          url: 'https://agentcommunity.org',
+        },
+      },
+    ],
+  };
 
   return (
     <>
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-12">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <SetMobileHeadings headings={doc.headings} />
         <article className="max-w-3xl">
           <Toolbar rawContent={doc.rawContent} slug={fileSlug} type="docs" />

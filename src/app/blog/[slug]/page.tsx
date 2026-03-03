@@ -38,6 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: canonical,
       type: 'article',
       publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: [post.author],
       tags: post.tags,
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
@@ -58,9 +60,38 @@ export default async function BlogPostPage({ params }: Props) {
   // Find the actual filename for the toolbar
   const fileSlug = slug;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `${BASE_URL}/${slug}`,
+    image: `https://docs.agentcommunity.org/og/blog-${slug}.png`,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: '.agent Community',
+      url: 'https://agentcommunity.org',
+    },
+    keywords: post.tags.join(', '),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${BASE_URL}/${slug}`,
+    },
+  };
+
   return (
     <div className="mx-auto max-w-7xl flex">
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-12">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <article className="max-w-3xl">
           <header className="mb-8">
             <h1 className="text-3xl font-bold mb-2">{post.title}</h1>

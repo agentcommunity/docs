@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: '.agent Community',
+    locale: 'en_US',
+  },
+  twitter: {
+    site: '@agentcommunity_',
+    creator: '@agentcommunity_',
   },
 };
 
@@ -25,7 +30,11 @@ const structuredData = {
       '@type': 'Organization',
       name: '.agent Community',
       url: 'https://agentcommunity.org',
-      sameAs: ['https://github.com/agentcommunity'],
+      sameAs: [
+        'https://github.com/agentcommunity',
+        'https://x.com/agentcommunity_',
+        'https://www.linkedin.com/company/agentcommunity/',
+      ],
     },
     {
       '@type': 'WebSite',

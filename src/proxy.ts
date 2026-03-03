@@ -85,6 +85,6 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt, rss.xml
      * - files with common asset extensions
      */
-    '/((?!_next/static|_next/image|favicon\\.ico|sitemap\\.xml|robots\\.txt|rss\\.xml|og/|assets/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon\\.ico|sitemap\\.xml|robots\\.txt|rss\\.xml|llms\\.txt|llms-full\\.txt|og/|assets/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 };

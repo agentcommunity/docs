@@ -1,0 +1,37 @@
+# .agent Community
+
+> Open specs, governance, and infrastructure for the agentic web. Community-governed, not corporate-controlled.
+
+The .agent Community is building the open foundation for agent identity, discovery, and trust on the internet. Our primary specification is AID (Agent Identity & Discovery) — a lightweight DNS-based protocol for discovering an agent's endpoint, capabilities, and configuration with a single query.
+
+## Docs
+
+- [.agent Community Overview](https://docs.agentcommunity.org/docs): Open specs, governance, and infrastructure for the agentic web.
+- [Why .agent?](https://docs.agentcommunity.org/docs/why-agent): Why agents need human-readable names and why the naming layer must be community-governed.
+- [Governance](https://docs.agentcommunity.org/docs/governance): How the .agent community will be governed — charter, principles, and what's coming.
+- [Get Involved](https://docs.agentcommunity.org/docs/get-involved): How to join — contribute to specs, join working groups, reserve your name.
+- [Work Items](https://docs.agentcommunity.org/docs/work-items): Specifications and protocols the .agent community is developing.
+
+## Blog
+
+- [Code is State](https://blog.agentcommunity.org/code-is-state): Systems that rewrite their own code as a normal part of operation.
+- [Code Mode and AID](https://blog.agentcommunity.org/codemode-and-aid): Massive tool scale with clean DNS-first discovery.
+- [WebMCP and AID](https://blog.agentcommunity.org/webmcp-and-aid): Browser-first tools meet Internet-first discovery.
+- [Why AID Now Supports UCP](https://blog.agentcommunity.org/why-aid-now-supports-ucp): Universal Commerce Protocol support via DNS.
+- [Add AID to ERC-8004](https://blog.agentcommunity.org/aid-to-8004): Why ERC-8004 needs a DNS-first discovery layer.
+- [AgentBrief](https://blog.agentcommunity.org/agent-brief-agentic-news): A curation agent for the agentic web.
+- [Agent Identity & Discovery](https://blog.agentcommunity.org/agent-identity-and-discovery): Identity for the agentic web.
+- [Identity Joins Discovery](https://blog.agentcommunity.org/identity-joins-discovery): Moving from discovery to trusted discovery.
+- [Web Bot Auth, Not for Agents](https://blog.agentcommunity.org/web_auth_box_not_for_agents): Signed interactions, or a product moat wrapped in a standard?
+- [Door or Address Book](https://blog.agentcommunity.org/door_or_address_book): How does an AI agent know what to do when it hits a locked door on the web?
+- [Missing grep mcp](https://blog.agentcommunity.org/missing_grep_mcp): The discovery layer MCP forgot.
+- [Finding door a2a](https://blog.agentcommunity.org/finding_door_a2a): Use DNS to find an agent's front door.
+- [What Should Happen When You Type a Domain Name?](https://blog.agentcommunity.org/what_when_domain): AID adds a DNS-based address book for automatic discovery.
+- [Missing Record](https://blog.agentcommunity.org/missing_record): The MX-like record for agents.
+
+## Links
+
+- [AID Spec](https://aid.agentcommunity.org): The Agent Identity & Discovery specification.
+- [GitHub](https://github.com/agentcommunity): Source code and spec repositories.
+- [Community Site](https://agentcommunity.org): Join the community.
+- [RSS Feed](https://blog.agentcommunity.org/rss.xml): Blog updates.
