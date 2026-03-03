@@ -34,7 +34,8 @@ export function TagFilter({ tags, activeTag }: { tags: string[]; activeTag?: str
         <button
           key={tag}
           onClick={() => setTag(tag)}
-          className={`rounded-full px-3 py-1 text-sm transition-colors shrink-0 ${activeTag === tag ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80 text-foreground'}`}
+          className={`rounded-full px-3 py-1 text-sm transition-colors shrink-0 ${activeTag === tag ? 'bg-primary text-primary-foreground' : tag === 'aid' ? 'font-medium hover:opacity-80' : 'bg-muted hover:bg-muted/80 text-foreground'}`}
+          style={tag === 'aid' && activeTag !== tag ? { backgroundColor: 'var(--aid-accent)', color: '#fff' } : undefined}
         >
           #{tag}
         </button>

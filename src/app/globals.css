@@ -11,6 +11,7 @@
   --border: #e7e5e4;
   --primary: #292524;
   --primary-fg: #fafaf9;
+  --aid-accent: #3b82f6;
 }
 
 .dark {
@@ -21,6 +22,7 @@
   --border: #292524;
   --primary: #e7e5e4;
   --primary-fg: #0c0a09;
+  --aid-accent: #60a5fa;
 }
 
 /* Map runtime tokens to Tailwind theme (inline = allows var() references) */

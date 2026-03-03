@@ -1,9 +1,17 @@
 import Link from 'next/link';
 import type { BlogPost } from '@/lib/types';
 
+const aidPillStyle = { backgroundColor: 'var(--aid-accent)', color: '#fff' } as const;
+const aidBorderStyle = { borderLeftWidth: '3px', borderLeftColor: 'var(--aid-accent)' } as const;
+
 export function BlogPostCard({ post }: { post: BlogPost }) {
+  const isAid = post.tags.includes('aid');
   return (
-    <Link href={`/blog/${post.slug}`} className="block group rounded-lg border border-border p-4 hover:bg-muted/30 transition-colors no-underline">
+    <Link
+      href={`/blog/${post.slug}`}
+      className="block group rounded-lg border border-border p-4 hover:bg-muted/30 transition-colors no-underline"
+      style={isAid ? aidBorderStyle : undefined}
+    >
       <div className="flex gap-4">
         {post.image && (
           <img src={post.image} alt="" className="w-24 h-24 rounded-md object-cover shrink-0" />
@@ -15,7 +23,13 @@ export function BlogPostCard({ post }: { post: BlogPost }) {
             <time>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <div className="flex gap-1 flex-wrap">
               {post.tags.slice(0, 3).map(tag => (
-                <span key={tag} className="rounded-full bg-muted px-2 py-0.5">#{tag}</span>
+                <span
+                  key={tag}
+                  className={`rounded-full px-2 py-0.5 ${tag === 'aid' ? 'font-medium' : 'bg-muted'}`}
+                  style={tag === 'aid' ? aidPillStyle : undefined}
+                >
+                  #{tag}
+                </span>
               ))}
             </div>
           </div>

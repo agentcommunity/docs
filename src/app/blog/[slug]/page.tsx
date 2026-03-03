@@ -71,7 +71,13 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
             <div className="flex gap-1 mt-2 flex-wrap">
               {post.tags.map(tag => (
-                <span key={tag} className="rounded-full bg-muted px-2 py-0.5 text-xs">#{tag}</span>
+                <span
+                  key={tag}
+                  className={`rounded-full px-2 py-0.5 text-xs ${tag === 'aid' ? 'font-medium' : 'bg-muted'}`}
+                  style={tag === 'aid' ? { backgroundColor: 'var(--aid-accent)', color: '#fff' } : undefined}
+                >
+                  #{tag}
+                </span>
               ))}
             </div>
           </header>

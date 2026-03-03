@@ -96,7 +96,7 @@ function parseBlogFile(filename: string): BlogPost | null {
     description: (data.description as string) || "",
     author: (data.author as string) || "Agent Community",
     date,
-    tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    tags: Array.isArray(data.tags) ? data.tags.map(t => String(t).toLowerCase()) : [],
     image: (data.image as string) || undefined,
     content,
     rawContent: rawFile,
