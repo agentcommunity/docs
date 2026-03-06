@@ -8,7 +8,7 @@ const BLOG_BASE_URL = 'https://blog.agentcommunity.org';
 export default function sitemap(): MetadataRoute.Sitemap {
   const docPages = getAllDocSlugs().map(slug => ({
     url: slug.length === 0 ? `${DOCS_BASE_URL}/docs` : `${DOCS_BASE_URL}/docs/${slug.join('/')}`,
-    lastModified: new Date(),
+    lastModified: '2026-03-01',
     changeFrequency: 'weekly' as const,
   }));
 
@@ -23,9 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   return [
-    { url: `${DOCS_BASE_URL}/docs`, lastModified: new Date(), changeFrequency: 'weekly' },
+    { url: `${DOCS_BASE_URL}/docs`, lastModified: '2026-03-01', changeFrequency: 'weekly' },
     ...uniqueDocPages.filter((page) => page.url !== `${DOCS_BASE_URL}/docs`),
-    { url: BLOG_BASE_URL, lastModified: new Date(), changeFrequency: 'weekly' },
+    { url: BLOG_BASE_URL, lastModified: '2026-03-04', changeFrequency: 'weekly' },
     ...blogPages,
   ];
 }

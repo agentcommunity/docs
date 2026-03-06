@@ -17,12 +17,16 @@ export function Navbar() {
             <Link href="/docs" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Docs</Link>
             <a href="https://blog.agentcommunity.org" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Blog</a>
             <a href="https://aid.agentcommunity.org" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">AID Spec</a>
+            <a href="https://agentcommunity.org/about" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">About</a>
           </nav>
         </div>
         <div className="flex items-center gap-2">
           <SearchDialog />
           <a href="https://github.com/agentcommunity" target="_blank" rel="noopener noreferrer" className="p-2 rounded-md hover:bg-muted transition-colors">
             <Github className="w-4 h-4" />
+          </a>
+          <a href="https://agentcommunity.org/join" className="hidden sm:inline-flex px-3 py-1.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+            Join
           </a>
           <ThemeToggle />
         </div>
