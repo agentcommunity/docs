@@ -1,0 +1,85 @@
+---
+title: "Bootstrapping ARDP via AID: A Non-Normative Interop Mapping"
+description: "How AID DNS records can serve as a lightweight bootstrap layer for ARDP agent resolution and discovery. An optional, illustrative mapping for deployments where the ARDP authority is a DNS name."
+author: Balazs Nemethi
+date: 2026-03-09
+tags: [aid, ardp, dns, discovery, interoperability, ietf, agent-protocols]
+---
+
+AID and ARDP solve different problems at different layers. AID answers a static question via DNS: given a domain, where is the agent endpoint and what protocol does it speak? ARDP answers dynamic questions at the control plane: registration refresh, presence, capability queries, scoped discovery, and federation.
+
+These layers compose naturally. This post documents an optional, non-normative mapping for using AID as a DNS bootstrap into ARDP, so that deployments where the ARDP authority is a DNS name get a simple onboarding path without modifying either protocol.
+
+## The layering
+
+```
+┌─────────────────────────────────────┐
+│  Application Protocols              │
+│  (MCP, A2A, OpenAPI, gRPC, ...)     │
+├─────────────────────────────────────┤
+│  ARDP Control Plane                 │
+│  Registration, resolution,          │
+│  presence, capabilities,            │
+│  scoped discovery, federation       │
+├─────────────────────────────────────┤
+│  AID DNS Bootstrap                  │
+│  _agent.<domain> TXT record         │
+│  Static endpoint discovery          │
+└─────────────────────────────────────┘
+```
+
+This aligns with the layering framework emerging in the IETF [agent2agent discussions](https://mailarchive.ietf.org/arch/browse/agent2agent/): discovery ("who is reachable and where") sits below the control plane, which sits below the application protocols. Each layer is independently replaceable.
+
+## DNS record format
+
+A domain advertising an ARDP resolver or registrar via AID publishes a TXT record. The protocol-specific subdomain form is preferred:
+
+```dns
+_agent._ardp.example.com. 300 IN TXT "v=aid1;p=ardp;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
+```
+
+A base record works as fallback:
+
+```dns
+_agent.example.com. 300 IN TXT "v=aid1;p=ardp;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
+```
+
+We use plain TXT records because they work today with every DNS provider, registrar, and managed DNS service. No SVCB support required, no provider upgrade path, no feature gates. Any domain owner who can edit a TXT record can publish an AID record right now.
+
+Key fields:
+
+| Key | Value | Notes |
+|-----|-------|-------|
+| `v` | `aid1` | AID version (required) |
+| `p` | `ardp` | Protocol token indicating ARDP (required) |
+| `u` | HTTPS URI | Points to ARDP metadata resource (required) |
+| `s` | Free text | Human-readable description (optional) |
+| `a` | Auth hint | Authentication method hint (optional) |
+
+## Client flow
+
+Given an agent identifier whose authority component is a DNS name:
+
+1. **Canonicalize** the domain (lowercase, IDNA2008 if applicable).
+2. **Query the protocol-specific record:** `_agent._ardp.<domain>`. On NXDOMAIN or no valid AID record, proceed to step 3.
+3. **Query the base record:** `_agent.<domain>`. Accept only if `p=ardp`. If no valid record, bootstrap fails and the client may fall back to other discovery mechanisms per the ARDP spec.
+4. **Validate transport:** confirm the discovered URI uses HTTPS. Perform standard TLS certificate validation.
+5. **Fetch ARDP metadata:** retrieve the ARDP metadata resource at the discovered URI. Parse TTL bounds, supported authentication profiles, and operational parameters.
+6. **Proceed with ARDP operations:** execute RESOLVE, REGISTER, or other ARDP operations subject to ARDP's authorization model.
+
+## What this does not change
+
+This bootstrap is optional. It does not modify ARDP's identity proof requirements (proof-of-control for registration), authorization model, or protocol semantics. It provides one possible onboarding path. ARDP deployments that use non-DNS authorities or have their own discovery mechanisms are unaffected.
+
+AID's security requirements apply to the bootstrap phase: mandatory HTTPS for remote URIs, optional DNSSEC validation, optional PKA (Ed25519 endpoint proof via [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421) HTTP Message Signatures). Once the ARDP metadata endpoint is resolved, ARDP's own security model governs everything from that point forward.
+
+## Protocol token registration
+
+The `ardp` protocol token will be registered in the AID protocol token registry once ARDP's identifier terminology stabilizes. If you're building an ARDP implementation and want to test this flow today, use `p=ardp` and we'll make sure it maps correctly.
+
+## References
+
+- [AID Specification v1.2](https://aid.agentcommunity.org/docs/specification)
+- [AID Source + SDKs](https://github.com/agentcommunity/agent-identity-discovery)
+- ARDP Draft (pending Datatracker submission by Roberto Pioli)
+- [agent2agent@ mailing list archive](https://mailarchive.ietf.org/arch/browse/agent2agent/)

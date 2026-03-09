@@ -393,3 +393,19 @@ The AID specification, SDKs, and documentation are open source at [github.com/ag
 - [SPIFFE.io](https://spiffe.io/)
 - [IPSIE Working Group](https://openid.net/wg/ipsie/)
 - [Nametag Signa](https://getnametag.com/newsroom/agentic-ai-security-verified-human-signatures)
+
+---
+
+## Update — 8 March 2026
+
+This post generated discussion that surfaced a question worth addressing directly. We are tracking the open design questions from this article in [agentcommunity/agent-identity-discovery#115](https://github.com/agentcommunity/agent-identity-discovery/issues/115) — join the conversation there.
+
+### FAQ
+
+**Q: If an agent proves it's `agent@acme.com` via PKA, doesn't the receiving server still need a separate authorization relationship (e.g., OAuth) before allowing anything meaningful?**
+
+Yes. AID is intentionally scoped as a discovery and identity bootstrap layer. It answers "where is the agent and is this endpoint authentic?" — then gets out of the way.
+
+The actual authorization (OAuth, PAT, mTLS, etc.) sits above it. The `auth` hint in the AID record (`a=oauth2_code`, `a=pat`, etc.) tells the client _which_ auth mechanism to expect, but does not perform it. Think of it like DNS + TLS for websites: DNS tells you where to connect, TLS proves you're talking to the right server, but neither handles login. AID + PKA does the same for agents — then the protocol layer (MCP, A2A, etc.) handles the actual authorization flow.
+
+The article's "PKA-Extended" section explores whether the PKA key _could_ also bind organizational attestations to credentials — but that is an open question for the identity community, not something AID does today. See the [layering diagram](#how-aid-composes-with-the-existing-stack) above for the full picture.
