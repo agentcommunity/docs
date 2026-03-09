@@ -10,6 +10,8 @@ AID and ARDP solve different problems at different layers. AID answers a static 
 
 These layers compose naturally. This post documents an optional, non-normative mapping for using AID as a DNS bootstrap into ARDP, so that deployments where the ARDP authority is a DNS name get a simple onboarding path without modifying either protocol.
 
+**Try it live:** [ardp-demo.agentcommunity.org](https://ardp-demo.agentcommunity.org) runs the full bootstrap flow in your browser --- DNS lookup via DoH, ARDP metadata fetch, and agent resolution, with each step visualized. Source: [github.com/agentcommunity/ardp-aid-demo](https://github.com/agentcommunity/ardp-aid-demo).
+
 ## The layering
 
 ```
@@ -35,13 +37,13 @@ This aligns with the layering framework emerging in the IETF [agent2agent discus
 A domain advertising an ARDP resolver or registrar via AID publishes a TXT record. The protocol-specific subdomain form is preferred:
 
 ```dns
-_agent._ardp.example.com. 300 IN TXT "v=aid1;p=ardp;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
+_agent._ardp.example.com. 300 IN TXT "v=aid1;p=openapi;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
 ```
 
 A base record works as fallback:
 
 ```dns
-_agent.example.com. 300 IN TXT "v=aid1;p=ardp;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
+_agent.example.com. 300 IN TXT "v=aid1;p=openapi;u=https://example.com/.well-known/ardp/meta;s=ARDP resolver"
 ```
 
 We use plain TXT records because they work today with every DNS provider, registrar, and managed DNS service. No SVCB support required, no provider upgrade path, no feature gates. Any domain owner who can edit a TXT record can publish an AID record right now.
@@ -51,10 +53,12 @@ Key fields:
 | Key | Value | Notes |
 |-----|-------|-------|
 | `v` | `aid1` | AID version (required) |
-| `p` | `ardp` | Protocol token indicating ARDP (required) |
+| `p` | `openapi` | Protocol token --- ARDP exposes REST/JSON endpoints (required; see note below) |
 | `u` | HTTPS URI | Points to ARDP metadata resource (required) |
 | `s` | Free text | Human-readable description (optional) |
 | `a` | Auth hint | Authentication method hint (optional) |
+
+> **Why `p=openapi` instead of `p=ardp`?** The AID SDK currently validates the `p` field against a fixed set of recognized protocol tokens. Since ARDP's `/.well-known/ardp/*` endpoints are REST/JSON, `openapi` is the correct semantic fit today. The protocol-specific _subdomain_ (`_agent._ardp.<domain>`) still uses `ardp` to differentiate the DNS lookup path. Once the `ardp` token is registered in the AID protocol registry, records can be updated to `p=ardp` without changing the subdomain structure.
 
 ## Client flow
 
@@ -62,7 +66,7 @@ Given an agent identifier whose authority component is a DNS name:
 
 1. **Canonicalize** the domain (lowercase, IDNA2008 if applicable).
 2. **Query the protocol-specific record:** `_agent._ardp.<domain>`. On NXDOMAIN or no valid AID record, proceed to step 3.
-3. **Query the base record:** `_agent.<domain>`. Accept only if `p=ardp`. If no valid record, bootstrap fails and the client may fall back to other discovery mechanisms per the ARDP spec.
+3. **Query the base record:** `_agent.<domain>`. Accept if `p=openapi` (or `p=ardp` once registered). If no valid record, bootstrap fails and the client may fall back to other discovery mechanisms per the ARDP spec.
 4. **Validate transport:** confirm the discovered URI uses HTTPS. Perform standard TLS certificate validation.
 5. **Fetch ARDP metadata:** retrieve the ARDP metadata resource at the discovered URI. Parse TTL bounds, supported authentication profiles, and operational parameters.
 6. **Proceed with ARDP operations:** execute RESOLVE, REGISTER, or other ARDP operations subject to ARDP's authorization model.
@@ -73,13 +77,26 @@ This bootstrap is optional. It does not modify ARDP's identity proof requirement
 
 AID's security requirements apply to the bootstrap phase: mandatory HTTPS for remote URIs, optional DNSSEC validation, optional PKA (Ed25519 endpoint proof via [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421) HTTP Message Signatures). Once the ARDP metadata endpoint is resolved, ARDP's own security model governs everything from that point forward.
 
+## Live demo
+
+The full bootstrap flow runs at [ardp-demo.agentcommunity.org](https://ardp-demo.agentcommunity.org). It executes three steps live in the browser:
+
+1. **AID DNS Discovery** --- calls `discover("ardp-demo.agentcommunity.org", { protocol: "ardp" })` from `@agentcommunity/aid`, which performs a DNS-over-HTTPS query for `_agent._ardp.ardp-demo.agentcommunity.org` and parses the AID record
+2. **ARDP Metadata Fetch** --- fetches `/.well-known/ardp/meta` from the URI in the AID record, returning server capabilities, supported auth, and feature list
+3. **ARDP Resolve** --- queries `/.well-known/ardp/resolve?aid=agent:demo@ardp-demo.agentcommunity.org` to resolve an agent identifier to its MCP endpoint
+
+Each step shows the DNS query or HTTP request/response as it happens. The ARDP endpoints are mock implementations of three resources from draft-pioli-agent-discovery-01 (`meta`, `resolve`, `nonce`), deployed as Vercel serverless functions.
+
+Source and deployment instructions: [github.com/agentcommunity/ardp-aid-demo](https://github.com/agentcommunity/ardp-aid-demo).
+
 ## Protocol token registration
 
-The `ardp` protocol token will be registered in the AID protocol token registry once ARDP's identifier terminology stabilizes. If you're building an ARDP implementation and want to test this flow today, use `p=ardp` and we'll make sure it maps correctly.
+The `ardp` protocol token will be registered in the AID protocol token registry once ARDP's identifier terminology stabilizes. In the meantime, deployments should use `p=openapi` (ARDP endpoints are REST/JSON) while using the `_ardp` protocol-specific subdomain for DNS lookup differentiation. Once registered, updating the `p` value in the TXT record is a one-line change with no client-side impact.
 
 ## References
 
 - [AID Specification v1.2](https://aid.agentcommunity.org/docs/specification)
 - [AID Source + SDKs](https://github.com/agentcommunity/agent-identity-discovery)
-- ARDP Draft (pending Datatracker submission by Roberto Pioli)
+- [ARDP Internet-Draft](https://datatracker.ietf.org/doc/draft-pioli-agent-discovery/) (draft-pioli-agent-discovery-01)
+- [Live demo](https://ardp-demo.agentcommunity.org) | [Demo source](https://github.com/agentcommunity/ardp-aid-demo)
 - [agent2agent@ mailing list archive](https://mailarchive.ietf.org/arch/browse/agent2agent/)
