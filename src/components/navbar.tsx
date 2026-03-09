@@ -14,7 +14,7 @@ export function Navbar() {
             <span>.agent Community</span>
           </Link>
           <nav className="hidden sm:flex items-center gap-1 text-sm">
-            <Link href="/docs" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Docs</Link>
+            <a href="https://docs.agentcommunity.org" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Docs</a>
             <a href="https://blog.agentcommunity.org" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">Blog</a>
             <a href="https://aid.agentcommunity.org" target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">AID Spec</a>
             <a href="https://agentcommunity.org/about" className="px-3 py-1.5 rounded-md hover:bg-muted transition-colors">About</a>
