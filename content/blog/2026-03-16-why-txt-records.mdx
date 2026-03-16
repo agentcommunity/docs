@@ -80,6 +80,22 @@ Here's the full picture. "ServiceMode" is what matters for agent discovery — i
 
 The providers in bold can't publish a ServiceMode SVCB record. Add up the domain counts: GoDaddy (82M), Namecheap (24M), OpenSRS (18M), Squarespace (14M), Hostinger (7M), Network Solutions (6M), Wix (3M). That's over 150 million domains whose owners cannot publish the record type that would be required for SVCB-based agent discovery.
 
+### The honest counterargument
+
+I should address the obvious response: most of those 150 million domains are small business sites, parked pages, and personal blogs. They're probably never going to publish agent discovery records. The companies actually deploying AI agents today — the ones building MCP servers, running agent infrastructure — are disproportionately on Cloudflare, Route 53, and Google Cloud DNS. All of which support SVCB fine.
+
+If you weight the numbers by "domains likely to publish an `_agent` record," SVCB coverage is probably north of 80%. A developer on Namecheap who's building an agent can point their nameservers to Cloudflare's free tier in 10 minutes.
+
+So why TXT anyway? Three reasons.
+
+First, adoption velocity. AID is a v1 protocol still proving itself. The barrier to trying it should be zero. "Edit a TXT record" is something every developer has done. "Check whether your DNS provider supports SVCB ServiceMode, and if not, migrate nameservers" is a different conversation. For an early-stage protocol, that friction kills experimentation.
+
+Second, debugging simplicity. `dig TXT _agent.example.com` works everywhere. No special tooling, no wondering whether your resolver handles Type 64. TXT is the format every DNS operator already knows how to read, write, and troubleshoot.
+
+Third, Azure DNS. This one matters more than the retail registrars. Microsoft's enterprise cloud DNS doesn't support SVCB. If you're an enterprise running agent infrastructure on Azure — and plenty are — you can't publish the record without migrating DNS away from the platform you're running everything else on. That's not a Namecheap problem you can solve with Cloudflare's free tier. That's an enterprise architecture problem.
+
+The TXT parsing tradeoff is real. Semicolon-delimited key=value without a formal schema is more fragile than SVCB's structured parameters. I accept that. It's a v1 cost we pay for universal deployability, and one that goes away when AID v2 moves to SVCB.
+
 ### cPanel doesn't support it either
 
 There's another layer. Even where the DNS server software handles SVCB fine (BIND and PowerDNS both do), domain owners manage their DNS through control panels. cPanel, the dominant shared hosting panel, doesn't offer SVCB or HTTPS in its zone editor. If you're on shared hosting without root access, you can't publish these records. Period.
