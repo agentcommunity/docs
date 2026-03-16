@@ -88,11 +88,17 @@ So the raw provider gap isn't the whole story. What actually drove the decision 
 
 The enterprise blocker is Azure DNS. Microsoft's cloud DNS doesn't support SVCB. If you're running agent infrastructure on Azure — and plenty of enterprises are — you can't publish the record without migrating DNS away from the platform you're running everything else on. That's not a problem you solve with Cloudflare's free tier. That's an architecture constraint.
 
+It goes deeper than Azure's managed DNS service. Windows DNS Server itself — the authoritative server software that enterprises run on-premises — [doesn't support SVCB or HTTPS record types either](https://www.simonpainter.com/svcb-https-records/). Simon Painter, a Microsoft MVP, documented this in March 2026: if you're running Windows DNS infrastructure and want to publish SVCB records, the workaround is to stand up a separate BIND instance. That's not a realistic ask for most enterprise DNS teams.
+
 ### cPanel doesn't support it either
 
 There's another layer. Even where the DNS server software handles SVCB fine (BIND and PowerDNS both do), domain owners manage their DNS through control panels. cPanel, the dominant shared hosting panel, doesn't offer SVCB or HTTPS in its zone editor. If you're on shared hosting without root access, you can't publish these records. Period.
 
 RFC 3597 ("unknown record types") theoretically lets you enter arbitrary types. In practice, retail DNS APIs reject them. ClouDNS returns a hard failure. GoDaddy's API doesn't accept it. Namecheap's `setHosts` has a fixed type allowlist. The theoretical fallback doesn't survive contact with the real world.
+
+### Client-side resolution isn't uniform either
+
+Even if you get the record published, client support for Type 64/65 queries is fragmented. Safari on Apple platforms has the most complete implementation. Chromium-based browsers rolled support out gradually since Chrome 96, with behavior varying across releases and platforms. Firefox has been [conservative](https://www.simonpainter.com/svcb-https-records/) — you shouldn't assume HTTPS-RR-driven upgrades are active for every Firefox user. The RFC 9460 authors themselves acknowledge this, requiring that operators "continue to include address records at the zone apex for legacy clients." If a new standard requires SVCB alongside duplicate fallback records to ensure deliverability, it doubles the administrative burden and increases the likelihood of state sync errors.
 
 ## Why "just migrate to Cloudflare" isn't an answer
 
