@@ -1,0 +1,51 @@
+---
+title: "AID is now an IETF Internet-Draft"
+description: "We submitted draft-nemethi-aid-agent-identity-discovery-00 to the IETF Datatracker on March 16, 2026, and filed for IANA registration of _agent."
+author: Balazs Nemethi
+date: 2026-03-16
+tags: [aid, ietf, internet-draft, iana, dns, standards, agent-discovery]
+---
+
+# AID is now an IETF Internet-Draft
+
+Today I submitted [draft-nemethi-aid-agent-identity-discovery-00](https://datatracker.ietf.org/doc/draft-nemethi-aid-agent-identity-discovery/) to the IETF Datatracker. Same evening, I filed a request with IANA to register `_agent` in the Underscored and Globally Scoped DNS Node Names registry under RFC 8552.
+
+We've been building and shipping AID since mid-2025. Spec has been stable since July 2025, current version is v1.2 (frozen February 2026), six SDKs across TypeScript, Python, Go, Rust, .NET, and Java. The Internet-Draft puts all of that into the format the IETF process expects. Same protocol, different wrapper.
+
+## What's in the draft
+
+The I-D documents AID v1.2 as it works today. Nothing new, nothing aspirational:
+
+- TXT record format at `_agent.<domain>` with nine defined keys (`v,u,p,a,s,d,e,k,i`)
+- Client discovery algorithm, exact-host semantics, ambiguity rejection
+- Protocol-specific subdomains (`_agent._mcp.<domain>`, `_agent._a2a.<domain>`)
+- Security: mandatory HTTPS, optional DNSSEC, PKA endpoint proof via Ed25519 and RFC 9421
+- Local execution safeguards for `proto=local`
+- Enterprise policy modes (balanced, strict)
+- `.well-known/agent` fallback
+
+The IANA Considerations section requests `_agent` for TXT under RFC 8552 and `agent` as a service-name-only registration under RFC 6335. No port number. The service name is future-facing for SRV if we ever go there.
+
+## Why now
+
+Agent discovery is a live topic at the IETF right now. The agent2agent working group, the CATALIST BoF, multiple competing drafts circulating. IETF 125 is happening this week in Shenzhen with side meetings specifically about discovery. Posting the draft before those discussions means it's on the table, not something I'm promising to write later.
+
+The `_agent` label matters more than the draft itself, honestly. AID has been using it in production since 2025 but production use doesn't create an IANA registration. Filing does. The RFC 8552 registry runs on Expert Review. The experts look at whether the label is properly scoped and whether there's a real protocol behind it. I think we clear that bar.
+
+## Nothing changes for existing users
+
+AID v1.2 is the same spec today as it was yesterday. The I-D is the spec reformatted as RFCXML, not a new version. No normative changes. If you have an `_agent` record published, it keeps working. If you're using the SDKs, same deal.
+
+The submission is individual, not adopted by any working group. That may change. Either way, the protocol doesn't depend on IETF adoption to function. It already works.
+
+## What's next
+
+IANA experts will review the `_agent` registration request. They may approve it, ask questions, or push back. I'll update here when I hear back.
+
+I'm sending an introduction to the dnsop@ mailing list this week with the Datatracker URL. That's where the DNS-specific discussion will happen. If you have thoughts on how agent discovery should work in DNS, come argue about it there.
+
+I also wrote about [why AID uses TXT records instead of SVCB](/blog/why-txt-records). If you've been wondering about that choice, the post has the provider survey data and the upgrade plan.
+
+---
+
+*The draft: [draft-nemethi-aid-agent-identity-discovery-00](https://datatracker.ietf.org/doc/draft-nemethi-aid-agent-identity-discovery/). The spec: [AID v1.2](https://aid.agentcommunity.org/docs/specification). The code: [GitHub](https://github.com/agentcommunity/agent-identity-discovery).*

@@ -1,0 +1,111 @@
+---
+title: "Why AID ships on TXT records"
+description: "We like SVCB. We plan to use it. But a third of DNS providers can't publish one yet, and agent adoption isn't waiting for them."
+author: Balazs Nemethi
+date: 2026-03-16
+tags: [dns, svcb, srv, txt, aid, standards, agent-discovery]
+---
+
+# Why AID ships on TXT records
+
+People keep asking why AID uses TXT records instead of SVCB. Fair question. I want to give a real answer.
+
+SVCB is the better record type for service discovery. I genuinely think that. We want to use it. But when I looked at the actual DNS provider landscape in early 2026, roughly a third of providers couldn't publish one. Agent adoption is moving way faster than DNS infrastructure upgrades. So we built AID on TXT for v1, designed the spec so it can move to SVCB or SRV in v2, and made the `_agent` label stable across both.
+
+That's the whole argument. The rest of this post is the evidence.
+
+## What AID actually needs from a DNS record
+
+AID's job is small. One record at `_agent.<domain>` carries a version tag, an endpoint URL, a protocol token, and some optional metadata. Fits in a single TXT record under 255 bytes:
+
+```
+_agent.example.com. 300 IN TXT "v=aid1;p=mcp;u=https://api.example.com/mcp;a=pat"
+```
+
+AID doesn't need ALPN negotiation or ECH key distribution at the discovery layer. It's a pointer. It tells you where the agent lives and what protocol it speaks. After that, the application protocol (MCP, A2A, OpenAPI, whatever else) takes over.
+
+SVCB would give us more structure. Validated parameters instead of semicolon-delimited strings. Native SvcParams extensibility so you can add new fields without touching the format. Cleaner integration with SVCB-aware client stacks. I know. The question was always timing, not merit.
+
+## The provider landscape in March 2026
+
+I surveyed 31 DNS providers and registrars: major clouds, CDN DNS, mass-market registrars, regional hosts.
+
+| Support level | Providers | Share of sample |
+|---|---|---|
+| Full SVCB + HTTPS | 18 | 58% |
+| Partial (alias mode only) | 1 | 3% |
+| No support | 10 | 32% |
+| Unknown / untested | 2 | 6% |
+
+The full-support list is who you'd expect. Cloudflare, AWS Route 53, Google Cloud DNS, Akamai Edge DNS, NS1, DNSimple, Gandi, OVHcloud, Hetzner, others. SVCB works well on all of them.
+
+The no-support list is where it gets awkward. Azure DNS. DigitalOcean. Namecheap. Oracle Cloud DNS. Linode DNS Manager. OpenSRS, the reseller platform behind a bunch of downstream registrars you may not recognize by name but whose customers are very real.
+
+Then there's GoDaddy. Largest registrar in the world, 82+ million domains. They support HTTPS records but only in alias mode, priority locked to 0. ServiceMode parameters, the part that would carry structured discovery data, aren't available.
+
+A developer on DigitalOcean, an enterprise on Azure, a startup that registered through an OpenSRS-powered reseller: none of them can publish an SVCB record from their DNS panel today. These are not edge cases.
+
+### cPanel doesn't support it either
+
+There's another layer. Even where the DNS server software handles SVCB fine (BIND and PowerDNS both do), domain owners manage their DNS through control panels. cPanel, the dominant shared hosting panel, doesn't offer SVCB or HTTPS in its zone editor. If you're on shared hosting without root access, you can't publish these records. Period.
+
+RFC 3597 ("unknown record types") theoretically lets you enter arbitrary types. In practice, retail DNS APIs reject them. ClouDNS returns a hard failure. GoDaddy's API doesn't accept it. Namecheap's `setHosts` has a fixed type allowlist. The theoretical fallback doesn't survive contact with the real world.
+
+## Why agent discovery can't tolerate gaps
+
+You can deploy ECH incrementally. If Cloudflare supports it and your competitor's hoster doesn't, you get a privacy advantage, and the protocol still works.
+
+Agent discovery is different. The whole point is that given *any* domain, you can find its agent. If a third of domain owners can't publish the record because their DNS provider doesn't support the type, you don't have an incremental gap. You have a hole in the directory.
+
+I wanted AID to work the day you publish the record, on whatever DNS provider you already use. Not "works after you migrate to Cloudflare or Route 53."
+
+## We planned the SVCB upgrade from the start
+
+I didn't punt on SVCB and hope for the best. The upgrade path has been in the spec since v1.0 (July 2025):
+
+> "AID v2 may adopt a more structured DNS record type such as SRV (RFC 2782) or SVCB (RFC 9460) for discovery, depending on registrar support at the time of ratification."
+> -- [AID Spec, Section 5](https://aid.agentcommunity.org/docs/specification#5-future-path)
+
+What makes it work is that we separated the label from the record type:
+
+> "The `_agent` DNS label is the stable discovery identifier for AID across all protocol versions."
+> -- [AID Spec, Section 5.1](https://aid.agentcommunity.org/docs/specification#51-label-stability)
+
+`_agent` stays. The record type changes. Clients look at `v=aid1` to know what format they're parsing. When SVCB coverage is broad enough, AID v2 adopts it, operators keep the same label, and the transition is a record type swap, not a redesign.
+
+What would trigger it:
+
+- GoDaddy and Namecheap ship full ServiceMode SVCB
+- Azure DNS, DigitalOcean, and Oracle add support
+- cPanel and Plesk put SVCB/HTTPS in their zone editors
+- The OpenSRS/reseller stack unblocks the record type
+
+I expect this will happen. SVCB is well-designed and the RFC has been out long enough that providers are slowly adding it. But "slowly adding" and "ready for a global standard to depend on" are different bars, and I don't think it helps anyone to pretend otherwise.
+
+## What we're giving up in v1
+
+I should be honest about the tradeoffs.
+
+SVCB would let AID use validated, typed parameters instead of parsing semicolons. The SvcParams model means you can bolt on new discovery metadata without changing the record format. That's a real advantage over TXT, where you're always one bad parser away from breakage. SVCB also plugs into existing service-binding client code, so SDK authors wouldn't have to write custom parsers.
+
+SRV gives you priority and weight natively, which is a cleaner way to handle multi-endpoint load distribution than what AID v1 offers (one record per domain).
+
+Both are better fits for what AID does than TXT. Neither can be published today across the full DNS ecosystem AID needs to reach. That's the whole tension, and I don't think the right resolution is to pretend the ecosystem is further along than it is.
+
+## Precedent
+
+SPF defined its own dedicated record type (type 99). Adoption was so low that RFC 7208 deprecated it and moved everyone back to TXT. The better record type lost to the one people could actually publish.
+
+DKIM uses TXT. DMARC uses TXT. BIMI uses TXT. MTA-STS uses TXT for the policy record. Not because TXT is ideal for any of these. Because it's the type that works everywhere, and "works everywhere" is table stakes for a standard you want the whole internet to use.
+
+Where AID is different: we wrote the SVCB upgrade path into the spec before shipping v1, instead of hoping the ecosystem would retroactively catch up.
+
+## Where this leaves us
+
+I like SVCB. I plan to adopt it. The spec is designed so we can do that without breaking anything when the time comes.
+
+But a discovery standard that a third of domain owners can't deploy isn't a standard. It's a feature for the providers that happen to support it. TXT gets AID into every DNS panel on the internet right now. SVCB gives it better structure when the ecosystem catches up. The `_agent` label is ready for both.
+
+---
+
+*AID is open source and the spec is frozen at v1.2. [Read it](https://aid.agentcommunity.org/docs/specification), [grab an SDK](https://github.com/agentcommunity/agent-identity-discovery) (TypeScript, Python, Go, Rust, .NET, Java), or just go publish an `_agent` TXT record. 30 seconds, any provider.*
