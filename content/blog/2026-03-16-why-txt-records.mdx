@@ -45,19 +45,60 @@ Then there's GoDaddy. Largest registrar in the world, 82+ million domains. They 
 
 A developer on DigitalOcean, an enterprise on Azure, a startup that registered through an OpenSRS-powered reseller: none of them can publish an SVCB record from their DNS panel today. These are not edge cases.
 
+### Provider-by-provider breakdown
+
+Here's the full picture. "ServiceMode" is what matters for agent discovery — it's the mode that carries structured parameters. AliasMode (priority 0) only does apex CNAME-like redirects and can't carry discovery metadata.
+
+| Provider | Domains | SVCB | HTTPS | ServiceMode | API | Notes |
+|---|---|---|---|---|---|---|
+| Cloudflare | CDN leader | Full | Full | Yes | Yes | Auto-generates HTTPS records for proxied domains. Some API quoting bugs with ipv4hint/ipv6hint. |
+| AWS Route 53 | Cloud leader | Full | Full | Yes | Yes | Supports SvcPriority, TargetName, SvcParams via console and API. |
+| Akamai Edge DNS | CDN/Enterprise | Full | Full | Yes | Yes | Co-authors of RFC 9460. Terraform provider support. |
+| NS1 (IBM) | Developer/Enterprise | Full | Full | Yes | Yes | Integrates with traffic steering policies. |
+| DNSimple | Developer | Full | Full | Yes | Yes | Warns that records fail to sync to integrated providers lacking support (e.g. Azure). |
+| Gandi | EU/Developer | Full | Full | Yes | Yes | LiveDNS platform, full REST API. |
+| OVHcloud | EU/Cloud | Full | Full | Yes | Yes | Supports AliasMode and ServiceMode via Control Panel and API. |
+| IONOS SE | EU/Enterprise | Full | Full | Yes | Yes | Cloud DNS API recognizes HTTPS and SVCB types. |
+| Porkbun | Developer | Full | Full | Yes | Yes | REST API accepts HTTPS and SVCB in create/edit endpoints. |
+| deSEC | Privacy/OSS | Full | Full | Yes | Yes | Open-source, standards-focused. |
+| Hetzner | EU/Cloud | Full | Full | Yes | Yes | |
+| Google Cloud DNS | Cloud | Full | Full | Yes | Yes | |
+| **GoDaddy** | **82M+ domains** | **None** | **Partial** | **No** | **No** | **AliasMode only. Priority locked to 0. No ServiceMode. No custom SvcParams.** |
+| **Namecheap** | **24M+ domains** | **None** | **None** | **No** | **No** | **Explicitly rejected by product team. API allowlist: A, AAAA, CNAME, MX, TXT, SRV, CAA only.** |
+| **DigitalOcean** | Cloud | **None** | **None** | **No** | **No** | **API returns hard 404/400 for unsupported types. No doctl support.** |
+| **Azure DNS** | Enterprise Cloud | **None** | **None** | **No** | **No** | **"Does not support SVCB/HTTPS records." Breaks DNSimple sync.** |
+| **Squarespace** | **14M+ domains** | **Partial** | **None** | **No** | **No** | **UI shows SVCB dropdown but frequent save failures. Recommends Cloudflare for SVCB.** |
+| **Oracle Cloud DNS** | Enterprise Cloud | **None** | **None** | **No** | **No** | |
+| **Linode DNS** | Cloud | **None** | **None** | **No** | **No** | |
+| **OpenSRS/Tucows** | **18M+ domains (reseller)** | **None** | **None** | **No** | **No** | **Powers downstream registrars. No SVCB in reseller API.** |
+| **HostGator** | Hosting | **None** | **None** | **No** | **No** | **Zone editor limited to A, AAAA, CNAME, MX, SRV, TXT.** |
+| **Bluehost** | Hosting | **None** | **None** | **No** | **No** | **Predefined record type list, SVCB/HTTPS omitted.** |
+| **SiteGround** | Hosting | **None** | **None** | **No** | **No** | **Site Tools restricted to A, CNAME, MX, SRV, TXT.** |
+| **Hostinger** | **7M+ domains** | **None** | **None** | **No** | **No** | |
+| **Network Solutions** | **6M+ domains** | **None** | **None** | **No** | **No** | |
+| **Wix** | **3M+ domains** | **None** | **None** | **No** | **No** | |
+
+The providers in bold can't publish a ServiceMode SVCB record. Add up the domain counts: GoDaddy (82M), Namecheap (24M), OpenSRS (18M), Squarespace (14M), Hostinger (7M), Network Solutions (6M), Wix (3M). That's over 150 million domains on platforms that can't publish the record.
+
+Now, I'll be the first to say that number is misleading if you take it at face value. Most of those domains are small business sites, parked pages, and personal blogs. They're not going to publish agent discovery records. The companies actually building MCP servers and running agent infrastructure are disproportionately on Cloudflare, Route 53, and Google Cloud DNS — all of which handle SVCB fine. If you weight the numbers by "domains likely to publish an `_agent` record," SVCB coverage is probably north of 80%. A developer on Namecheap can point nameservers to Cloudflare's free tier in 10 minutes.
+
+So the raw provider gap isn't the whole story. What actually drove the decision was three things: adoption velocity for an early-stage protocol, debugging simplicity, and one enterprise blocker that doesn't have a free-tier workaround.
+
+"Edit a TXT record" is something every developer has done. "Check whether your DNS provider supports SVCB ServiceMode, and if not, migrate nameservers" is a different conversation. For a v1 protocol still proving itself, that friction kills experimentation. And `dig TXT _agent.example.com` works everywhere — no special tooling, no wondering whether your resolver handles Type 64.
+
+The enterprise blocker is Azure DNS. Microsoft's cloud DNS doesn't support SVCB. If you're running agent infrastructure on Azure — and plenty of enterprises are — you can't publish the record without migrating DNS away from the platform you're running everything else on. That's not a problem you solve with Cloudflare's free tier. That's an architecture constraint.
+
 ### cPanel doesn't support it either
 
 There's another layer. Even where the DNS server software handles SVCB fine (BIND and PowerDNS both do), domain owners manage their DNS through control panels. cPanel, the dominant shared hosting panel, doesn't offer SVCB or HTTPS in its zone editor. If you're on shared hosting without root access, you can't publish these records. Period.
 
 RFC 3597 ("unknown record types") theoretically lets you enter arbitrary types. In practice, retail DNS APIs reject them. ClouDNS returns a hard failure. GoDaddy's API doesn't accept it. Namecheap's `setHosts` has a fixed type allowlist. The theoretical fallback doesn't survive contact with the real world.
 
-## Why agent discovery can't tolerate gaps
+## Why "just migrate to Cloudflare" isn't an answer
 
-You can deploy ECH incrementally. If Cloudflare supports it and your competitor's hoster doesn't, you get a privacy advantage, and the protocol still works.
+For individual developers, sure. Point your nameservers and move on. But a protocol standard shouldn't assume its users will migrate DNS providers to adopt it. ECH and DDR can deploy incrementally — if your provider doesn't support it, you miss out on a privacy benefit, but nothing breaks. Agent discovery is different. If a domain can't publish the record, it's invisible. The directory has a hole.
 
-Agent discovery is different. The whole point is that given *any* domain, you can find its agent. If a third of domain owners can't publish the record because their DNS provider doesn't support the type, you don't have an incremental gap. You have a hole in the directory.
-
-I wanted AID to work the day you publish the record, on whatever DNS provider you already use. Not "works after you migrate to Cloudflare or Route 53."
+I wanted AID to work the day you publish the record, on whatever DNS provider you already use. For v1 of a protocol still earning trust, that matters more than structural elegance.
 
 ## We planned the SVCB upgrade from the start
 
@@ -84,13 +125,11 @@ I expect this will happen. SVCB is well-designed and the RFC has been out long e
 
 ## What we're giving up in v1
 
-I should be honest about the tradeoffs.
+SVCB would give AID validated, typed parameters instead of semicolon parsing. The SvcParams model means you can add new discovery fields without touching the record format — that's a real advantage over TXT, where you're always one bad parser away from breakage. SVCB also plugs into existing service-binding client code, which would save SDK authors from writing custom parsers.
 
-SVCB would let AID use validated, typed parameters instead of parsing semicolons. The SvcParams model means you can bolt on new discovery metadata without changing the record format. That's a real advantage over TXT, where you're always one bad parser away from breakage. SVCB also plugs into existing service-binding client code, so SDK authors wouldn't have to write custom parsers.
+SRV gives you priority and weight natively, which is a cleaner way to handle multi-endpoint load distribution than one record per domain.
 
-SRV gives you priority and weight natively, which is a cleaner way to handle multi-endpoint load distribution than what AID v1 offers (one record per domain).
-
-Both are better fits for what AID does than TXT. Neither can be published today across the full DNS ecosystem AID needs to reach. That's the whole tension, and I don't think the right resolution is to pretend the ecosystem is further along than it is.
+Both are better fits for what AID does than TXT. I'm not pretending otherwise. The tradeoff is deployability now versus structure later, and for a v1 protocol that needs to earn adoption before it can demand infrastructure, I think deployability wins.
 
 ## Precedent
 
