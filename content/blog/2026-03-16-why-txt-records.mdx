@@ -45,6 +45,41 @@ Then there's GoDaddy. Largest registrar in the world, 82+ million domains. They 
 
 A developer on DigitalOcean, an enterprise on Azure, a startup that registered through an OpenSRS-powered reseller: none of them can publish an SVCB record from their DNS panel today. These are not edge cases.
 
+### Provider-by-provider breakdown
+
+Here's the full picture. "ServiceMode" is what matters for agent discovery — it's the mode that carries structured parameters. AliasMode (priority 0) only does apex CNAME-like redirects and can't carry discovery metadata.
+
+| Provider | Domains | SVCB | HTTPS | ServiceMode | API | Notes |
+|---|---|---|---|---|---|---|
+| Cloudflare | CDN leader | Full | Full | Yes | Yes | Auto-generates HTTPS records for proxied domains. Some API quoting bugs with ipv4hint/ipv6hint. |
+| AWS Route 53 | Cloud leader | Full | Full | Yes | Yes | Supports SvcPriority, TargetName, SvcParams via console and API. |
+| Akamai Edge DNS | CDN/Enterprise | Full | Full | Yes | Yes | Co-authors of RFC 9460. Terraform provider support. |
+| NS1 (IBM) | Developer/Enterprise | Full | Full | Yes | Yes | Integrates with traffic steering policies. |
+| DNSimple | Developer | Full | Full | Yes | Yes | Warns that records fail to sync to integrated providers lacking support (e.g. Azure). |
+| Gandi | EU/Developer | Full | Full | Yes | Yes | LiveDNS platform, full REST API. |
+| OVHcloud | EU/Cloud | Full | Full | Yes | Yes | Supports AliasMode and ServiceMode via Control Panel and API. |
+| IONOS SE | EU/Enterprise | Full | Full | Yes | Yes | Cloud DNS API recognizes HTTPS and SVCB types. |
+| Porkbun | Developer | Full | Full | Yes | Yes | REST API accepts HTTPS and SVCB in create/edit endpoints. |
+| deSEC | Privacy/OSS | Full | Full | Yes | Yes | Open-source, standards-focused. |
+| Hetzner | EU/Cloud | Full | Full | Yes | Yes | |
+| Google Cloud DNS | Cloud | Full | Full | Yes | Yes | |
+| **GoDaddy** | **82M+ domains** | **None** | **Partial** | **No** | **No** | **AliasMode only. Priority locked to 0. No ServiceMode. No custom SvcParams.** |
+| **Namecheap** | **24M+ domains** | **None** | **None** | **No** | **No** | **Explicitly rejected by product team. API allowlist: A, AAAA, CNAME, MX, TXT, SRV, CAA only.** |
+| **DigitalOcean** | Cloud | **None** | **None** | **No** | **No** | **API returns hard 404/400 for unsupported types. No doctl support.** |
+| **Azure DNS** | Enterprise Cloud | **None** | **None** | **No** | **No** | **"Does not support SVCB/HTTPS records." Breaks DNSimple sync.** |
+| **Squarespace** | **14M+ domains** | **Partial** | **None** | **No** | **No** | **UI shows SVCB dropdown but frequent save failures. Recommends Cloudflare for SVCB.** |
+| **Oracle Cloud DNS** | Enterprise Cloud | **None** | **None** | **No** | **No** | |
+| **Linode DNS** | Cloud | **None** | **None** | **No** | **No** | |
+| **OpenSRS/Tucows** | **18M+ domains (reseller)** | **None** | **None** | **No** | **No** | **Powers downstream registrars. No SVCB in reseller API.** |
+| **HostGator** | Hosting | **None** | **None** | **No** | **No** | **Zone editor limited to A, AAAA, CNAME, MX, SRV, TXT.** |
+| **Bluehost** | Hosting | **None** | **None** | **No** | **No** | **Predefined record type list, SVCB/HTTPS omitted.** |
+| **SiteGround** | Hosting | **None** | **None** | **No** | **No** | **Site Tools restricted to A, CNAME, MX, SRV, TXT.** |
+| **Hostinger** | **7M+ domains** | **None** | **None** | **No** | **No** | |
+| **Network Solutions** | **6M+ domains** | **None** | **None** | **No** | **No** | |
+| **Wix** | **3M+ domains** | **None** | **None** | **No** | **No** | |
+
+The providers in bold can't publish a ServiceMode SVCB record. Add up the domain counts: GoDaddy (82M), Namecheap (24M), OpenSRS (18M), Squarespace (14M), Hostinger (7M), Network Solutions (6M), Wix (3M). That's over 150 million domains whose owners cannot publish the record type that would be required for SVCB-based agent discovery.
+
 ### cPanel doesn't support it either
 
 There's another layer. Even where the DNS server software handles SVCB fine (BIND and PowerDNS both do), domain owners manage their DNS through control panels. cPanel, the dominant shared hosting panel, doesn't offer SVCB or HTTPS in its zone editor. If you're on shared hosting without root access, you can't publish these records. Period.
