@@ -3,7 +3,7 @@ title: "Why AID ships on TXT records"
 description: "We like SVCB. We plan to use it. But a third of DNS providers can't publish one yet, and agent adoption isn't waiting for them."
 author: Balazs Nemethi
 date: 2026-03-16
-tags: [dns, svcb, srv, txt, aid, standards, agent-discovery]
+tags: [dns, svcb, srv, txt, aid, standards, agent-discovery, update]
 ---
 
 # Why AID ships on TXT records
@@ -63,7 +63,7 @@ Here's the full picture. "ServiceMode" is what matters for agent discovery — i
 | deSEC | Privacy/OSS | Full | Full | Yes | Yes | Open-source, standards-focused. |
 | Hetzner | EU/Cloud | Full | Full | Yes | Yes | |
 | Google Cloud DNS | Cloud | Full | Full | Yes | Yes | |
-| **GoDaddy** | **82M+ domains** | **None** | **Partial** | **No** | **No** | **AliasMode only. Priority locked to 0. No ServiceMode. No custom SvcParams.** |
+| **GoDaddy**\* | **82M+ domains** | **None** | **Partial** | **No** | **No** | **AliasMode only. Priority locked to 0. No ServiceMode. No custom SvcParams.\*** |
 | **Namecheap** | **24M+ domains** | **None** | **None** | **No** | **No** | **Explicitly rejected by product team. API allowlist: A, AAAA, CNAME, MX, TXT, SRV, CAA only.** |
 | **DigitalOcean** | Cloud | **None** | **None** | **No** | **No** | **API returns hard 404/400 for unsupported types. No doctl support.** |
 | **Azure DNS** | Enterprise Cloud | **None** | **None** | **No** | **No** | **"Does not support SVCB/HTTPS records." Breaks DNSimple sync.** |
@@ -152,5 +152,7 @@ I like SVCB. I plan to adopt it. The spec is designed so we can do that without 
 But a discovery standard that a third of domain owners can't deploy isn't a standard. It's a feature for the providers that happen to support it. TXT gets AID into every DNS panel on the internet right now. SVCB gives it better structure when the ecosystem catches up. The `_agent` label is ready for both.
 
 ---
+
+**\*Update (March 23, 2026):** GoDaddy's engineering team reached out to clarify that their DNS API backend already accepts HTTPS records with arbitrary SvcParams in ServiceMode — the limitation I tested was the web UI at dcc.godaddy.com, which presents a simplified form that doesn't expose priority or ServiceMode parameters. Their backend database stores records as type-code-plus-rdata, so SVCB support is a configuration addition (adding one entry to their type table), not an architectural change. They also noted that UI updates to expose ServiceMode parameters are currently in testing. This is good news for the SVCB ecosystem. The core argument stands — developers hitting the GoDaddy web panel today still can't publish a ServiceMode record — but the gap is closing faster than the table above suggests, and credit to GoDaddy for actively working on it.
 
 *AID is open source and the spec is frozen at v1.2. [Read it](https://aid.agentcommunity.org/docs/specification), [grab an SDK](https://github.com/agentcommunity/agent-identity-discovery) (TypeScript, Python, Go, Rust, .NET, Java), or just go publish an `_agent` TXT record. 30 seconds, any provider.*
