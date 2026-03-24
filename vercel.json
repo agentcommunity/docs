@@ -1,7 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "echo 'Redirect-only deployment'",
+  "framework": null,
+  "buildCommand": "mkdir -p .output && echo '{}' > .output/config.json",
   "installCommand": "echo 'No install needed'",
+  "outputDirectory": ".output",
   "redirects": [
     { "source": "/rss.xml", "destination": "https://agentcommunity.org/blog/rss.xml", "permanent": true },
     { "source": "/api/search", "destination": "https://agentcommunity.org/api/content-search", "permanent": true },
