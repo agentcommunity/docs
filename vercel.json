@@ -1,5 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm run generate:og && pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile"
+  "buildCommand": "echo 'Redirect-only deployment'",
+  "installCommand": "echo 'No install needed'",
+  "redirects": [
+    { "source": "/rss.xml", "destination": "https://agentcommunity.org/blog/rss.xml", "permanent": true },
+    { "source": "/api/search", "destination": "https://agentcommunity.org/api/content-search", "permanent": true },
+    { "source": "/docs/:path*", "destination": "https://agentcommunity.org/docs/:path*", "permanent": true },
+    { "source": "/docs", "destination": "https://agentcommunity.org/docs", "permanent": true },
+    { "source": "/blog/:path*", "destination": "https://agentcommunity.org/blog/:path*", "permanent": true },
+    { "source": "/:path((?!api|_next).*)", "destination": "https://agentcommunity.org/blog/:path", "permanent": true },
+    { "source": "/", "destination": "https://agentcommunity.org/blog", "permanent": true }
+  ]
 }
