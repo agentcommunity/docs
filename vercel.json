@@ -5,12 +5,53 @@
   "installCommand": "echo 'No install needed'",
   "outputDirectory": ".output",
   "redirects": [
-    { "source": "/rss.xml", "destination": "https://agentcommunity.org/blog/rss.xml", "permanent": true },
-    { "source": "/api/search", "destination": "https://agentcommunity.org/api/content-search", "permanent": true },
-    { "source": "/docs/:path*", "destination": "https://agentcommunity.org/docs/:path*", "permanent": true },
-    { "source": "/docs", "destination": "https://agentcommunity.org/docs", "permanent": true },
-    { "source": "/blog/:path*", "destination": "https://agentcommunity.org/blog/:path*", "permanent": true },
-    { "source": "/:path((?!api|_next).*)", "destination": "https://agentcommunity.org/blog/:path", "permanent": true },
-    { "source": "/", "destination": "https://agentcommunity.org/blog", "permanent": true }
+    {
+      "source": "/rss.xml",
+      "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/blog/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/blog",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "blog.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/api/search",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/api/content-search",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:path*",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "docs.agentcommunity.org" }],
+      "destination": "https://agentcommunity.org/docs/:path*",
+      "permanent": true
+    }
   ]
 }
